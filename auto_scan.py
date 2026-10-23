@@ -10,7 +10,7 @@ import pandas as pd
 
 from scanner import technical_indicators, fetch_live, score_candidate, categories
 from quality import enrich_dataframe
-from sec_fundamentals import fetch_sec_annual
+from sec_fundamentals import fetch_sec_annual, fetch_sec_quarterly
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / 'data'
@@ -134,13 +134,16 @@ def main():
     enrichment_lookup={r['ticker']:r for r in enrich_rows}
     # SEC filings are authoritative for reported annual amounts; limit requests per run.
     sec_limit=max(0,min(10,int(os.environ.get('RADAR_SEC_LIMIT','3'))))
-    sec_results={};sec_failures={}
+    sec_results={};sec_failures={};quarterly_results={};quarterly_failures={}
     if os.environ.get('RADAR_SEC_USER_AGENT','').strip():
         sec_choices=[r['ticker'] for r in ranked[:max(10,sec_limit*5)]]
         for ticker in sec_choices[:sec_limit]:
             result,message=fetch_sec_annual(ticker)
             if result: sec_results[ticker]=result
             else: sec_failures[ticker]=message
+            quarterly,qmessage=fetch_sec_quarterly(ticker)
+            if quarterly: quarterly_results[ticker]=quarterly
+            else: quarterly_failures[ticker]=qmessage
 
     financial_keys=('company','sector','market_cap','revenue_growth','earnings_growth','profit_margin','free_cash_flow','trailing_pe')
     for r in batch:
@@ -176,6 +179,20 @@ def main():
         else:
             for key in ('sec_periods_json','sec_tags_json','sec_last_retrieved_utc'):
                 r[key]=old.get(key)
+        # Preserve the original annual fields and store 10-Q metrics separately.
+        quarterly=quarterly_results.get(r['ticker'])
+        if quarterly:
+            for key,value in quarterly['metrics'].items(): r[key]=value
+            r['sec_quarterly_periods_json']=json.dumps(quarterly['periods'],sort_keys=True)
+            r['sec_quarterly_filed_json']=json.dumps(quarterly['filed_dates'],sort_keys=True)
+            r['sec_quarterly_tags_json']=json.dumps(quarterly['tags'],sort_keys=True)
+            r['sec_quarterly_last_retrieved_utc']=quarterly['sec_last_retrieved_utc']
+        else:
+            for key in ('quarterly_revenue','quarterly_net_income','quarterly_revenue_yoy_growth',
+                        'quarterly_earnings_yoy_growth','quarterly_profit_margin',
+                        'sec_quarterly_periods_json','sec_quarterly_filed_json','sec_quarterly_tags_json',
+                        'sec_quarterly_last_retrieved_utc'):
+                r[key]=old.get(key)
         r['fundamentals_checked']=sum(pd.notna(r.get(k)) for k in financial_keys[3:])>0
         r.update(score_candidate(r))
         r['categories'] = categories(r)
@@ -197,8 +214,9 @@ def main():
       'fundamental_enrichment_failures':len(enrichment_failures),
       'fundamental_enrichment_attempts':len(attempted_enrichments),
       'fundamental_enrichment_failed_symbols':[s for s in attempted_enrichments if s not in enrichment_lookup],
-      'fundamentals_provider':'SEC annual 10-K when configured; Yahoo Finance unofficial fallback',
+      'fundamentals_provider':'SEC 10-K annual + 10-Q quarterly when configured; Yahoo Finance unofficial fallback',
       'sec_success_count':len(sec_results),'sec_failure_details':sec_failures,
+      'sec_quarterly_success_count':len(quarterly_results),'sec_quarterly_failure_details':quarterly_failures,
       'sec_configured':bool(os.environ.get('RADAR_SEC_USER_AGENT','').strip()),
       'stored_candidates':len(updated), 'next_cursor':next_cursor,
       'note':'Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
