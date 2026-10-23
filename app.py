@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from scanner import DEFAULT_UNIVERSE, demo_data, fetch_live
 from quality import enrich_dataframe
+from reliability import add_freshness
 
 st.set_page_config(page_title='Stock Opportunity Radar',page_icon='📡',layout='wide')
 st.markdown('''<style>
@@ -29,7 +30,7 @@ DISPLAY_COLUMNS = financial_column_config()
 
 def money_text(value):
     return 'Unavailable' if pd.isna(value) else f'${float(value):,.2f}'
-st.caption('V3.1 • Financial-data quality controls • Currency and percentage display • Research only')
+st.caption('V3.3 • Separate price and scan freshness • Financial request diagnostics • Research only')
 
 with st.sidebar:
     st.header('Scan controls')
@@ -95,24 +96,25 @@ with tab0:
         st.write(f"**Last scan (UTC):** {status.get('run_utc', 'Unknown')} · **Universe source:** {status.get('universe_source','Unknown')}")
         st.write(f"**Symbols in universe:** {status.get('universe_count',0):,} · **Last run attempted:** {status.get('tickers_attempted',0)} · **Last run errors:** {status.get('failed_price_requests',0)}")
     if snapshot.exists():
-        auto_df=enrich_dataframe(pd.read_csv(snapshot))
+        auto_df=add_freshness(enrich_dataframe(pd.read_csv(snapshot)))
         if auto_df.empty:
             st.info('No candidates have passed the initial scan yet.')
         else:
-            auto_df['last_scanned_utc']=pd.to_datetime(auto_df.get('last_scanned_utc'),utc=True,errors='coerce')
-            ages=(pd.Timestamp.now(tz='UTC')-auto_df['last_scanned_utc']).dt.days
-            auto_df['Age (days)']=ages
+            st.caption('Price age = latest recorded trading date; scanned age = last automated processing time; fundamentals checked age = last successful metadata retrieval, NOT the reporting-period age.')
             st.warning('Results accumulate over time. Old scores and prices are stale; validate again before research. Fundamentals are enriched for only a few names per run.')
             st.metric('Stored research candidates (not all US stocks)',len(auto_df))
             incomplete=int((auto_df['research_status']=='Incomplete research').sum())
             st.warning(f'{incomplete} of {len(auto_df)} candidates have incomplete fundamentals. Older V2 scores must not be interpreted as comparable, fully researched rankings.')
             st.info('Momentum uses price data independently of fundamentals. Growth and value scores need adequate financial data. Missing data is not zero performance.')
+            if status_path.exists():
+                failed_names=status.get('fundamental_enrichment_failed_symbols',[])
+                st.caption(f"Last scheduled run: {status.get('fundamental_enrichment_attempts', 'Unknown')} metadata enrichment attempts; {len(failed_names)} unsuccessful. Previous values are preserved where available.")
             strategy=st.selectbox('Choose research view', ['All candidates','Growth','Value','Momentum','Recovery (not available yet)'])
             if strategy!='All candidates':
                 col={'Growth':'growth_score','Value':'value_score','Momentum':'momentum_score','Recovery (not available yet)':'recovery_score'}[strategy]
                 auto_df=auto_df[auto_df[col].notna()].sort_values(col, ascending=False)
                 st.caption(f'{strategy} scores are provisional research heuristics. They are not price targets, probabilities, or buy signals.')
-            cols=['ticker','research_status','fundamental_coverage_pct','fundamental_missing_fields','growth_score','value_score','momentum_score','categories','price','trend','return_3m','Age (days)','fundamentals_checked']
+            cols=['ticker','research_status','fundamental_coverage_pct','fundamental_missing_fields','growth_score','value_score','momentum_score','categories','price','trend','return_3m','Price age (days)','Scanned age (days)','Fundamentals checked age (days)','fundamentals_fetch_status','fundamentals_checked']
             cols=[c for c in cols if c in auto_df.columns]
             st.dataframe(auto_df[cols],hide_index=True,width='stretch', column_config=DISPLAY_COLUMNS)
             st.download_button('Download discovered candidates',auto_df.to_csv(index=False).encode(),file_name='auto_candidates.csv',mime='text/csv')
@@ -150,6 +152,8 @@ with tab2:
         st.link_button('SEC filings search',f'https://www.sec.gov/edgar/search/#/q={selected}')
 with tab3:
     st.markdown('''
+**V3.3 reliability.** Price date, scan date, and successful financial-metadata retrieval date are tracked separately in automated discovery. The latter is NOT the statement reporting period. Yahoo authorization failures are reported and prior usable data is preserved, rather than changing missing values to zero.
+
 **V3 data reliability.** Candidate statuses depend on actual available financial fields. Growth and value scores require minimum fundamentals, momentum can be technical-only, and recovery is not yet implemented. Scores are only transparent research heuristics. Missingness and sector comparisons require further development.
 
 **V2 manual scanner design.** Daily closing prices feed a 50/200-day trend signal and 3/6-month returns. Financial values are requested from an unofficial research data source.
