@@ -94,9 +94,59 @@ def batch_technicals(symbols):
     return results, failures
 
 
+def update_coverage_ledger(universe, source, selected, qualified, failures, run_time):
+    """Track attempted vs qualified symbols independently of the candidate table.
+
+    Records an attempt even if a provider rejects data. This is not confirmation of
+    a successful price retrieval, and coverage never implies full fundamental review.
+    """
+    path = DATA / 'scan_coverage.csv'
+    fields = ['ticker', 'last_attempt_utc', 'last_qualified_utc', 'last_result', 'attempt_count']
+    if path.exists():
+        try:
+            prior = pd.read_csv(path, dtype={'ticker': str})
+            prior = prior.drop_duplicates('ticker', keep='last')
+            previous = {str(r['ticker']): r for r in prior.to_dict('records')}
+        except Exception:
+            previous = {}
+    else:
+        previous = {}
+    universe_set = set(universe)
+    previous = {ticker: row for ticker, row in previous.items() if ticker in universe_set}
+    failed_symbols = {ticker for ticker, _ in failures}
+    qualified_symbols = {row['ticker'] for row in qualified}
+    for ticker in selected:
+        old = previous.get(ticker, {})
+        try:
+            prior_attempts = int(float(old.get('attempt_count', 0)))
+        except (ValueError, TypeError):
+            prior_attempts = 0
+        result = ('qualified' if ticker in qualified_symbols else
+                  'price_failed_or_unusable' if ticker in failed_symbols else
+                  'did_not_pass_price_liquidity')
+        previous[ticker] = {
+            'ticker': ticker,
+            'last_attempt_utc': run_time,
+            'last_qualified_utc': run_time if ticker in qualified_symbols else old.get('last_qualified_utc', ''),
+            'last_result': result,
+            'attempt_count': prior_attempts + 1,
+        }
+    frame = pd.DataFrame(sorted(previous.values(), key=lambda r: r['ticker']), columns=fields)
+    frame.to_csv(path, index=False)
+    attempted_count = len(previous)
+    last_qualified = sum(r.get('last_result') == 'qualified' for r in previous.values())
+    return {
+        'universe_coverage_attempted': attempted_count,
+        'universe_coverage_pct': round(100.0 * attempted_count / len(universe), 2),
+        'last_results_qualified_count': last_qualified,
+        'universe_coverage_unattempted': len(universe) - attempted_count,
+        'coverage_scope': f'Attempted from current universe source: {source}; some requests may have failed',
+    }
+
+
 def main():
     universe, source = read_universe()
-    batch_size = min(500, max(1, int(os.environ.get('RADAR_BATCH_SIZE', '100'))))
+    batch_size = min(300, max(1, int(os.environ.get('RADAR_BATCH_SIZE', '200'))))
     cursor_file = DATA / 'cursor.json'
     try:
         cursor = int(json.loads(cursor_file.read_text()).get('cursor', 0))
@@ -207,7 +257,9 @@ def main():
     advance = bool(batch) or len(failed) < len(selected)
     next_cursor = (start + len(selected)) % len(universe) if advance else start
     cursor_file.write_text(json.dumps({'cursor': next_cursor, 'universe_size': len(universe), 'source': source}, indent=2))
+    coverage = update_coverage_ledger(universe, source, selected, batch, failed, datetime.now(timezone.utc).isoformat(timespec='seconds'))
     status = {'run_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'),
+      **coverage,
       'universe_source':source, 'universe_count':len(universe),
       'tickers_attempted':len(selected),'qualifying_price_liquidity':len(batch),
       'failed_price_requests':len(failed),'fundamental_enrichments':len(enrichment_lookup),
@@ -219,7 +271,8 @@ def main():
       'sec_quarterly_success_count':len(quarterly_results),'sec_quarterly_failure_details':quarterly_failures,
       'sec_configured':bool(os.environ.get('RADAR_SEC_USER_AGENT','').strip()),
       'stored_candidates':len(updated), 'next_cursor':next_cursor,
-      'note':'Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
+      'batch_size_configured':batch_size, 'price_request_success_or_filtered':len(selected)-len(failed),
+      'note':'Coverage counts attempted symbols, not reliable financial research or full daily market screening. Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
