@@ -22,7 +22,8 @@ def assess(row):
     trend=price is not None and sma50 is not None and sma200 is not None and price>sma50>sma200
     result={'fundamental_fields_present':count,'fundamental_coverage_pct':coverage,
             'research_status':'Fundamentals reviewed (partial)' if enriched else 'Incomplete research',
-            'growth_score':None,'value_score':None,'recovery_score':None,'momentum_score':None}
+            'growth_score':None,'value_score':None,'recovery_score':None,'momentum_score':None,
+            'fundamental_missing_fields': ', '.join(k for k,v in values.items() if v is None)}
     if enriched:
         revenue=values['revenue_growth']; earnings=values['earnings_growth']; margin=values['profit_margin']; fcf=values['free_cash_flow']; pe=values['trailing_pe']
         if earnings is not None:
@@ -30,8 +31,11 @@ def assess(row):
             result['growth_score']=int(min(100,max(0,40 + 100*revenue + 70*earnings + 30*margin + (10 if fcf is not None and fcf>0 else 0))))
         if pe is not None and fcf is not None and pe>0:
             result['value_score']=int(max(0,min(100, 65 - pe*.7 + 30*margin + (15 if fcf>0 else -15))))
-    if trend and ret3 is not None:
-        result['momentum_score']=int(max(0,min(100,55 + min(30,max(-20,ret3))*0.8 + (10 if r.get('breakout_3m') is True else 0))))
+    if ret3 is not None and price is not None and sma50 is not None and sma200 is not None:
+        # Technical ranking is independent of missing financial metadata.
+        six=number(r.get('return_6m'))
+        if six is not None:
+            result['momentum_score']=int(max(0,min(100,30 + (20 if trend else 0) + min(25,max(-25,ret3))*.8 + min(20,max(-20,six))*.5 + (10 if str(r.get('breakout_3m')).lower()=='true' else 0))))
     # Recovery needs multi-quarter point-in-time fundamental data; do not manufacture scores.
     result['qualified_strategies']=', '.join(k.title() for k in ('growth','value','momentum') if result[f'{k}_score'] is not None) or 'Not qualified'
     result['investment_ready']='No — research only'

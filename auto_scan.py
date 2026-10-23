@@ -2,7 +2,8 @@
 import io
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+import time
 from pathlib import Path
 from urllib.request import Request, urlopen
 import pandas as pd
@@ -105,17 +106,47 @@ def main():
     batch, failed = batch_technicals(selected)
     # Enrich a few strongest preliminary technical candidates, but avoid large bursts of metadata requests.
     ranked = sorted(batch, key=lambda r:(r['trend'] == 'Bullish', r['return_3m'] or -999), reverse=True)
-    enriched, enrichment_failures = fetch_live([r['ticker'] for r in ranked[:min(5, len(ranked))]]) if ranked else (pd.DataFrame(), [])
-    enrichment_lookup = {r['ticker']: r for r in enriched.to_dict('records')} if not enriched.empty else {}
+    existing = load_existing()
+    old_lookup = {str(r['ticker']):r for r in existing.to_dict('records')} if not existing.empty else {}
+    # Prefer high-momentum names that have no real fundamentals or haven't been checked recently.
+    def needs_enrichment(r):
+        old=old_lookup.get(r['ticker'], {})
+        filled=sum(pd.notna(old.get(k)) for k in ('revenue_growth','earnings_growth','profit_margin','free_cash_flow','trailing_pe'))
+        prev=pd.to_datetime(old.get('fundamentals_last_checked_utc'),utc=True,errors='coerce')
+        expired=pd.isna(prev) or (pd.Timestamp.now(tz='UTC')-prev).days>=14
+        return filled<3 or expired
+    priority=[r['ticker'] for r in ranked if needs_enrichment(r)]
+    limit=max(0,min(10,int(os.environ.get('RADAR_ENRICH_LIMIT','5'))))
+    enrich_rows=[]; enrichment_failures=[]
+    for ticker in priority[:limit]:
+        # Independent failures should not terminate scanning or erase older fundamentals.
+        success=pd.DataFrame()
+        for attempt in range(2):
+            success, errors=fetch_live([ticker])
+            if not success.empty: break
+            enrichment_failures.extend(errors)
+            if attempt==0: time.sleep(2)
+        if not success.empty: enrich_rows.extend(success.to_dict('records'))
+        time.sleep(.4)
+    enrichment_lookup={r['ticker']:r for r in enrich_rows}
+    financial_keys=('company','sector','market_cap','revenue_growth','earnings_growth','profit_margin','free_cash_flow','trailing_pe')
     for r in batch:
-        e = enrichment_lookup.get(r['ticker'])
+        old=old_lookup.get(r['ticker'], {})
+        # A technical-only scan must not wipe previously collected fundamentals.
+        for k in financial_keys:
+            if pd.isna(r.get(k)) or r.get(k) in ('Unverified','Unknown'):
+                oldval=old.get(k)
+                if oldval is not None and pd.notna(oldval): r[k]=oldval
+        r['fundamentals_last_checked_utc']=old.get('fundamentals_last_checked_utc')
+        e=enrichment_lookup.get(r['ticker'])
         if e:
-            r.update(e)
-            r['fundamentals_checked'] = True
+            for k in financial_keys:
+                if k in e and e[k] is not None and pd.notna(e[k]): r[k]=e[k]
+            r['fundamentals_last_checked_utc']=datetime.now(timezone.utc).isoformat(timespec='seconds')
+        r['fundamentals_checked']=sum(pd.notna(r.get(k)) for k in financial_keys[3:])>0
         r.update(score_candidate(r))
         r['categories'] = categories(r)
         r['last_scanned_utc'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
-    existing = load_existing()
     updated = pd.concat([existing, pd.DataFrame(batch)], ignore_index=True)
     if not updated.empty:
         updated = updated.drop_duplicates('ticker', keep='last')
@@ -130,6 +161,7 @@ def main():
       'universe_source':source, 'universe_count':len(universe),
       'tickers_attempted':len(selected),'qualifying_price_liquidity':len(batch),
       'failed_price_requests':len(failed),'fundamental_enrichments':len(enrichment_lookup),
+      'fundamental_enrichment_failures':len(enrichment_failures),
       'stored_candidates':len(updated), 'next_cursor':next_cursor,
       'note':'Incremental, partial coverage; scores are not return forecasts. Stored rows may be stale. No trading.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))

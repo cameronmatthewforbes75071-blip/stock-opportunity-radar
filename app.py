@@ -10,26 +10,7 @@ st.markdown('''<style>
 h1,h2,h3 {color:#f3f7ff}
 </style>''', unsafe_allow_html=True)
 st.title('📡 Stock Opportunity Radar')
-
-# Display-only formatting: keep CSV exports and calculations numeric/unmodified.
-def financial_column_config():
-    money = ('$%.2f', ['price', 'Price', 'sma50', 'sma200'])
-    config = {key: st.column_config.NumberColumn(format=money[0]) for key in money[1]}
-    config['free_cash_flow'] = st.column_config.NumberColumn(format='$%.0f')
-    config['market_cap'] = st.column_config.NumberColumn(format='$%.0f')
-    # Historical price returns and coverage are already stored as percentage points.
-    for key in ('return_3m', 'return_6m', '3M %', '6M %', 'Coverage %', 'data_coverage',
-                'fundamental_coverage_pct'):
-        config[key] = st.column_config.NumberColumn(format='%.2f%%')
-    for key in ('score', 'Score / 100', 'growth_score', 'value_score', 'momentum_score'):
-        config[key] = st.column_config.NumberColumn(format='%.0f')
-    return config
-
-DISPLAY_COLUMNS = financial_column_config()
-
-def money_text(value):
-    return 'Unavailable' if pd.isna(value) else f'${float(value):,.2f}'
-st.caption('V3.1 • Financial-data quality controls • Currency and percentage display • Research only')
+st.caption('V3 • Data-quality gates and separate strategy rankings • Research only')
 
 with st.sidebar:
     st.header('Scan controls')
@@ -114,7 +95,7 @@ with tab0:
                 st.caption(f'{strategy} scores are provisional research heuristics. They are not price targets, probabilities, or buy signals.')
             cols=['ticker','research_status','fundamental_coverage_pct','fundamental_missing_fields','growth_score','value_score','momentum_score','categories','price','trend','return_3m','Age (days)','fundamentals_checked']
             cols=[c for c in cols if c in auto_df.columns]
-            st.dataframe(auto_df[cols],hide_index=True,use_container_width=True, column_config=DISPLAY_COLUMNS)
+            st.dataframe(auto_df[cols],hide_index=True,use_container_width=True)
             st.download_button('Download discovered candidates',auto_df.to_csv(index=False).encode(),file_name='auto_candidates.csv',mime='text/csv')
     else:
         st.info('No automated snapshot yet. In GitHub, run Actions → Incremental stock discovery → Run workflow once. Commit permission must be enabled for Actions.')
@@ -125,7 +106,7 @@ with tab1:
     if filtered.empty: st.write('No stocks meet these filters. Reduce the score or data-coverage threshold.')
     else:
         show=filtered[['ticker','company','research_status','fundamental_coverage_pct','fundamental_missing_fields','growth_score','value_score','momentum_score','categories','score','data_coverage','price','trend','return_3m','return_6m','as_of']].rename(columns={'ticker':'Ticker','company':'Company','categories':'Category','score':'Score / 100','data_coverage':'Coverage %','price':'Price','trend':'Trend','return_3m':'3M %','return_6m':'6M %','as_of':'Price as of'})
-        st.dataframe(show,use_container_width=True,hide_index=True,column_config=DISPLAY_COLUMNS)
+        st.dataframe(show,use_container_width=True,hide_index=True)
         st.download_button('Download CSV',filtered.to_csv(index=False).encode(),file_name='stock_radar_results.csv',mime='text/csv')
 with tab2:
     selected=st.selectbox('Select ticker to inspect',df.ticker.tolist())
@@ -134,14 +115,14 @@ with tab2:
     st.write(f"**Category:** {row.categories} · **Sector:** {row.sector} · **Source:** {row.source}")
     st.write(f"**V2 legacy score (not comparable when data is missing):** {row.score}/100 · **V3 financial field coverage:** {row.fundamental_coverage_pct}% · **Status:** {row.research_status}")
     u,v,w=st.columns(3)
-    u.metric('Price',money_text(row.price))
+    u.metric('Price',f"${row.price:,.2f}")
     v.metric('3-month price change',f"{row.return_3m:.1f}%")
     w.metric('6-month price change',f"{row.return_6m:.1f}%")
     st.markdown('#### Price signals')
-    st.write(f"Trend: **{row.trend}** · 50-day average: **{money_text(row.sma50)}** · 200-day average: **{money_text(row.sma200)}**")
+    st.write(f"Trend: **{row.trend}** · 50-day average: **${row.sma50:.2f}** · 200-day average: **${row.sma200:.2f}**")
     st.markdown('#### Business and valuation signals')
     for col,label,percent in [('revenue_growth','Revenue growth',True),('earnings_growth','Earnings growth',True),('profit_margin','Profit margin',True),('trailing_pe','Trailing P/E',False),('free_cash_flow','Free cash flow',False)]:
-        value=row[col]; display='Unavailable' if pd.isna(value) else (f'{value*100:.1f}%' if percent else (money_text(value) if col == 'free_cash_flow' else f'{value:,.2f}'))
+        value=row[col]; display='Unavailable' if pd.isna(value) else (f'{value*100:.1f}%' if percent else f'{value:,.2f}')
         st.write(f'- **{label}:** {display}')
     st.markdown('#### Verification and research')
     st.write('Check the latest 10-Q / 10-K, management guidance, peer valuations, share count, dilution, and risk factors before forming an investment thesis.')
