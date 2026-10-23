@@ -144,6 +144,24 @@ def update_coverage_ledger(universe, source, selected, qualified, failures, run_
     }
 
 
+def select_retries(universe, regular, max_retries=20):
+    """Retry last-run failures, excluding symbols already in the regular batch.
+    Old failure rows remain eligible; an attempt is not counted as success.
+    """
+    path=DATA/'scan_coverage.csv'
+    if max_retries<=0 or not path.exists(): return []
+    try:
+        ledger=pd.read_csv(path,dtype={'ticker':str})
+        if not {'ticker','last_result','last_attempt_utc'}.issubset(ledger.columns): return []
+        failed=ledger[ledger.last_result.eq('price_failed_or_unusable')].copy()
+        failed=failed[failed.ticker.isin(set(universe)-set(regular))]
+        failed=failed.sort_values(['last_attempt_utc','ticker'],na_position='first')
+        return failed.ticker.head(max_retries).tolist()
+    except (OSError,ValueError,KeyError) as ex:
+        print('RETRY LEDGER UNAVAILABLE:',ex)
+        return []
+
+
 def main():
     universe, source = read_universe()
     batch_size = min(300, max(1, int(os.environ.get('RADAR_BATCH_SIZE', '200'))))
@@ -153,7 +171,10 @@ def main():
     except (FileNotFoundError, ValueError, TypeError):
         cursor = 0
     start = cursor % len(universe)
-    selected = [universe[(start+i) % len(universe)] for i in range(min(batch_size, len(universe)))]
+    regular = [universe[(start+i) % len(universe)] for i in range(min(batch_size, len(universe)))]
+    retry_limit = min(30,max(0,int(os.environ.get('RADAR_RETRY_LIMIT','20'))))
+    retry_symbols=select_retries(universe,regular,retry_limit)
+    selected=regular+retry_symbols
     batch, failed = batch_technicals(selected)
     # Enrich a few strongest preliminary technical candidates, but avoid large bursts of metadata requests.
     ranked = sorted(batch, key=lambda r:(r['trend'] == 'Bullish', r['return_3m'] or -999), reverse=True)
@@ -183,7 +204,7 @@ def main():
         time.sleep(.4)
     enrichment_lookup={r['ticker']:r for r in enrich_rows}
     # SEC filings are authoritative for reported annual amounts; limit requests per run.
-    sec_limit=max(0,min(10,int(os.environ.get('RADAR_SEC_LIMIT','3'))))
+    sec_limit=max(0,min(10,int(os.environ.get('RADAR_SEC_LIMIT','0'))))
     sec_results={};sec_failures={};quarterly_results={};quarterly_failures={}
     if os.environ.get('RADAR_SEC_USER_AGENT','').strip():
         sec_choices=[r['ticker'] for r in ranked[:max(10,sec_limit*5)]]
@@ -255,13 +276,13 @@ def main():
         updated.to_csv(DATA / 'discovery.csv', index=False)
     # Keep cursor stationary if ALL price requests fail, allowing retry next time.
     advance = bool(batch) or len(failed) < len(selected)
-    next_cursor = (start + len(selected)) % len(universe) if advance else start
+    next_cursor = (start + len(regular)) % len(universe) if advance else start
     cursor_file.write_text(json.dumps({'cursor': next_cursor, 'universe_size': len(universe), 'source': source}, indent=2))
     coverage = update_coverage_ledger(universe, source, selected, batch, failed, datetime.now(timezone.utc).isoformat(timespec='seconds'))
     status = {'run_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'),
       **coverage,
       'universe_source':source, 'universe_count':len(universe),
-      'tickers_attempted':len(selected),'qualifying_price_liquidity':len(batch),
+      'tickers_attempted':len(selected),'regular_tickers_attempted':len(regular),'retry_tickers_attempted':len(retry_symbols),'retry_symbols':retry_symbols,'qualifying_price_liquidity':len(batch),
       'failed_price_requests':len(failed),'fundamental_enrichments':len(enrichment_lookup),
       'fundamental_enrichment_failures':len(enrichment_failures),
       'fundamental_enrichment_attempts':len(attempted_enrichments),
@@ -271,8 +292,8 @@ def main():
       'sec_quarterly_success_count':len(quarterly_results),'sec_quarterly_failure_details':quarterly_failures,
       'sec_configured':bool(os.environ.get('RADAR_SEC_USER_AGENT','').strip()),
       'stored_candidates':len(updated), 'next_cursor':next_cursor,
-      'batch_size_configured':batch_size, 'price_request_success_or_filtered':len(selected)-len(failed),
-      'note':'Coverage counts attempted symbols, not reliable financial research or full daily market screening. Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
+      'batch_size_configured':batch_size,'retry_limit_configured':retry_limit, 'price_request_success_or_filtered':len(selected)-len(failed),
+      'note':'Dedicated SEC enrichment runs separately after technical screening. Coverage counts attempted symbols, not reliable financial research or full daily market screening. Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
