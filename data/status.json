@@ -1,0 +1,12 @@
+{
+  "run_utc": "2026-10-23T13:54:53+00:00",
+  "universe_source": "nasdaqtrader-symbol-directory (best-effort common-equity filter)",
+  "universe_count": 5741,
+  "tickers_attempted": 100,
+  "qualifying_price_liquidity": 36,
+  "failed_price_requests": 13,
+  "fundamental_enrichments": 5,
+  "stored_candidates": 36,
+  "next_cursor": 100,
+  "note": "Incremental, partial coverage; scores are not return forecasts. Stored rows may be stale. No trading."
+}
