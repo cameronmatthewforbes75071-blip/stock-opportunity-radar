@@ -63,9 +63,10 @@ def load_existing():
 
 def batch_technicals(symbols):
     import yfinance as yf
-    results, failures, short_records = [], [], []
-    for i in range(0, len(symbols), 25):
-        batch = symbols[i:i+25]
+    results, failures, short_records, successful_price = [], [], [], set()
+    chunk_size = max(10, min(50, int(os.environ.get('RADAR_DOWNLOAD_CHUNK', '30'))))
+    for i in range(0, len(symbols), chunk_size):
+        batch = symbols[i:i+chunk_size]
         try:
             raw = yf.download(batch, period='18mo', auto_adjust=True, progress=False, threads=False, group_by='ticker', timeout=30)
             for sym in batch:
@@ -75,6 +76,11 @@ def batch_technicals(symbols):
                     else:
                         frame = raw if len(batch) == 1 else None
                     if frame is None or frame.empty: raise ValueError('No price rows')
+                    close = pd.to_numeric(frame['Close'], errors='coerce').dropna()
+                    volume = pd.to_numeric(frame['Volume'], errors='coerce')
+                    if close.empty or not pd.notna(close.iloc[-1]): raise ValueError('No usable closing prices')
+                    if volume.dropna().empty: raise ValueError('No usable volume data')
+                    successful_price.add(sym)
                     ind = technical_indicators(frame['Close'], frame['Volume'])
                     if not ind:
                         short, short_reason = evaluate_short_history(frame['Close'], frame['Volume'])
@@ -98,17 +104,17 @@ def batch_technicals(symbols):
                     failures.append((sym, str(ex)[:80]))
         except Exception as ex:
             failures.extend((sym, str(ex)[:80]) for sym in batch)
-    return results, failures, short_records
+    return results, failures, short_records, successful_price
 
 
-def update_coverage_ledger(universe, source, selected, qualified, failures, run_time, short_records=None):
+def update_coverage_ledger(universe, source, selected, qualified, failures, run_time, short_records=None, successful_price=None):
     """Track attempted vs qualified symbols independently of the candidate table.
 
     Records an attempt even if a provider rejects data. This is not confirmation of
     a successful price retrieval, and coverage never implies full fundamental review.
     """
     path = DATA / 'scan_coverage.csv'
-    fields = ['ticker', 'last_attempt_utc', 'last_qualified_utc', 'last_result', 'attempt_count', 'failure_class', 'failure_reason']
+    fields = ['ticker', 'last_attempt_utc', 'last_qualified_utc', 'last_result', 'attempt_count', 'failure_class', 'failure_reason', 'price_data_verified_utc']
     if path.exists():
         try:
             prior = pd.read_csv(path, dtype={'ticker': str})
@@ -123,6 +129,7 @@ def update_coverage_ledger(universe, source, selected, qualified, failures, run_
     failed_symbols = {ticker: reason for ticker, reason in failures}
     qualified_symbols = {row['ticker'] for row in qualified}
     short_tiers = {row['ticker']:row['history_tier'] for row in (short_records or [])}
+    successful_price = set(successful_price or [])
     for ticker in selected:
         old = previous.get(ticker, {})
         try:
@@ -141,16 +148,21 @@ def update_coverage_ledger(universe, source, selected, qualified, failures, run_
             'attempt_count': prior_attempts + 1,
             'failure_class': classify_failure(failed_symbols[ticker]) if ticker in failed_symbols else '',
             'failure_reason': failed_symbols.get(ticker, ''),
+            'price_data_verified_utc': run_time if ticker in successful_price else old.get('price_data_verified_utc', ''),
         }
     frame = pd.DataFrame(sorted(previous.values(), key=lambda r: r['ticker']), columns=fields)
     frame.to_csv(path, index=False)
     attempted_count = len(previous)
     last_qualified = sum(r.get('last_result') == 'qualified' for r in previous.values())
+    verified_count = sum(pd.notna(row.get('price_data_verified_utc')) and str(row.get('price_data_verified_utc')).strip() not in ('', 'nan', 'None') for row in previous.values())
     return {
         'universe_coverage_attempted': attempted_count,
         'universe_coverage_pct': round(100.0 * attempted_count / len(universe), 2),
         'last_results_qualified_count': last_qualified,
         'universe_coverage_unattempted': len(universe) - attempted_count,
+        'universe_price_data_verified': verified_count,
+        'universe_price_data_verified_pct': round(100.0 * verified_count / len(universe), 2),
+        'universe_price_data_unverified': len(universe) - verified_count,
         'coverage_scope': f'Attempted from current universe source: {source}; some requests may have failed',
     }
 
@@ -187,10 +199,10 @@ def main():
     retry_limit = min(30,max(0,int(os.environ.get('RADAR_RETRY_LIMIT','20'))))
     retry_symbols=select_retries(universe,regular,retry_limit)
     selected=regular+retry_symbols
-    batch, failed, short_records = batch_technicals(selected)
+    batch, failed, short_records, successful_price = batch_technicals(selected)
     failed_map={ticker:reason for ticker,reason in failed}
-    retry_recovered=[ticker for ticker in retry_symbols if ticker not in failed_map]
-    retry_failed=[ticker for ticker in retry_symbols if ticker in failed_map]
+    retry_recovered=[ticker for ticker in retry_symbols if ticker in successful_price]
+    retry_failed=[ticker for ticker in retry_symbols if ticker not in successful_price]
     failure_types={}
     for _,reason in failed:
         key=classify_failure(reason)
@@ -307,11 +319,11 @@ def main():
         updated = enrich_dataframe(updated)
         updated = updated.sort_values(['fundamental_coverage_pct','score'], ascending=False)
         updated.to_csv(DATA / 'discovery.csv', index=False)
-    # Keep cursor stationary if ALL price requests fail, allowing retry next time.
-    advance = bool(batch) or len(failed) < len(selected)
+    # Keep cursor stationary only when none of the newly selected symbols returned usable price data.
+    advance = bool(set(regular) & successful_price)
     next_cursor = (start + len(regular)) % len(universe) if advance else start
     cursor_file.write_text(json.dumps({'cursor': next_cursor, 'universe_size': len(universe), 'source': source}, indent=2))
-    coverage = update_coverage_ledger(universe, source, selected, batch, failed, datetime.now(timezone.utc).isoformat(timespec='seconds'), short_records)
+    coverage = update_coverage_ledger(universe, source, selected, batch, failed, datetime.now(timezone.utc).isoformat(timespec='seconds'), short_records, successful_price)
     status = {'run_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'),
       **coverage,
       'universe_source':source, 'universe_count':len(universe),
@@ -325,8 +337,12 @@ def main():
       'sec_quarterly_success_count':len(quarterly_results),'sec_quarterly_failure_details':quarterly_failures,
       'sec_configured':bool(os.environ.get('RADAR_SEC_USER_AGENT','').strip()),
       'stored_candidates':len(updated), 'next_cursor':next_cursor,
-      'batch_size_configured':batch_size,'retry_limit_configured':retry_limit, 'price_request_success_or_filtered':len(selected)-len(failed),
-      'note':'V3.9: separate unranked limited-history watchlist; stocks with <20 observations are unusable; best-effort equity directory screening; failures classified, retries capped; dedicated SEC enrichment runs separately after technical screening. Coverage counts attempted symbols, not reliable financial research or full daily market screening. Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
+      'batch_size_configured':batch_size,'retry_limit_configured':retry_limit, 'price_request_success_or_filtered':len(successful_price),
+      'last_run_verified_price_symbols':len(successful_price),
+      'last_run_verified_price_pct':round(100*len(successful_price)/len(selected),2) if selected else 0,
+      'last_run_filtered_or_unranked':len(successful_price)-len(batch),
+      'last_run_verified_retries':len(retry_recovered),
+      'note':'V4.0: attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
