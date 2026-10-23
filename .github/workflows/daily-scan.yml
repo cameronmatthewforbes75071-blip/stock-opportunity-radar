@@ -23,7 +23,7 @@ jobs:
         env:
           RADAR_BATCH_SIZE: '100'
           RADAR_ENRICH_LIMIT: '5'
-          RADAR_SEC_LIMIT: '3'
+          RADAR_SEC_LIMIT: '5'
           RADAR_SEC_USER_AGENT: ${{ secrets.RADAR_SEC_USER_AGENT }}
         run: python auto_scan.py
       - name: Commit scan results
