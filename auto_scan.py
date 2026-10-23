@@ -8,6 +8,7 @@ from urllib.request import Request, urlopen
 import pandas as pd
 
 from scanner import technical_indicators, fetch_live, score_candidate, categories
+from quality import enrich_dataframe
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / 'data'
@@ -117,7 +118,9 @@ def main():
     existing = load_existing()
     updated = pd.concat([existing, pd.DataFrame(batch)], ignore_index=True)
     if not updated.empty:
-        updated = updated.drop_duplicates('ticker', keep='last').sort_values(['score', 'data_coverage'], ascending=False)
+        updated = updated.drop_duplicates('ticker', keep='last')
+        updated = enrich_dataframe(updated)
+        updated = updated.sort_values(['fundamental_coverage_pct','score'], ascending=False)
         updated.to_csv(DATA / 'discovery.csv', index=False)
     # Keep cursor stationary if ALL price requests fail, allowing retry next time.
     advance = bool(batch) or len(failed) < len(selected)
