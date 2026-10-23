@@ -1,0 +1,11 @@
+{
+  "run_utc": "2026-10-23T20:35:48+00:00",
+  "attempted": 10,
+  "annual_success": 9,
+  "quarterly_success": 9,
+  "failures": {
+    "ASC": "No usable annual SEC XBRL metrics",
+    "ASC (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics"
+  },
+  "note": "SEC job enriches saved candidates, not the full market. Cached XBRL filings are not point-in-time backtest data."
+}
