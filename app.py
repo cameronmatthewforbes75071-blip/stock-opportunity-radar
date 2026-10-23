@@ -20,7 +20,7 @@ def financial_column_config():
     config['market_cap'] = st.column_config.NumberColumn(format='$%.0f')
     # Historical price returns and coverage are already stored as percentage points.
     for key in ('return_3m', 'return_6m', '3M %', '6M %', 'Coverage %', 'data_coverage',
-                'fundamental_coverage_pct'):
+                'fundamental_coverage_pct', 'quarterly_revenue_yoy_growth', 'quarterly_earnings_yoy_growth', 'quarterly_profit_margin'):
         config[key] = st.column_config.NumberColumn(format='%.2f%%')
     for key in ('score', 'Score / 100', 'growth_score', 'value_score', 'momentum_score'):
         config[key] = st.column_config.NumberColumn(format='%.0f')
@@ -30,7 +30,7 @@ DISPLAY_COLUMNS = financial_column_config()
 
 def money_text(value):
     return 'Unavailable' if pd.isna(value) else f'${float(value):,.2f}'
-st.caption('V3.4 • Separate price and scan freshness • Financial request diagnostics • Research only')
+st.caption('V3.5 • Separate price and scan freshness • Financial request diagnostics • Research only')
 
 with st.sidebar:
     st.header('Scan controls')
@@ -117,6 +117,18 @@ with tab0:
             cols=['ticker','research_status','fundamental_coverage_pct','fundamental_missing_fields','growth_score','value_score','momentum_score','categories','price','trend','return_3m','Price age (days)','Scanned age (days)','Fundamentals checked age (days)','fundamentals_fetch_status','fundamentals_checked']
             cols=[c for c in cols if c in auto_df.columns]
             st.dataframe(auto_df[cols],hide_index=True,width='stretch', column_config=DISPLAY_COLUMNS)
+            quarterly_cols=['ticker','quarterly_revenue','quarterly_net_income','quarterly_revenue_yoy_growth',
+                            'quarterly_earnings_yoy_growth','quarterly_profit_margin','sec_quarterly_periods_json','sec_quarterly_filed_json']
+            if 'sec_quarterly_periods_json' in auto_df.columns:
+                st.markdown('#### SEC Quarterly (10-Q) research')
+                st.caption('Quarterly metrics are separate from annual scores. SEC periods are fiscal periods; filed dates indicate public availability. Missing values are not zero.')
+                view=auto_df.reindex(columns=quarterly_cols).copy()
+                for key in ('quarterly_revenue_yoy_growth','quarterly_earnings_yoy_growth','quarterly_profit_margin'):
+                    view[key]=pd.to_numeric(view[key],errors='coerce')*100
+                qconfig={k:st.column_config.NumberColumn(format='$%.0f') for k in ('quarterly_revenue','quarterly_net_income')}
+                qconfig.update({k:st.column_config.NumberColumn(format='%.2f%%') for k in ('quarterly_revenue_yoy_growth','quarterly_earnings_yoy_growth','quarterly_profit_margin')})
+                with st.expander('SEC quarterly numbers, reporting periods, and filing dates'):
+                    st.dataframe(view,hide_index=True,width='stretch',column_config=qconfig)
             if 'sec_periods_json' in auto_df.columns:
                 st.caption('SEC annual statement periods appear below when available; reporting period age differs from retrieval age.')
                 with st.expander('SEC financial reporting periods and source details'):
@@ -157,6 +169,8 @@ with tab2:
         st.link_button('SEC filings search',f'https://www.sec.gov/edgar/search/#/q={selected}')
 with tab3:
     st.markdown('''
+**V3.5 quarterly SEC financials.** The scanner stores 10-Q discrete-quarter revenue and net income separately from 10-K annual figures. Year-over-year rates require a matching approximately one-year-earlier quarter. Actual fiscal period ends and SEC filing dates are exposed. Missing 10-Q values stay missing, and provisional rankings are not replaced by unvalidated quarterly scores.
+
 **V3.4 reliability.** Price date, scan date, and successful financial-metadata retrieval date are tracked separately in automated discovery. The latter is NOT the statement reporting period. Yahoo authorization failures are reported and prior usable data is preserved, rather than changing missing values to zero.
 
 **V3 data reliability.** Candidate statuses depend on actual available financial fields. Growth and value scores require minimum fundamentals, momentum can be technical-only, and recovery is not yet implemented. Scores are only transparent research heuristics. Missingness and sector comparisons require further development.
