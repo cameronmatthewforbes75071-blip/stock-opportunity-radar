@@ -22,6 +22,7 @@ jobs:
       - name: Run incremental scan
         env:
           RADAR_BATCH_SIZE: '200'
+          RADAR_DOWNLOAD_CHUNK: '30'
           RADAR_ENRICH_LIMIT: '5'
           RADAR_SEC_LIMIT: '0'
           RADAR_RETRY_LIMIT: '20'
