@@ -12,6 +12,7 @@ from scanner import technical_indicators, fetch_live, score_candidate, categorie
 from quality import enrich_dataframe
 from sec_fundamentals import fetch_sec_annual, fetch_sec_quarterly
 from screen_reliability import classify_failure, is_likely_common_equity, retry_eligible, make_failure_record
+from adaptive_history import evaluate_short_history
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / 'data'
@@ -62,7 +63,7 @@ def load_existing():
 
 def batch_technicals(symbols):
     import yfinance as yf
-    results, failures = [], []
+    results, failures, short_records = [], [], []
     for i in range(0, len(symbols), 25):
         batch = symbols[i:i+25]
         try:
@@ -75,7 +76,16 @@ def batch_technicals(symbols):
                         frame = raw if len(batch) == 1 else None
                     if frame is None or frame.empty: raise ValueError('No price rows')
                     ind = technical_indicators(frame['Close'], frame['Volume'])
-                    if not ind: raise ValueError('Less than 201 daily observations')
+                    if not ind:
+                        short, short_reason = evaluate_short_history(frame['Close'], frame['Volume'])
+                        if short:
+                            short_records.append({'ticker': sym, 'company':sym, **short,
+                                'as_of':str(frame['Close'].dropna().index[-1].date()),
+                                'source':'Yahoo Finance via yfinance (unofficial)'})
+                            continue
+                        if short_reason == 'filtered_price_liquidity':
+                            continue
+                        raise ValueError('Less than 20 daily observations')
                     if ind['price'] < 5 or (ind['avg_volume_20d'] or 0) < 500000:
                         continue
                     results.append({'ticker':sym, 'company':sym, 'sector':'Unverified',
@@ -88,10 +98,10 @@ def batch_technicals(symbols):
                     failures.append((sym, str(ex)[:80]))
         except Exception as ex:
             failures.extend((sym, str(ex)[:80]) for sym in batch)
-    return results, failures
+    return results, failures, short_records
 
 
-def update_coverage_ledger(universe, source, selected, qualified, failures, run_time):
+def update_coverage_ledger(universe, source, selected, qualified, failures, run_time, short_records=None):
     """Track attempted vs qualified symbols independently of the candidate table.
 
     Records an attempt even if a provider rejects data. This is not confirmation of
@@ -112,6 +122,7 @@ def update_coverage_ledger(universe, source, selected, qualified, failures, run_
     previous = {ticker: row for ticker, row in previous.items() if ticker in universe_set}
     failed_symbols = {ticker: reason for ticker, reason in failures}
     qualified_symbols = {row['ticker'] for row in qualified}
+    short_tiers = {row['ticker']:row['history_tier'] for row in (short_records or [])}
     for ticker in selected:
         old = previous.get(ticker, {})
         try:
@@ -119,6 +130,7 @@ def update_coverage_ledger(universe, source, selected, qualified, failures, run_
         except (ValueError, TypeError):
             prior_attempts = 0
         result = ('qualified' if ticker in qualified_symbols else
+                  short_tiers[ticker] if ticker in short_tiers else
                   'price_failed_or_unusable' if ticker in failed_symbols else
                   'did_not_pass_price_liquidity')
         previous[ticker] = {
@@ -175,7 +187,7 @@ def main():
     retry_limit = min(30,max(0,int(os.environ.get('RADAR_RETRY_LIMIT','20'))))
     retry_symbols=select_retries(universe,regular,retry_limit)
     selected=regular+retry_symbols
-    batch, failed = batch_technicals(selected)
+    batch, failed, short_records = batch_technicals(selected)
     failed_map={ticker:reason for ticker,reason in failed}
     retry_recovered=[ticker for ticker in retry_symbols if ticker not in failed_map]
     retry_failed=[ticker for ticker in retry_symbols if ticker in failed_map]
@@ -184,6 +196,19 @@ def main():
         key=classify_failure(reason)
         failure_types[key]=failure_types.get(key,0)+1
     pd.DataFrame([make_failure_record(ticker,reason) for ticker,reason in failed], columns=['ticker','reason','failure_class']).to_csv(DATA/'price_failures_last_run.csv',index=False)
+    # Short-history stocks go to an explicitly UNRANKED watchlist, never to discovery.csv.
+    short_path = DATA / 'limited_history.csv'
+    short_df = pd.DataFrame(short_records)
+    if short_path.exists():
+        try:
+            old_short = pd.read_csv(short_path)
+            short_df = pd.concat([old_short, short_df], ignore_index=True)
+        except (OSError, ValueError, pd.errors.ParserError):
+            pass
+    if not short_df.empty:
+        short_df = short_df.drop_duplicates('ticker', keep='last').sort_values('ticker')
+    short_df.to_csv(short_path, index=False)
+
     # Enrich a few strongest preliminary technical candidates, but avoid large bursts of metadata requests.
     ranked = sorted(batch, key=lambda r:(r['trend'] == 'Bullish', r['return_3m'] or -999), reverse=True)
     existing = load_existing()
@@ -286,12 +311,12 @@ def main():
     advance = bool(batch) or len(failed) < len(selected)
     next_cursor = (start + len(regular)) % len(universe) if advance else start
     cursor_file.write_text(json.dumps({'cursor': next_cursor, 'universe_size': len(universe), 'source': source}, indent=2))
-    coverage = update_coverage_ledger(universe, source, selected, batch, failed, datetime.now(timezone.utc).isoformat(timespec='seconds'))
+    coverage = update_coverage_ledger(universe, source, selected, batch, failed, datetime.now(timezone.utc).isoformat(timespec='seconds'), short_records)
     status = {'run_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'),
       **coverage,
       'universe_source':source, 'universe_count':len(universe),
       'tickers_attempted':len(selected),'regular_tickers_attempted':len(regular),'retry_tickers_attempted':len(retry_symbols),'retry_symbols':retry_symbols,'retry_recovered_count':len(retry_recovered),'retry_failed_count':len(retry_failed),'failure_types':failure_types,'qualifying_price_liquidity':len(batch),
-      'failed_price_requests':len(failed),'fundamental_enrichments':len(enrichment_lookup),
+      'failed_price_requests':len(failed), 'short_history_60_200_qualified':sum(r['history_tier']=='limited_60_200' for r in short_records), 'early_history_20_59_qualified':sum(r['history_tier']=='early_20_59' for r in short_records), 'limited_history_watchlist_size':len(short_df), 'fundamental_enrichments':len(enrichment_lookup),
       'fundamental_enrichment_failures':len(enrichment_failures),
       'fundamental_enrichment_attempts':len(attempted_enrichments),
       'fundamental_enrichment_failed_symbols':[s for s in attempted_enrichments if s not in enrichment_lookup],
@@ -301,7 +326,7 @@ def main():
       'sec_configured':bool(os.environ.get('RADAR_SEC_USER_AGENT','').strip()),
       'stored_candidates':len(updated), 'next_cursor':next_cursor,
       'batch_size_configured':batch_size,'retry_limit_configured':retry_limit, 'price_request_success_or_filtered':len(selected)-len(failed),
-      'note':'V3.8: best-effort equity directory screening; failures classified, retries capped; dedicated SEC enrichment runs separately after technical screening. Coverage counts attempted symbols, not reliable financial research or full daily market screening. Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
+      'note':'V3.9: separate unranked limited-history watchlist; stocks with <20 observations are unusable; best-effort equity directory screening; failures classified, retries capped; dedicated SEC enrichment runs separately after technical screening. Coverage counts attempted symbols, not reliable financial research or full daily market screening. Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
