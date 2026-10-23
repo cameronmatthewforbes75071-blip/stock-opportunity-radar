@@ -30,7 +30,7 @@ DISPLAY_COLUMNS = financial_column_config()
 
 def money_text(value):
     return 'Unavailable' if pd.isna(value) else f'${float(value):,.2f}'
-st.caption('V3.3 • Separate price and scan freshness • Financial request diagnostics • Research only')
+st.caption('V3.4 • Separate price and scan freshness • Financial request diagnostics • Research only')
 
 with st.sidebar:
     st.header('Scan controls')
@@ -117,6 +117,11 @@ with tab0:
             cols=['ticker','research_status','fundamental_coverage_pct','fundamental_missing_fields','growth_score','value_score','momentum_score','categories','price','trend','return_3m','Price age (days)','Scanned age (days)','Fundamentals checked age (days)','fundamentals_fetch_status','fundamentals_checked']
             cols=[c for c in cols if c in auto_df.columns]
             st.dataframe(auto_df[cols],hide_index=True,width='stretch', column_config=DISPLAY_COLUMNS)
+            if 'sec_periods_json' in auto_df.columns:
+                st.caption('SEC annual statement periods appear below when available; reporting period age differs from retrieval age.')
+                with st.expander('SEC financial reporting periods and source details'):
+                    sec_cols=[c for c in ['ticker','fundamentals_source','sec_periods_json','sec_last_retrieved_utc'] if c in auto_df.columns]
+                    st.dataframe(auto_df[sec_cols],hide_index=True,width='stretch')
             st.download_button('Download discovered candidates',auto_df.to_csv(index=False).encode(),file_name='auto_candidates.csv',mime='text/csv')
     else:
         st.info('No automated snapshot yet. In GitHub, run Actions → Incremental stock discovery → Run workflow once. Commit permission must be enabled for Actions.')
@@ -152,7 +157,7 @@ with tab2:
         st.link_button('SEC filings search',f'https://www.sec.gov/edgar/search/#/q={selected}')
 with tab3:
     st.markdown('''
-**V3.3 reliability.** Price date, scan date, and successful financial-metadata retrieval date are tracked separately in automated discovery. The latter is NOT the statement reporting period. Yahoo authorization failures are reported and prior usable data is preserved, rather than changing missing values to zero.
+**V3.4 reliability.** Price date, scan date, and successful financial-metadata retrieval date are tracked separately in automated discovery. The latter is NOT the statement reporting period. Yahoo authorization failures are reported and prior usable data is preserved, rather than changing missing values to zero.
 
 **V3 data reliability.** Candidate statuses depend on actual available financial fields. Growth and value scores require minimum fundamentals, momentum can be technical-only, and recovery is not yet implemented. Scores are only transparent research heuristics. Missingness and sector comparisons require further development.
 
