@@ -30,7 +30,7 @@ DISPLAY_COLUMNS = financial_column_config()
 
 def money_text(value):
     return 'Unavailable' if pd.isna(value) else f'${float(value):,.2f}'
-st.caption('V3.5 • Separate price and scan freshness • Financial request diagnostics • Research only')
+st.caption('V3.6 • Separate price and scan freshness • Financial request diagnostics • Research only')
 
 with st.sidebar:
     st.header('Scan controls')
@@ -95,6 +95,13 @@ with tab0:
         status=json.loads(status_path.read_text())
         st.write(f"**Last scan (UTC):** {status.get('run_utc', 'Unknown')} · **Universe source:** {status.get('universe_source','Unknown')}")
         st.write(f"**Symbols in universe:** {status.get('universe_count',0):,} · **Last run attempted:** {status.get('tickers_attempted',0)} · **Last run errors:** {status.get('failed_price_requests',0)}")
+        coverage_pct=status.get('universe_coverage_pct')
+        if coverage_pct is not None:
+            st.progress(min(1.0, max(0.0, float(coverage_pct)/100)), text=f"Universe attempted: {status.get('universe_coverage_attempted',0):,} / {status.get('universe_count',0):,} symbols ({float(coverage_pct):.2f}%)")
+            st.caption('This is cumulative attempt coverage, not validated price coverage or financial-statement coverage. The saved candidate count is separate. An attempted symbol may have failed.')
+            st.write(f"**Not yet attempted:** {status.get('universe_coverage_unattempted',0):,} · **Last batch price failures:** {status.get('failed_price_requests',0):,}")
+        else:
+            st.caption('Run the V3.6 workflow to generate cumulative universe coverage.')
     if snapshot.exists():
         auto_df=add_freshness(enrich_dataframe(pd.read_csv(snapshot)))
         if auto_df.empty:
