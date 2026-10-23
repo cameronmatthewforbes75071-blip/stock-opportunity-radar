@@ -74,3 +74,69 @@ def fetch_sec_annual(ticker,agent=None):
         return {'metrics':vals,'periods':periods,'tags':tags,'cik':cik,'sec_last_retrieved_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'), 'source':'SEC XBRL companyfacts (annual 10-K)'},'OK'
     except Exception as e:
         return {}, f'{type(e).__name__}: {str(e)[:140]}'
+
+
+# Most recent quarterly (10-Q) facts, with one original filing per period.
+# Period comparisons require the SAME fiscal quarter one year earlier, based on end dates.
+def _quarterly(facts, tags, unit='USD'):
+    for tag in tags:
+        rows=facts.get('us-gaap',{}).get(tag,{}).get('units',{}).get(unit,[])
+        quarters={}
+        for r in rows:
+            if r.get('form') not in ('10-Q','10-Q/A') or not all(k in r for k in ('start','end','filed','val')):
+                continue
+            try:
+                start=datetime.fromisoformat(r['start']); end=datetime.fromisoformat(r['end'])
+            except (TypeError,ValueError): continue
+            if not 70 <= (end-start).days <= 105: continue
+            period=r['end']
+            entry={'val':r['val'],'filed':r['filed'],'tag':tag,'end':period,'start':r['start'],'form':r['form']}
+            previous=quarters.get(period)
+            if previous is None or entry['filed']<previous['filed']:
+                quarters[period]=entry
+        if quarters: return sorted(quarters.values(),key=lambda x:x['end'],reverse=True)
+    return []
+
+
+def _matching_yoy(records):
+    if not records: return None
+    latest=records[0]
+    current_date=datetime.fromisoformat(latest['end'])
+    matches=[r for r in records[1:] if 350 <= (current_date-datetime.fromisoformat(r['end'])).days <= 380]
+    if not matches or matches[0]['val']<=0: return None
+    return (latest['val']/matches[0]['val'])-1
+
+
+def fetch_sec_quarterly(ticker,agent=None):
+    """SEC 10-Q discrete-quarter facts; no fabricated trailing totals or earnings estimates.
+
+    Returns a metric packet and status. Not every issuer uses these US-GAAP tags.
+    SEC companyfacts may include amended/re-stated filings; first-filed selection is
+    a deliberate research simplification, not a point-in-time backtesting feed.
+    """
+    agent=agent or os.getenv('RADAR_SEC_USER_AGENT','').strip()
+    if not agent or '@' not in agent: return {},'SEC not configured (set RADAR_SEC_USER_AGENT)'
+    try:
+        directory=_cached(TICKERS,agent,CACHE/'company_tickers.json',24*7)
+        matching=[v for v in directory.values() if str(v.get('ticker','')).upper()==ticker.upper()]
+        if not matching: return {},'Ticker not present in SEC company directory'
+        cik=int(matching[0]['cik_str'])
+        data=_cached(f'{BASE}/api/xbrl/companyfacts/CIK{cik:010d}.json',agent,CACHE/f'{cik}.json',24)
+        facts=data.get('facts',{})
+        revenue=_quarterly(facts,['RevenueFromContractWithCustomerExcludingAssessedTax','Revenues','SalesRevenueNet','RevenueFromContractWithCustomerIncludingAssessedTax'])
+        earnings=_quarterly(facts,['NetIncomeLoss'])
+        vals={};periods={};tags={};filed_dates={}
+        for key,items in [('quarterly_revenue',revenue),('quarterly_net_income',earnings)]:
+            if items:
+                vals[key]=items[0]['val'];periods[key]=items[0]['end'];tags[key]=items[0]['tag'];filed_dates[key]=items[0]['filed']
+        rg=_matching_yoy(revenue);eg=_matching_yoy(earnings)
+        if rg is not None: vals['quarterly_revenue_yoy_growth']=rg
+        if eg is not None: vals['quarterly_earnings_yoy_growth']=eg
+        if revenue and earnings and revenue[0]['end']==earnings[0]['end'] and revenue[0]['val']>0:
+            vals['quarterly_profit_margin']=earnings[0]['val']/revenue[0]['val']
+        if not vals: return {},'No usable quarterly 10-Q SEC XBRL metrics'
+        return {'metrics':vals,'periods':periods,'tags':tags,'filed_dates':filed_dates,'cik':cik,
+                'sec_last_retrieved_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'),
+                'source':'SEC XBRL companyfacts (discrete quarterly 10-Q)'},'OK'
+    except Exception as e:
+        return {},f'{type(e).__name__}: {str(e)[:140]}'
