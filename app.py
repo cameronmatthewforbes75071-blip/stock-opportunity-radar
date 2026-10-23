@@ -99,6 +99,7 @@ with tab0:
         if coverage_pct is not None:
             st.progress(min(1.0, max(0.0, float(coverage_pct)/100)), text=f"Universe attempted: {status.get('universe_coverage_attempted',0):,} / {status.get('universe_count',0):,} symbols ({float(coverage_pct):.2f}%)")
             st.caption('This is cumulative attempt coverage, not validated price coverage or financial-statement coverage. The saved candidate count is separate. An attempted symbol may have failed.')
+            st.caption(f"Last scan: {status.get('regular_tickers_attempted',status.get('tickers_attempted','?'))} regular + {status.get('retry_tickers_attempted',0)} retries; {status.get('failed_price_requests',0)} unusable/failed price requests.")
             st.write(f"**Not yet attempted:** {status.get('universe_coverage_unattempted',0):,} · **Last batch price failures:** {status.get('failed_price_requests',0):,}")
         else:
             st.caption('Run the V3.6 workflow to generate cumulative universe coverage.')
