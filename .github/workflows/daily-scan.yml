@@ -1,0 +1,39 @@
+
+name: Incremental stock discovery
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 23 * * 1-5'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stock-radar-daily-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run incremental scan
+        env:
+          RADAR_BATCH_SIZE: '100'
+        run: python auto_scan.py
+      - name: Commit scan results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/discovery.csv data/status.json data/cursor.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update stock discovery snapshot"
+            git push
+          fi
+  
