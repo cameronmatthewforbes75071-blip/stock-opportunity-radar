@@ -1,21 +1,32 @@
 {
-  "run_utc": "2026-10-23T19:58:46+00:00",
+  "run_utc": "2026-10-23T20:22:34+00:00",
+  "universe_coverage_attempted": 200,
+  "universe_coverage_pct": 3.48,
+  "last_results_qualified_count": 62,
+  "universe_coverage_unattempted": 5541,
+  "coverage_scope": "Attempted from current universe source: nasdaqtrader-symbol-directory (best-effort common-equity filter); some requests may have failed",
   "universe_source": "nasdaqtrader-symbol-directory (best-effort common-equity filter)",
   "universe_count": 5741,
-  "tickers_attempted": 100,
-  "qualifying_price_liquidity": 26,
-  "failed_price_requests": 8,
+  "tickers_attempted": 200,
+  "qualifying_price_liquidity": 62,
+  "failed_price_requests": 20,
   "fundamental_enrichments": 5,
   "fundamental_enrichment_failures": 0,
   "fundamental_enrichment_attempts": 5,
   "fundamental_enrichment_failed_symbols": [],
   "fundamentals_provider": "SEC 10-K annual + 10-Q quarterly when configured; Yahoo Finance unofficial fallback",
-  "sec_success_count": 5,
-  "sec_failure_details": {},
-  "sec_quarterly_success_count": 5,
-  "sec_quarterly_failure_details": {},
+  "sec_success_count": 4,
+  "sec_failure_details": {
+    "BTE": "No usable annual SEC XBRL metrics"
+  },
+  "sec_quarterly_success_count": 4,
+  "sec_quarterly_failure_details": {
+    "BTE": "No usable quarterly 10-Q SEC XBRL metrics"
+  },
   "sec_configured": true,
-  "stored_candidates": 241,
-  "next_cursor": 700,
-  "note": "Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading."
+  "stored_candidates": 303,
+  "next_cursor": 900,
+  "batch_size_configured": 200,
+  "price_request_success_or_filtered": 180,
+  "note": "Coverage counts attempted symbols, not reliable financial research or full daily market screening. Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading."
 }
