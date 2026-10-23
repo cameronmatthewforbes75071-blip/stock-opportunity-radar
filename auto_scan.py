@@ -11,6 +11,7 @@ import pandas as pd
 from scanner import technical_indicators, fetch_live, score_candidate, categories
 from quality import enrich_dataframe
 from sec_fundamentals import fetch_sec_annual, fetch_sec_quarterly
+from screen_reliability import classify_failure, is_likely_common_equity, retry_eligible, make_failure_record
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / 'data'
@@ -36,13 +37,9 @@ def read_universe():
                 df = df[df['Test Issue'].fillna('Y') == 'N']
             if 'ETF' in df.columns:
                 df = df[df['ETF'].fillna('Y') == 'N']
-            if 'Security Name' in df.columns:
-                # Exclude many trust, preferred, warrants, rights and units; some uncommon securities may remain.
-                excluded = r'(?i)(warrant|depositary|depositary share|preferred| preference | units?\b|right to|notes due|etf|exchange.traded fund)'
-                df = df[~df['Security Name'].fillna('').str.contains(excluded, regex=True)]
-            for symbol in df[ticker_col].dropna():
-                symbol = symbol.strip().upper()
-                if symbol and len(symbol) <= 7 and symbol.replace('-', '').isalpha() and '.' not in symbol and '$' not in symbol:
+            for _, record in df.iterrows():
+                symbol = str(record.get(ticker_col, '')).strip().upper()
+                if is_likely_common_equity(symbol, record.get('Security Name', '')):
                     symbols.add(symbol)
         except Exception as ex:
             print(f'UNIVERSE SOURCE FAILED [{kind}]: {type(ex).__name__}: {ex}')
@@ -101,7 +98,7 @@ def update_coverage_ledger(universe, source, selected, qualified, failures, run_
     a successful price retrieval, and coverage never implies full fundamental review.
     """
     path = DATA / 'scan_coverage.csv'
-    fields = ['ticker', 'last_attempt_utc', 'last_qualified_utc', 'last_result', 'attempt_count']
+    fields = ['ticker', 'last_attempt_utc', 'last_qualified_utc', 'last_result', 'attempt_count', 'failure_class', 'failure_reason']
     if path.exists():
         try:
             prior = pd.read_csv(path, dtype={'ticker': str})
@@ -113,7 +110,7 @@ def update_coverage_ledger(universe, source, selected, qualified, failures, run_
         previous = {}
     universe_set = set(universe)
     previous = {ticker: row for ticker, row in previous.items() if ticker in universe_set}
-    failed_symbols = {ticker for ticker, _ in failures}
+    failed_symbols = {ticker: reason for ticker, reason in failures}
     qualified_symbols = {row['ticker'] for row in qualified}
     for ticker in selected:
         old = previous.get(ticker, {})
@@ -130,6 +127,8 @@ def update_coverage_ledger(universe, source, selected, qualified, failures, run_
             'last_qualified_utc': run_time if ticker in qualified_symbols else old.get('last_qualified_utc', ''),
             'last_result': result,
             'attempt_count': prior_attempts + 1,
+            'failure_class': classify_failure(failed_symbols[ticker]) if ticker in failed_symbols else '',
+            'failure_reason': failed_symbols.get(ticker, ''),
         }
     frame = pd.DataFrame(sorted(previous.values(), key=lambda r: r['ticker']), columns=fields)
     frame.to_csv(path, index=False)
@@ -155,6 +154,7 @@ def select_retries(universe, regular, max_retries=20):
         if not {'ticker','last_result','last_attempt_utc'}.issubset(ledger.columns): return []
         failed=ledger[ledger.last_result.eq('price_failed_or_unusable')].copy()
         failed=failed[failed.ticker.isin(set(universe)-set(regular))]
+        failed=failed[failed.apply(retry_eligible,axis=1)]
         failed=failed.sort_values(['last_attempt_utc','ticker'],na_position='first')
         return failed.ticker.head(max_retries).tolist()
     except (OSError,ValueError,KeyError) as ex:
@@ -176,6 +176,14 @@ def main():
     retry_symbols=select_retries(universe,regular,retry_limit)
     selected=regular+retry_symbols
     batch, failed = batch_technicals(selected)
+    failed_map={ticker:reason for ticker,reason in failed}
+    retry_recovered=[ticker for ticker in retry_symbols if ticker not in failed_map]
+    retry_failed=[ticker for ticker in retry_symbols if ticker in failed_map]
+    failure_types={}
+    for _,reason in failed:
+        key=classify_failure(reason)
+        failure_types[key]=failure_types.get(key,0)+1
+    pd.DataFrame([make_failure_record(ticker,reason) for ticker,reason in failed], columns=['ticker','reason','failure_class']).to_csv(DATA/'price_failures_last_run.csv',index=False)
     # Enrich a few strongest preliminary technical candidates, but avoid large bursts of metadata requests.
     ranked = sorted(batch, key=lambda r:(r['trend'] == 'Bullish', r['return_3m'] or -999), reverse=True)
     existing = load_existing()
@@ -282,7 +290,7 @@ def main():
     status = {'run_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'),
       **coverage,
       'universe_source':source, 'universe_count':len(universe),
-      'tickers_attempted':len(selected),'regular_tickers_attempted':len(regular),'retry_tickers_attempted':len(retry_symbols),'retry_symbols':retry_symbols,'qualifying_price_liquidity':len(batch),
+      'tickers_attempted':len(selected),'regular_tickers_attempted':len(regular),'retry_tickers_attempted':len(retry_symbols),'retry_symbols':retry_symbols,'retry_recovered_count':len(retry_recovered),'retry_failed_count':len(retry_failed),'failure_types':failure_types,'qualifying_price_liquidity':len(batch),
       'failed_price_requests':len(failed),'fundamental_enrichments':len(enrichment_lookup),
       'fundamental_enrichment_failures':len(enrichment_failures),
       'fundamental_enrichment_attempts':len(attempted_enrichments),
@@ -293,7 +301,7 @@ def main():
       'sec_configured':bool(os.environ.get('RADAR_SEC_USER_AGENT','').strip()),
       'stored_candidates':len(updated), 'next_cursor':next_cursor,
       'batch_size_configured':batch_size,'retry_limit_configured':retry_limit, 'price_request_success_or_filtered':len(selected)-len(failed),
-      'note':'Dedicated SEC enrichment runs separately after technical screening. Coverage counts attempted symbols, not reliable financial research or full daily market screening. Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
+      'note':'V3.8: best-effort equity directory screening; failures classified, retries capped; dedicated SEC enrichment runs separately after technical screening. Coverage counts attempted symbols, not reliable financial research or full daily market screening. Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
