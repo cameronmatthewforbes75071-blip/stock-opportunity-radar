@@ -118,7 +118,9 @@ def main():
     priority=[r['ticker'] for r in ranked if needs_enrichment(r)]
     limit=max(0,min(10,int(os.environ.get('RADAR_ENRICH_LIMIT','5'))))
     enrich_rows=[]; enrichment_failures=[]
+    attempted_enrichments=[]
     for ticker in priority[:limit]:
+        attempted_enrichments.append(ticker)
         # Independent failures should not terminate scanning or erase older fundamentals.
         success=pd.DataFrame()
         for attempt in range(2):
@@ -138,11 +140,17 @@ def main():
                 oldval=old.get(k)
                 if oldval is not None and pd.notna(oldval): r[k]=oldval
         r['fundamentals_last_checked_utc']=old.get('fundamentals_last_checked_utc')
+        r['fundamentals_source']=old.get('fundamentals_source', 'Unknown / historical')
+        r['fundamentals_fetch_status']=old.get('fundamentals_fetch_status', 'Not requested this run')
         e=enrichment_lookup.get(r['ticker'])
         if e:
             for k in financial_keys:
                 if k in e and e[k] is not None and pd.notna(e[k]): r[k]=e[k]
             r['fundamentals_last_checked_utc']=datetime.now(timezone.utc).isoformat(timespec='seconds')
+            r['fundamentals_source']='Yahoo Finance via yfinance (unofficial)'
+            r['fundamentals_fetch_status']='Succeeded (metadata returned; completeness varies)'
+        if r['ticker'] in attempted_enrichments and not e:
+            r['fundamentals_fetch_status']='Failed or no usable response (previous fundamentals retained)'
         r['fundamentals_checked']=sum(pd.notna(r.get(k)) for k in financial_keys[3:])>0
         r.update(score_candidate(r))
         r['categories'] = categories(r)
@@ -162,8 +170,11 @@ def main():
       'tickers_attempted':len(selected),'qualifying_price_liquidity':len(batch),
       'failed_price_requests':len(failed),'fundamental_enrichments':len(enrichment_lookup),
       'fundamental_enrichment_failures':len(enrichment_failures),
+      'fundamental_enrichment_attempts':len(attempted_enrichments),
+      'fundamental_enrichment_failed_symbols':[s for s in attempted_enrichments if s not in enrichment_lookup],
+      'fundamentals_provider':'Yahoo Finance via yfinance (unofficial; 401 responses possible)',
       'stored_candidates':len(updated), 'next_cursor':next_cursor,
-      'note':'Incremental, partial coverage; scores are not return forecasts. Stored rows may be stale. No trading.'}
+      'note':'Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
