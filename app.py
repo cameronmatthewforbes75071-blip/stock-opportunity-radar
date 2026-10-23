@@ -9,7 +9,7 @@ st.markdown('''<style>
 h1,h2,h3 {color:#f3f7ff}
 </style>''', unsafe_allow_html=True)
 st.title('📡 Stock Opportunity Radar')
-st.caption('V1 • Research-only candidate discovery • US equities • Long/position trading')
+st.caption('V2 • Incremental automated discovery + manual live scanner • Research only')
 
 with st.sidebar:
     st.header('Scan controls')
@@ -61,7 +61,36 @@ b.metric('Candidates displayed',len(filtered))
 c.metric('Bullish trends',int((df.trend=='Bullish').sum()))
 d.metric('Average data coverage',f'{df.data_coverage.mean():.0f}%')
 st.divider()
-tab1,tab2,tab3=st.tabs(['🎯 Opportunities','🔬 Stock research','ℹ️ Methodology'])
+tab0,tab1,tab2,tab3=st.tabs(['🤖 Auto discovery','🎯 Opportunities','🔬 Stock research','ℹ️ Methodology'])
+with tab0:
+    from pathlib import Path
+    import json
+    data_dir=Path(__file__).parent / 'data'
+    snapshot=data_dir / 'discovery.csv'
+    status_path=data_dir / 'status.json'
+    st.subheader('Incremental automated discovery')
+    st.caption('Background jobs scan a rotating subset of symbols. This is NOT full-market daily coverage. Data may be delayed or incomplete.')
+    if status_path.exists():
+        status=json.loads(status_path.read_text())
+        st.write(f"**Last scan (UTC):** {status.get('run_utc', 'Unknown')} · **Universe source:** {status.get('universe_source','Unknown')}")
+        st.write(f"**Symbols in universe:** {status.get('universe_count',0):,} · **Last run attempted:** {status.get('tickers_attempted',0)} · **Last run errors:** {status.get('failed_price_requests',0)}")
+    if snapshot.exists():
+        auto_df=pd.read_csv(snapshot)
+        if auto_df.empty:
+            st.info('No candidates have passed the initial scan yet.')
+        else:
+            auto_df['last_scanned_utc']=pd.to_datetime(auto_df.get('last_scanned_utc'),utc=True,errors='coerce')
+            ages=(pd.Timestamp.now(tz='UTC')-auto_df['last_scanned_utc']).dt.days
+            auto_df['Age (days)']=ages
+            st.warning('Results accumulate over time. Old scores and prices are stale; validate again before research. Fundamentals are enriched for only a few names per run.')
+            st.metric('Stored research candidates (not all US stocks)',len(auto_df))
+            cols=['ticker','score','data_coverage','categories','price','trend','return_3m','Age (days)','fundamentals_checked']
+            cols=[c for c in cols if c in auto_df.columns]
+            st.dataframe(auto_df[cols],hide_index=True,use_container_width=True)
+            st.download_button('Download discovered candidates',auto_df.to_csv(index=False).encode(),file_name='auto_candidates.csv',mime='text/csv')
+    else:
+        st.info('No automated snapshot yet. In GitHub, run Actions → Incremental stock discovery → Run workflow once. Commit permission must be enabled for Actions.')
+
 with tab1:
     st.subheader('Research candidates')
     st.caption('Scores are unvalidated heuristics—not return forecasts or buy signals. Missing data lowers coverage.')
@@ -93,7 +122,7 @@ with tab2:
         st.link_button('SEC filings search',f'https://www.sec.gov/edgar/search/#/q={selected}')
 with tab3:
     st.markdown('''
-**Prototype design.** Daily closing prices feed a 50/200-day trend signal and 3/6-month returns. Financial values are requested from an unofficial research data source.
+**V2 manual scanner design.** Daily closing prices feed a 50/200-day trend signal and 3/6-month returns. Financial values are requested from an unofficial research data source.
 
 **Score:** up to 20 trend points, 15 momentum points, 25 growth points, 20 financial health points, and 20 valuation points. Score is normalized only over available scored categories. **Coverage %** shows how many of 100 possible points had the required data; don't compare low-coverage stocks blindly.
 
