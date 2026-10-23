@@ -102,6 +102,7 @@ with tab0:
             st.caption(f"Last scan: {status.get('regular_tickers_attempted',status.get('tickers_attempted','?'))} regular + {status.get('retry_tickers_attempted',0)} retries; {status.get('failed_price_requests',0)} unusable/failed price requests.")
             st.write(f"**Not yet attempted:** {status.get('universe_coverage_unattempted',0):,} · **Last batch price failures:** {status.get('failed_price_requests',0):,}")
             st.caption(f"Retries recovered: {status.get('retry_recovered_count', 'N/A')} · Retry failures: {status.get('retry_failed_count','N/A')} · Failure classes: {status.get('failure_types',{})}")
+            st.caption(f"New short-history qualifiers (60–200 sessions): {status.get('short_history_60_200_qualified','N/A')} · Early-stage (20–59): {status.get('early_history_20_59_qualified','N/A')}")
             fpath=data_dir/'price_failures_last_run.csv'
             if fpath.exists():
                 with st.expander('Last run price failure details'):
@@ -148,6 +149,23 @@ with tab0:
                     sec_cols=[c for c in ['ticker','fundamentals_source','sec_periods_json','sec_last_retrieved_utc'] if c in auto_df.columns]
                     st.dataframe(auto_df[sec_cols],hide_index=True,width='stretch')
             st.download_button('Download discovered candidates',auto_df.to_csv(index=False).encode(),file_name='auto_candidates.csv',mime='text/csv')
+    # Separate research watchlist: never compared with full-history scores.
+    short_path=data_dir/'limited_history.csv'
+    if short_path.exists():
+        with st.expander('New: Limited-history watchlist (unranked)'):
+            short_df=pd.read_csv(short_path)
+            if short_df.empty:
+                st.info('No qualifying limited-history stocks have been collected yet.')
+            else:
+                st.warning('These are NOT fully scored investment candidates. Fewer than 201 daily observations means a 200-day moving average is unavailable. Review price histories and fundamentals independently.')
+                st.caption('60–200 days: limited technical history. 20–59 days: early-stage watchlist. No full technical or momentum score is assigned.')
+                view_cols=[c for c in ['ticker','history_tier','history_observations','price','avg_volume_20d','return_1m','return_3m','as_of','research_status'] if c in short_df.columns]
+                st.dataframe(short_df[view_cols],hide_index=True,width='stretch',column_config={
+                    'price':st.column_config.NumberColumn('Price',format='$%.2f'),
+                    'return_1m':st.column_config.NumberColumn('1M return',format='%.2f%%'),
+                    'return_3m':st.column_config.NumberColumn('3M return',format='%.2f%%'),
+                    'avg_volume_20d':st.column_config.NumberColumn('Avg volume',format='%.0f')})
+                st.download_button('Download limited-history watchlist',short_df.to_csv(index=False).encode(),file_name='limited_history.csv',mime='text/csv')
     else:
         st.info('No automated snapshot yet. In GitHub, run Actions → Incremental stock discovery → Run workflow once. Commit permission must be enabled for Actions.')
 
