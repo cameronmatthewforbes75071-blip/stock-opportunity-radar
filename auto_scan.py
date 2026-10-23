@@ -10,6 +10,7 @@ import pandas as pd
 
 from scanner import technical_indicators, fetch_live, score_candidate, categories
 from quality import enrich_dataframe
+from sec_fundamentals import fetch_sec_annual
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / 'data'
@@ -131,6 +132,16 @@ def main():
         if not success.empty: enrich_rows.extend(success.to_dict('records'))
         time.sleep(.4)
     enrichment_lookup={r['ticker']:r for r in enrich_rows}
+    # SEC filings are authoritative for reported annual amounts; limit requests per run.
+    sec_limit=max(0,min(10,int(os.environ.get('RADAR_SEC_LIMIT','3'))))
+    sec_results={};sec_failures={}
+    if os.environ.get('RADAR_SEC_USER_AGENT','').strip():
+        sec_choices=[r['ticker'] for r in ranked[:max(10,sec_limit*5)]]
+        for ticker in sec_choices[:sec_limit]:
+            result,message=fetch_sec_annual(ticker)
+            if result: sec_results[ticker]=result
+            else: sec_failures[ticker]=message
+
     financial_keys=('company','sector','market_cap','revenue_growth','earnings_growth','profit_margin','free_cash_flow','trailing_pe')
     for r in batch:
         old=old_lookup.get(r['ticker'], {})
@@ -151,6 +162,20 @@ def main():
             r['fundamentals_fetch_status']='Succeeded (metadata returned; completeness varies)'
         if r['ticker'] in attempted_enrichments and not e:
             r['fundamentals_fetch_status']='Failed or no usable response (previous fundamentals retained)'
+        # Overlay verified annual metrics only. Never overwrite metrics with nulls.
+        sec=sec_results.get(r['ticker'])
+        if sec:
+            for key in ('revenue_growth','earnings_growth','profit_margin','free_cash_flow'):
+                if key in sec['metrics']: r[key]=sec['metrics'][key]
+            r['sec_periods_json']=json.dumps(sec['periods'],sort_keys=True)
+            r['sec_tags_json']=json.dumps(sec['tags'],sort_keys=True)
+            r['sec_last_retrieved_utc']=sec['sec_last_retrieved_utc']
+            r['fundamentals_source']='SEC XBRL annual 10-K (reported metrics); Yahoo for any remaining fields'
+            r['fundamentals_last_checked_utc']=sec['sec_last_retrieved_utc']
+            r['fundamentals_fetch_status']='SEC annual metrics available; other fields may be Yahoo or missing'
+        else:
+            for key in ('sec_periods_json','sec_tags_json','sec_last_retrieved_utc'):
+                r[key]=old.get(key)
         r['fundamentals_checked']=sum(pd.notna(r.get(k)) for k in financial_keys[3:])>0
         r.update(score_candidate(r))
         r['categories'] = categories(r)
@@ -172,7 +197,9 @@ def main():
       'fundamental_enrichment_failures':len(enrichment_failures),
       'fundamental_enrichment_attempts':len(attempted_enrichments),
       'fundamental_enrichment_failed_symbols':[s for s in attempted_enrichments if s not in enrichment_lookup],
-      'fundamentals_provider':'Yahoo Finance via yfinance (unofficial; 401 responses possible)',
+      'fundamentals_provider':'SEC annual 10-K when configured; Yahoo Finance unofficial fallback',
+      'sec_success_count':len(sec_results),'sec_failure_details':sec_failures,
+      'sec_configured':bool(os.environ.get('RADAR_SEC_USER_AGENT','').strip()),
       'stored_candidates':len(updated), 'next_cursor':next_cursor,
       'note':'Partial coverage; scan timestamps differ from underlying prices and financial-report periods; unavailable fields must not be treated as zero. No trading.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
