@@ -30,7 +30,7 @@ DISPLAY_COLUMNS = financial_column_config()
 
 def money_text(value):
     return 'Unavailable' if pd.isna(value) else f'${float(value):,.2f}'
-st.caption('V3.6 • Separate price and scan freshness • Financial request diagnostics • Research only')
+st.caption('V3.8 • Separate price and scan freshness • Financial request diagnostics • Research only')
 
 with st.sidebar:
     st.header('Scan controls')
@@ -101,6 +101,11 @@ with tab0:
             st.caption('This is cumulative attempt coverage, not validated price coverage or financial-statement coverage. The saved candidate count is separate. An attempted symbol may have failed.')
             st.caption(f"Last scan: {status.get('regular_tickers_attempted',status.get('tickers_attempted','?'))} regular + {status.get('retry_tickers_attempted',0)} retries; {status.get('failed_price_requests',0)} unusable/failed price requests.")
             st.write(f"**Not yet attempted:** {status.get('universe_coverage_unattempted',0):,} · **Last batch price failures:** {status.get('failed_price_requests',0):,}")
+            st.caption(f"Retries recovered: {status.get('retry_recovered_count', 'N/A')} · Retry failures: {status.get('retry_failed_count','N/A')} · Failure classes: {status.get('failure_types',{})}")
+            fpath=data_dir/'price_failures_last_run.csv'
+            if fpath.exists():
+                with st.expander('Last run price failure details'):
+                    st.dataframe(pd.read_csv(fpath),hide_index=True,width='stretch')
         else:
             st.caption('Run the V3.6 workflow to generate cumulative universe coverage.')
     if snapshot.exists():
