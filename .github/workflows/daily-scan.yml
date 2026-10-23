@@ -1,17 +1,13 @@
-
 name: Incremental stock discovery
 on:
   workflow_dispatch:
   schedule:
     - cron: '30 23 * * 1-5'
-
 permissions:
   contents: write
-
 concurrency:
   group: stock-radar-daily-scan
   cancel-in-progress: false
-
 jobs:
   scan:
     runs-on: ubuntu-latest
@@ -26,6 +22,7 @@ jobs:
       - name: Run incremental scan
         env:
           RADAR_BATCH_SIZE: '100'
+          RADAR_ENRICH_LIMIT: '5'
         run: python auto_scan.py
       - name: Commit scan results
         run: |
@@ -36,4 +33,3 @@ jobs:
             git commit -m "chore: update stock discovery snapshot"
             git push
           fi
-  
