@@ -1,8 +1,8 @@
 {
-  "run_utc": "2026-10-24T17:30:55+00:00",
+  "run_utc": "2026-10-24T17:37:21+00:00",
   "attempted": 10,
-  "annual_success": 3,
-  "quarterly_success": 3,
+  "annual_success": 2,
+  "quarterly_success": 2,
   "failures": {
     "EQNR": "No usable annual SEC XBRL metrics",
     "EQNR (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
@@ -17,7 +17,9 @@
     "ALLT": "No usable annual SEC XBRL metrics",
     "ALLT (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
     "BTE": "No usable annual SEC XBRL metrics",
-    "BTE (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics"
+    "BTE (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "RSKD": "No usable annual SEC XBRL metrics",
+    "RSKD (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics"
   },
   "note": "SEC job enriches saved candidates, not the full market. Cached XBRL filings are not point-in-time backtest data."
 }

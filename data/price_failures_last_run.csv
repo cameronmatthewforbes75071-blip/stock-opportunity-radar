@@ -1,4 +1,9 @@
 ticker,reason,failure_class
-NSTR,Less than 20 daily observations,unclassified_error
-NXDR,Less than 20 daily observations,unclassified_error
-PAXG,Less than 20 daily observations,unclassified_error
+RTSN,Less than 20 daily observations,unclassified_error
+RZAI,Less than 20 daily observations,unclassified_error
+SCAT,Less than 20 daily observations,unclassified_error
+SVA,Less than 20 daily observations,unclassified_error
+TBCV,Less than 20 daily observations,unclassified_error
+TCXB,Less than 20 daily observations,unclassified_error
+TRBG,Less than 20 daily observations,unclassified_error
+TRXB,Less than 20 daily observations,unclassified_error
