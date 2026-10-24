@@ -63,54 +63,86 @@ def load_existing():
 
 
 def batch_technicals(symbols):
+    """Download symbols in chunks; bisect provider-wide exceptions to isolate failures.
+
+    A successful HTTP response with per-symbol empty prices does NOT trigger a
+    second download: these are likely delisted/new/unsupported symbols and repeated
+    requests can amplify rate limiting. Counts are logical symbols, not HTTP calls.
+    """
     import yfinance as yf
     results, failures, short_records, successful_price = [], [], [], set()
-    chunk_size = max(10, min(50, int(os.environ.get('RADAR_DOWNLOAD_CHUNK', '30'))))
-    for i in range(0, len(symbols), chunk_size):
-        batch = symbols[i:i+chunk_size]
+    chunk_size = max(5, min(50, int(os.environ.get('RADAR_DOWNLOAD_CHUNK', '30'))))
+    telemetry = {'download_calls': 0, 'download_fallback_splits': 0,
+                 'download_exception_count': 0, 'largest_chunk': 0,
+                 'download_batches': 0, 'provider_exception_samples': []}
+
+    def process_frame(sym, frame):
         try:
-            raw = yf.download(batch, period='18mo', auto_adjust=True, progress=False, threads=False, group_by='ticker', timeout=30)
-            for sym in batch:
-                try:
-                    if isinstance(raw.columns, pd.MultiIndex):
-                        frame = raw[sym] if sym in raw.columns.get_level_values(0) else None
-                    else:
-                        frame = raw if len(batch) == 1 else None
-                    if frame is None or frame.empty: raise ValueError('No price rows')
-                    close = pd.to_numeric(frame['Close'], errors='coerce').dropna()
-                    volume = pd.to_numeric(frame['Volume'], errors='coerce')
-                    if close.empty or not pd.notna(close.iloc[-1]): raise ValueError('No usable closing prices')
-                    if volume.dropna().empty: raise ValueError('No usable volume data')
-                    ind = technical_indicators(frame['Close'], frame['Volume'])
-                    if not ind:
-                        short, short_reason = evaluate_short_history(frame['Close'], frame['Volume'])
-                        if short:
-                            successful_price.add(sym)
-                            short_records.append({'ticker': sym, 'company':sym, **short,
-                                'as_of':str(frame['Close'].dropna().index[-1].date()),
-                                'source':'Yahoo Finance via yfinance (unofficial)'})
-                            continue
-                        if short_reason == 'filtered_price_liquidity':
-                            successful_price.add(sym)
-                            continue
-                        raise ValueError('Less than 20 daily observations')
-                    if ind['price'] < 5 or (ind['avg_volume_20d'] or 0) < 500000:
-                        successful_price.add(sym)
-                        continue
+            if frame is None or frame.empty:
+                raise ValueError('No price rows')
+            close = pd.to_numeric(frame['Close'], errors='coerce').dropna()
+            volume = pd.to_numeric(frame['Volume'], errors='coerce')
+            if close.empty or not pd.notna(close.iloc[-1]):
+                raise ValueError('No usable closing prices')
+            if volume.dropna().empty:
+                raise ValueError('No usable volume data')
+            ind = technical_indicators(frame['Close'], frame['Volume'])
+            if not ind:
+                short, short_reason = evaluate_short_history(frame['Close'], frame['Volume'])
+                if short:
                     successful_price.add(sym)
-                    results.append({'ticker':sym, 'company':sym, 'sector':'Unverified',
-                         'market_cap':None, 'revenue_growth':None, 'earnings_growth':None,
-                         'profit_margin':None,'free_cash_flow':None,'trailing_pe':None,
-                         **ind,'as_of':str(frame['Close'].dropna().index[-1].date()),
-                         'source':'Yahoo Finance via yfinance (unofficial)',
-                         'fundamentals_checked':False})
-                except Exception as ex:
-                    failures.append((sym, str(ex)[:80]))
-        except Exception as ex:
-            failures.extend((sym, str(ex)[:80]) for sym in batch)
-    # A symbol is not verified if any terminal exception was registered for it.
+                    short_records.append({'ticker': sym, 'company': sym, **short,
+                        'as_of': str(close.index[-1].date()),
+                        'source': 'Yahoo Finance via yfinance (unofficial)'})
+                    return
+                if short_reason == 'filtered_price_liquidity':
+                    successful_price.add(sym)
+                    return
+                raise ValueError('Less than 20 daily observations')
+            if ind['price'] < 5 or (ind['avg_volume_20d'] or 0) < 500000:
+                successful_price.add(sym)
+                return
+            successful_price.add(sym)
+            results.append({'ticker': sym, 'company': sym, 'sector': 'Unverified',
+                'market_cap': None, 'revenue_growth': None, 'earnings_growth': None,
+                'profit_margin': None, 'free_cash_flow': None, 'trailing_pe': None,
+                **ind, 'as_of': str(close.index[-1].date()),
+                'source': 'Yahoo Finance via yfinance (unofficial)',
+                'fundamentals_checked': False})
+        except Exception as exc:
+            failures.append((sym, str(exc)[:160]))
+
+    def download_batch(batch):
+        telemetry['download_calls'] += 1
+        telemetry['largest_chunk'] = max(telemetry['largest_chunk'], len(batch))
+        try:
+            raw = yf.download(batch, period='18mo', auto_adjust=True,
+                              progress=False, threads=False, group_by='ticker', timeout=30)
+        except Exception as exc:
+            telemetry['download_exception_count'] += 1
+            if len(telemetry['provider_exception_samples']) < 3:
+                telemetry['provider_exception_samples'].append(type(exc).__name__ + ': ' + str(exc)[:120])
+            if len(batch) > 1:
+                telemetry['download_fallback_splits'] += 1
+                midpoint = len(batch) // 2
+                download_batch(batch[:midpoint])
+                download_batch(batch[midpoint:])
+            else:
+                failures.append((batch[0], f'Provider request failed: {type(exc).__name__}: {str(exc)[:110]}'))
+            return
+        for sym in batch:
+            frame = None
+            if isinstance(raw.columns, pd.MultiIndex):
+                frame = raw[sym] if sym in raw.columns.get_level_values(0) else None
+            elif len(batch) == 1:
+                frame = raw
+            process_frame(sym, frame)
+
+    for i in range(0, len(symbols), chunk_size):
+        telemetry['download_batches'] += 1
+        download_batch(symbols[i:i+chunk_size])
     successful_price.difference_update(t for t, _ in failures)
-    return results, failures, short_records, successful_price
+    return results, failures, short_records, successful_price, telemetry
 
 
 def update_coverage_ledger(universe, source, selected, qualified, failures, run_time, short_records=None, successful_price=None):
@@ -194,7 +226,7 @@ def select_retries(universe, regular, max_retries=20):
 
 def main():
     universe, source = read_universe()
-    batch_size = min(300, max(1, int(os.environ.get('RADAR_BATCH_SIZE', '200'))))
+    batch_size = min(500, max(1, int(os.environ.get('RADAR_BATCH_SIZE', '200'))))
     cursor_file = DATA / 'cursor.json'
     try:
         cursor = int(json.loads(cursor_file.read_text()).get('cursor', 0))
@@ -205,7 +237,7 @@ def main():
     retry_limit = min(30,max(0,int(os.environ.get('RADAR_RETRY_LIMIT','20'))))
     retry_symbols=select_retries(universe,regular,retry_limit)
     selected=regular+retry_symbols
-    batch, failed, short_records, successful_price = batch_technicals(selected)
+    batch, failed, short_records, successful_price, download_stats = batch_technicals(selected)
     reconciled = reconcile_run(selected, batch, short_records, successful_price, failed, retry_symbols)
     # Report explicit terminal outcomes. If reconciliation fails, leave existing snapshots untouched.
     failed_map={ticker:reason for ticker,reason in failed}
@@ -352,10 +384,13 @@ def main():
       'last_run_failed_price_symbols':reconciled['failed'],
       'last_run_outcome_counts':reconciled['outcomes'],
       'last_run_reconciliation_passed':True,
+      'download_telemetry':download_stats,
+      'benchmark_target_batch_size':batch_size,
+      'last_run_verified_regular_symbols':len(set(regular) & successful_price),
       'last_run_unclassified_failure_symbols':reconciled['failed_symbols'],
       'last_run_filtered_or_unranked':len(successful_price)-len(batch),
       'last_run_verified_retries':len(retry_recovered),
-      'note':'V4.1: every requested symbol has one terminal result; counts reconciled. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
+      'note':'V4.2: controlled batch benchmark; per-provider exception fallback; every requested symbol has one terminal result and counts reconcile. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
