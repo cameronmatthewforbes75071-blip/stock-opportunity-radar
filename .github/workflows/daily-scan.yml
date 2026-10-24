@@ -21,8 +21,9 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run incremental scan
         env:
-          RADAR_BATCH_SIZE: '400'
+          RADAR_BATCH_SIZE: '600'
           RADAR_DOWNLOAD_CHUNK: '25'
+          RADAR_STALE_CALENDAR_DAYS: '5'
           RADAR_ENRICH_LIMIT: '5'
           RADAR_SEC_LIMIT: '0'
           RADAR_RETRY_LIMIT: '20'
