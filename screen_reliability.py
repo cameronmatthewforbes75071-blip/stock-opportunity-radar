@@ -5,7 +5,7 @@ import pandas as pd
 # An absent price history is ambiguous: do not infer a delisting or bad symbol.
 def classify_failure(message):
     msg = str(message).lower()
-    if any(x in msg for x in ('less than 201', 'insufficient history')):
+    if any(x in msg for x in ('less than 201', 'less than 20 daily observations', 'insufficient history')):
         return 'insufficient_history'
     if any(x in msg for x in ('429', 'rate limit', 'too many requests', 'timeout', 'timed out', 'connection', '502', '503', '504', '401', 'unauthorized', 'invalid crumb', 'jsondecodeerror')):
         return 'transient_or_provider'
