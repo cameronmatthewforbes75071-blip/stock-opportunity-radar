@@ -36,11 +36,13 @@ jobs:
           RADAR_SEC_USER_AGENT: ${{ secrets.RADAR_SEC_USER_AGENT }}
           RADAR_SEC_DAILY_LIMIT: '10'
         run: python sec_enrich.py
+      - name: Build candidate quality and research snapshots
+        run: python candidate_quality.py
       - name: Commit scan results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/discovery.csv data/status.json data/cursor.json data/scan_coverage.csv data/sec_enrichment_status.json data/price_failures_last_run.csv data/limited_history.csv
+          git add data/discovery.csv data/status.json data/cursor.json data/scan_coverage.csv data/sec_enrichment_status.json data/price_failures_last_run.csv data/limited_history.csv data/candidate_quality.csv data/candidate_quality_status.json data/candidate_snapshots.csv
           if ! git diff --cached --quiet; then
             git commit -m "chore: update stock discovery snapshot"
             git push
