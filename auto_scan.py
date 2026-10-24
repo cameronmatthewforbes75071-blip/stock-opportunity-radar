@@ -13,6 +13,7 @@ from quality import enrich_dataframe
 from sec_fundamentals import fetch_sec_annual, fetch_sec_quarterly
 from screen_reliability import classify_failure, is_likely_common_equity, retry_eligible, make_failure_record
 from adaptive_history import evaluate_short_history
+from coverage_validation import reconcile_run, validate_coverage_ledger
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / 'data'
@@ -80,20 +81,23 @@ def batch_technicals(symbols):
                     volume = pd.to_numeric(frame['Volume'], errors='coerce')
                     if close.empty or not pd.notna(close.iloc[-1]): raise ValueError('No usable closing prices')
                     if volume.dropna().empty: raise ValueError('No usable volume data')
-                    successful_price.add(sym)
                     ind = technical_indicators(frame['Close'], frame['Volume'])
                     if not ind:
                         short, short_reason = evaluate_short_history(frame['Close'], frame['Volume'])
                         if short:
+                            successful_price.add(sym)
                             short_records.append({'ticker': sym, 'company':sym, **short,
                                 'as_of':str(frame['Close'].dropna().index[-1].date()),
                                 'source':'Yahoo Finance via yfinance (unofficial)'})
                             continue
                         if short_reason == 'filtered_price_liquidity':
+                            successful_price.add(sym)
                             continue
                         raise ValueError('Less than 20 daily observations')
                     if ind['price'] < 5 or (ind['avg_volume_20d'] or 0) < 500000:
+                        successful_price.add(sym)
                         continue
+                    successful_price.add(sym)
                     results.append({'ticker':sym, 'company':sym, 'sector':'Unverified',
                          'market_cap':None, 'revenue_growth':None, 'earnings_growth':None,
                          'profit_margin':None,'free_cash_flow':None,'trailing_pe':None,
@@ -104,6 +108,8 @@ def batch_technicals(symbols):
                     failures.append((sym, str(ex)[:80]))
         except Exception as ex:
             failures.extend((sym, str(ex)[:80]) for sym in batch)
+    # A symbol is not verified if any terminal exception was registered for it.
+    successful_price.difference_update(t for t, _ in failures)
     return results, failures, short_records, successful_price
 
 
@@ -200,6 +206,8 @@ def main():
     retry_symbols=select_retries(universe,regular,retry_limit)
     selected=regular+retry_symbols
     batch, failed, short_records, successful_price = batch_technicals(selected)
+    reconciled = reconcile_run(selected, batch, short_records, successful_price, failed, retry_symbols)
+    # Report explicit terminal outcomes. If reconciliation fails, leave existing snapshots untouched.
     failed_map={ticker:reason for ticker,reason in failed}
     retry_recovered=[ticker for ticker in retry_symbols if ticker in successful_price]
     retry_failed=[ticker for ticker in retry_symbols if ticker not in successful_price]
@@ -324,6 +332,7 @@ def main():
     next_cursor = (start + len(regular)) % len(universe) if advance else start
     cursor_file.write_text(json.dumps({'cursor': next_cursor, 'universe_size': len(universe), 'source': source}, indent=2))
     coverage = update_coverage_ledger(universe, source, selected, batch, failed, datetime.now(timezone.utc).isoformat(timespec='seconds'), short_records, successful_price)
+    validate_coverage_ledger(DATA / 'scan_coverage.csv', universe)
     status = {'run_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'),
       **coverage,
       'universe_source':source, 'universe_count':len(universe),
@@ -338,11 +347,15 @@ def main():
       'sec_configured':bool(os.environ.get('RADAR_SEC_USER_AGENT','').strip()),
       'stored_candidates':len(updated), 'next_cursor':next_cursor,
       'batch_size_configured':batch_size,'retry_limit_configured':retry_limit, 'price_request_success_or_filtered':len(successful_price),
-      'last_run_verified_price_symbols':len(successful_price),
-      'last_run_verified_price_pct':round(100*len(successful_price)/len(selected),2) if selected else 0,
+      'last_run_verified_price_symbols':reconciled['verified'],
+      'last_run_verified_price_pct':reconciled['verified_pct'],
+      'last_run_failed_price_symbols':reconciled['failed'],
+      'last_run_outcome_counts':reconciled['outcomes'],
+      'last_run_reconciliation_passed':True,
+      'last_run_unclassified_failure_symbols':reconciled['failed_symbols'],
       'last_run_filtered_or_unranked':len(successful_price)-len(batch),
       'last_run_verified_retries':len(retry_recovered),
-      'note':'V4.0: attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
+      'note':'V4.1: every requested symbol has one terminal result; counts reconciled. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
