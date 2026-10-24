@@ -30,7 +30,7 @@ DISPLAY_COLUMNS = financial_column_config()
 
 def money_text(value):
     return 'Unavailable' if pd.isna(value) else f'${float(value):,.2f}'
-st.caption('V4.0 • Separate price and scan freshness • Financial request diagnostics • Research only')
+st.caption('V4.1 • Separate price and scan freshness • Financial request diagnostics • Research only')
 
 with st.sidebar:
     st.header('Scan controls')
@@ -103,6 +103,8 @@ with tab0:
             st.progress(min(1.0,max(0.0,verified_pct/100)), text=f"Verified price history: {status.get('universe_price_data_verified',0):,} / {status.get('universe_count',0):,} symbols ({verified_pct:.2f}%)")
             st.caption('Verified means usable daily price and volume were returned in V4.0 or later; it does NOT mean that the stock passed screening or has complete fundamentals.')
             st.caption(f"Last run: {status.get('last_run_verified_price_symbols','?')} usable price histories of {status.get('tickers_attempted','?')} attempts; {status.get('last_run_filtered_or_unranked','?')} usable histories were filtered or not fully ranked.")
+            if 'last_run_outcome_counts' in status:
+                st.caption(f"Reconciled last-run outcomes: {status['last_run_outcome_counts']} · Passed: {status.get('last_run_reconciliation_passed', False)}")
             st.caption(f"Last scan: {status.get('regular_tickers_attempted',status.get('tickers_attempted','?'))} regular + {status.get('retry_tickers_attempted',0)} retries; {status.get('failed_price_requests',0)} unusable/failed price requests.")
             st.write(f"**Not yet attempted:** {status.get('universe_coverage_unattempted',0):,} · **Last batch price failures:** {status.get('failed_price_requests',0):,}")
             st.caption(f"Retries recovered: {status.get('retry_recovered_count', 'N/A')} · Retry failures: {status.get('retry_failed_count','N/A')} · Failure classes: {status.get('failure_types',{})}")
