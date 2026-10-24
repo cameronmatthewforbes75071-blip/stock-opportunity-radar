@@ -15,6 +15,7 @@ from screen_reliability import classify_failure, is_likely_common_equity, retry_
 from adaptive_history import evaluate_short_history
 from coverage_validation import reconcile_run, validate_coverage_ledger
 from market_sessions import assess_candle_sessions
+from coverage_cycle import choose_regular_symbols, summarize_coverage_cycle
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / 'data'
@@ -244,14 +245,14 @@ def select_retries(universe, regular, max_retries=20):
 
 def main():
     universe, source = read_universe()
-    batch_size = min(1200, max(1, int(os.environ.get('RADAR_BATCH_SIZE', '1000'))))
+    batch_size = min(1500, max(1, int(os.environ.get('RADAR_BATCH_SIZE', '1250'))))
     cursor_file = DATA / 'cursor.json'
     try:
         cursor = int(json.loads(cursor_file.read_text()).get('cursor', 0))
     except (FileNotFoundError, ValueError, TypeError):
         cursor = 0
     start = cursor % len(universe)
-    regular = [universe[(start+i) % len(universe)] for i in range(min(batch_size, len(universe)))]
+    regular, selection_details = choose_regular_symbols(universe, DATA / 'scan_coverage.csv', batch_size, start)
     retry_limit = min(30,max(0,int(os.environ.get('RADAR_RETRY_LIMIT','20'))))
     retry_symbols=select_retries(universe,regular,retry_limit)
     # Counts only existing known failures that are temporarily held from retries.
@@ -403,10 +404,11 @@ def main():
         updated.to_csv(DATA / 'discovery.csv', index=False)
     # Keep cursor stationary only when none of the newly selected symbols returned usable price data.
     advance = bool(set(regular) & successful_price)
-    next_cursor = (start + len(regular)) % len(universe) if advance else start
+    next_cursor = ((universe.index(regular[-1]) + 1) % len(universe)) if advance and regular else start
     cursor_file.write_text(json.dumps({'cursor': next_cursor, 'universe_size': len(universe), 'source': source}, indent=2))
     coverage = update_coverage_ledger(universe, source, selected, batch, failed, datetime.now(timezone.utc).isoformat(timespec='seconds'), short_records, successful_price)
     validate_coverage_ledger(DATA / 'scan_coverage.csv', universe)
+    cycle_health = summarize_coverage_cycle(DATA / 'scan_coverage.csv', universe, session_health.get('expected_latest_completed_session'))
     status = {'run_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'),
       **coverage,
       'universe_source':source, 'universe_count':len(universe),
@@ -428,6 +430,8 @@ def main():
       'last_run_reconciliation_passed':True,
       'download_telemetry':download_stats,
       'benchmark_target_batch_size':batch_size,
+      'coverage_cycle':cycle_health,
+      'regular_selection':selection_details,
       'retry_quarantine_cooldown_days':7,
       'retry_quarantined_prior_failures':quarantine_count,
       'price_candle_age_calendar_day_buckets':candle_age_buckets,
@@ -438,12 +442,14 @@ def main():
       'market_session_freshness':session_health,
       'last_run_failure_details':[{'ticker':t,'reason':r,'failure_class':classify_failure(r)} for t,r in failed][:50],
       'last_run_verified_regular_symbols':len(set(regular) & successful_price),
-      'last_run_unclassified_failure_symbols':reconciled['failed_symbols'],
+      'last_run_unclassified_failure_symbols':[ticker for ticker, reason in failed if classify_failure(reason)=='unclassified_error'],
+      'last_run_failed_symbols':reconciled['failed_symbols'],
       'last_run_filtered_or_unranked':len(successful_price)-len(batch),
       'last_run_verified_retries':len(retry_recovered),
-      'note':'V4.4: 1000-symbol benchmark, seven-day cooldown after 3 failed attempts, XNYS session-aware candle diagnostics (plus separate calendar-day age);  per-provider exception fallback; every requested symbol has one terminal result and counts reconcile. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
+      'note':'V4.5: prioritize never-attempted symbols, then refresh oldest attempted; distinguish lifetime price verification from expected-session coverage; 1250-symbol controlled benchmark, seven-day cooldown after 3 failed attempts, XNYS session-aware candle diagnostics (plus separate calendar-day age);  per-provider exception fallback; every requested symbol has one terminal result and counts reconcile. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
 if __name__ == '__main__':
     main()
+
