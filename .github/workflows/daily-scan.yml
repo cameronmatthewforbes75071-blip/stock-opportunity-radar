@@ -23,7 +23,7 @@ jobs:
           pip install "exchange-calendars>=4.6,<5"
       - name: Run incremental scan
         env:
-          RADAR_BATCH_SIZE: '1000'
+          RADAR_BATCH_SIZE: '1250'
           RADAR_DOWNLOAD_CHUNK: '25'
           RADAR_STALE_CALENDAR_DAYS: '5'
           RADAR_ENRICH_LIMIT: '5'
