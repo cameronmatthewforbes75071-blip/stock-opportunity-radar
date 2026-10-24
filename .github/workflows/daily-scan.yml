@@ -11,17 +11,19 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install "exchange-calendars>=4.6,<5"
       - name: Run incremental scan
         env:
-          RADAR_BATCH_SIZE: '600'
+          RADAR_BATCH_SIZE: '1000'
           RADAR_DOWNLOAD_CHUNK: '25'
           RADAR_STALE_CALENDAR_DAYS: '5'
           RADAR_ENRICH_LIMIT: '5'
