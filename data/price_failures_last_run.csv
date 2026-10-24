@@ -1,3 +1,2 @@
 ticker,reason,failure_class
-CTY,Less than 20 daily observations,unclassified_error
-DAVI,Less than 20 daily observations,unclassified_error
+FLSC,Less than 20 daily observations,unclassified_error
