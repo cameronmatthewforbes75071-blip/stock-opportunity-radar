@@ -17,20 +17,44 @@ def main():
     if df.empty or 'ticker' not in df:
         print('SEC: no candidates yet');return
     agent=os.getenv('RADAR_SEC_USER_AGENT','').strip()
-    limit=min(20,max(0,int(os.getenv('RADAR_SEC_DAILY_LIMIT','10'))))
+    limit=min(50,max(0,int(os.getenv('RADAR_SEC_DAILY_LIMIT','25'))))
     if not agent or limit==0:
         print('SEC enrichment skipped: no configured contact or zero limit');return
     df['ticker']=df.ticker.astype(str)
     if 'sec_last_retrieved_utc' not in df: df['sec_last_retrieved_utc']=pd.NA
     if 'sec_quarterly_last_retrieved_utc' not in df: df['sec_quarterly_last_retrieved_utc']=pd.NA
-    # Stale/missing SEC rows first; never rank NA as successful research.
+    # V4.8: prioritize candidates not yet checked; do not repeatedly select
+    # unsupported securities merely because their SEC provenance is missing.
+    # Retrieval timestamps and reporting periods remain separate.
+    now=datetime.now(timezone.utc)
+    if 'sec_enrichment_last_attempt_utc' not in df: df['sec_enrichment_last_attempt_utc']=pd.NA
+    if 'sec_enrichment_failure_reason' not in df: df['sec_enrichment_failure_reason']=pd.NA
     ann=pd.to_datetime(df.sec_last_retrieved_utc,utc=True,errors='coerce')
     qtr=pd.to_datetime(df.sec_quarterly_last_retrieved_utc,utc=True,errors='coerce')
-    latest=pd.concat([ann,qtr],axis=1).min(axis=1)
-    prioritized=df.assign(_date=latest).sort_values('_date',na_position='first').head(limit)
-    successes=0; failures={}; quarterly_successes=0
+    prior=pd.to_datetime(df.sec_enrichment_last_attempt_utc,utc=True,errors='coerce')
+    # Missing both annual and quarterly provenance: priority, but previous
+    # failures are cooldown-limited (7 days), even across workflow runs.
+    previously_failed=prior.notna() & ann.isna() & qtr.isna()
+    eligible=~(previously_failed & ((pd.Timestamp(now)-prior)<pd.Timedelta(days=7)))
+    # Annual or quarterly gaps are preferred before fully enriched rows.
+    missing_both=(ann.isna() & qtr.isna())
+    missing_one=(ann.isna() ^ qtr.isna())
+    # Never attempted precedes past failed attempts and partial coverage.
+    priority=pd.Series(3,index=df.index)
+    priority[missing_one]=2
+    priority[missing_both]=1
+    priority[missing_both & prior.isna()]=0
+    oldest=prior.fillna(pd.Timestamp('1970-01-01',tz='UTC'))
+    prioritized=(df.loc[eligible].assign(_priority=priority.loc[eligible],_last_attempt=oldest.loc[eligible])
+                 .sort_values(['_priority','_last_attempt','ticker'],kind='stable')
+                 .head(limit))
+    selected_never_attempted=int(prior.loc[prioritized.index].isna().sum())
+    deferred_failure_cooldown=int((~eligible).sum())
+    successes=0; failures={}; quarterly_successes=0; full_successes=0; any_successes=0; selected_details=[]
     for idx,row in prioritized.iterrows():
         ticker=row['ticker']
+        df.at[idx,'sec_enrichment_last_attempt_utc']=datetime.now(timezone.utc).isoformat(timespec='seconds')
+        df.at[idx,'sec_enrichment_failure_reason']=pd.NA
         annual,msg=fetch_sec_annual(ticker,agent)
         if annual:
             for k in ('revenue_growth','earnings_growth','profit_margin','free_cash_flow'):
@@ -51,6 +75,14 @@ def main():
             df.at[idx,'sec_quarterly_last_retrieved_utc']=quarterly['sec_last_retrieved_utc']
             quarterly_successes+=1
         else: failures[ticker+' (quarterly)']=qmsg
+        if annual or quarterly: any_successes+=1
+        if annual and quarterly: full_successes+=1
+        if not annual and not quarterly:
+            df.at[idx,'sec_enrichment_failure_reason']=f'annual: {msg}; quarterly: {qmsg}'[:320]
+        selected_details.append({'ticker':ticker, 'annual_success':bool(annual),
+                                 'quarterly_success':bool(quarterly),
+                                 'annual_result':'OK' if annual else str(msg)[:180],
+                                 'quarterly_result':'OK' if quarterly else str(qmsg)[:180]})
         time.sleep(.25)
     # Recompute scores when financial metrics change. Never use missing data as zero.
     for idx in prioritized.index:
@@ -61,7 +93,13 @@ def main():
     df.to_csv(csv,index=False)
     report={'run_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'),
       'attempted':len(prioritized),'annual_success':successes,'quarterly_success':quarterly_successes,
-      'failures':failures,'note':'SEC job enriches saved candidates, not the full market. Cached XBRL filings are not point-in-time backtest data.'}
+      'any_sec_success':any_successes,'both_sec_success':full_successes,
+      'no_sec_success':len(prioritized)-any_successes,
+      'selected_never_attempted':selected_never_attempted,
+      'deferred_recent_no_data_failures':deferred_failure_cooldown,
+      'configured_daily_limit':limit,
+      'results_by_ticker':selected_details,
+      'failures':failures,'note':'V4.8 SEC throughput benchmark. Missing tags and missing SEC listing do not mean weak fundamentals. SEC retrieval timestamps are not filing dates; cached XBRL data are not point-in-time backtest data.'}
     (DATA/'sec_enrichment_status.json').write_text(json.dumps(report,indent=2))
     print(json.dumps(report,indent=2))
 
