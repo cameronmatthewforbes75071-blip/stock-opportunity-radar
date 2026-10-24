@@ -71,6 +71,7 @@ def batch_technicals(symbols):
     """
     import yfinance as yf
     results, failures, short_records, successful_price = [], [], [], set()
+    candle_dates = {}
     chunk_size = max(5, min(50, int(os.environ.get('RADAR_DOWNLOAD_CHUNK', '30'))))
     telemetry = {'download_calls': 0, 'download_fallback_splits': 0,
                  'download_exception_count': 0, 'largest_chunk': 0,
@@ -86,6 +87,12 @@ def batch_technicals(symbols):
                 raise ValueError('No usable closing prices')
             if volume.dropna().empty:
                 raise ValueError('No usable volume data')
+            last_candle = pd.Timestamp(close.index[-1])
+            if last_candle.tzinfo is None:
+                last_candle = last_candle.tz_localize('UTC')
+            else:
+                last_candle = last_candle.tz_convert('UTC')
+            candle_dates[sym] = last_candle.date().isoformat()
             ind = technical_indicators(frame['Close'], frame['Volume'])
             if not ind:
                 short, short_reason = evaluate_short_history(frame['Close'], frame['Volume'])
@@ -142,7 +149,7 @@ def batch_technicals(symbols):
         telemetry['download_batches'] += 1
         download_batch(symbols[i:i+chunk_size])
     successful_price.difference_update(t for t, _ in failures)
-    return results, failures, short_records, successful_price, telemetry
+    return results, failures, short_records, successful_price, telemetry, candle_dates
 
 
 def update_coverage_ledger(universe, source, selected, qualified, failures, run_time, short_records=None, successful_price=None):
@@ -217,6 +224,16 @@ def select_retries(universe, regular, max_retries=20):
         failed=ledger[ledger.last_result.eq('price_failed_or_unusable')].copy()
         failed=failed[failed.ticker.isin(set(universe)-set(regular))]
         failed=failed[failed.apply(retry_eligible,axis=1)]
+        # V4.3: repeated failures enter a 7-day cooldown. No historical ledger rows are deleted.
+        def cooldown_elapsed(row):
+            try:
+                n = int(float(row.get('attempt_count', 0)))
+                if n < 3: return True
+                last = pd.to_datetime(row.get('last_attempt_utc'), utc=True, errors='coerce')
+                return pd.notna(last) and (pd.Timestamp.now(tz='UTC') - last) >= pd.Timedelta(days=7)
+            except (TypeError, ValueError):
+                return False
+        failed=failed[failed.apply(cooldown_elapsed,axis=1)]
         failed=failed.sort_values(['last_attempt_utc','ticker'],na_position='first')
         return failed.ticker.head(max_retries).tolist()
     except (OSError,ValueError,KeyError) as ex:
@@ -226,7 +243,7 @@ def select_retries(universe, regular, max_retries=20):
 
 def main():
     universe, source = read_universe()
-    batch_size = min(500, max(1, int(os.environ.get('RADAR_BATCH_SIZE', '200'))))
+    batch_size = min(800, max(1, int(os.environ.get('RADAR_BATCH_SIZE', '400'))))
     cursor_file = DATA / 'cursor.json'
     try:
         cursor = int(json.loads(cursor_file.read_text()).get('cursor', 0))
@@ -236,9 +253,32 @@ def main():
     regular = [universe[(start+i) % len(universe)] for i in range(min(batch_size, len(universe)))]
     retry_limit = min(30,max(0,int(os.environ.get('RADAR_RETRY_LIMIT','20'))))
     retry_symbols=select_retries(universe,regular,retry_limit)
+    # Counts only existing known failures that are temporarily held from retries.
+    quarantine_count = 0
+    try:
+        prior_ledger = pd.read_csv(DATA / 'scan_coverage.csv')
+        if {'last_result','attempt_count','last_attempt_utc'}.issubset(prior_ledger.columns):
+            failed_prior=prior_ledger[prior_ledger.last_result.eq('price_failed_or_unusable')]
+            for _, row in failed_prior.iterrows():
+                attempts=pd.to_numeric(row.get('attempt_count'),errors='coerce')
+                last=pd.to_datetime(row.get('last_attempt_utc'),utc=True,errors='coerce')
+                if pd.notna(attempts) and attempts>=3 and pd.notna(last) and (pd.Timestamp.now(tz='UTC')-last)<pd.Timedelta(days=7):
+                    quarantine_count+=1
+    except (OSError, ValueError, pd.errors.ParserError):
+        pass
     selected=regular+retry_symbols
-    batch, failed, short_records, successful_price, download_stats = batch_technicals(selected)
+    batch, failed, short_records, successful_price, download_stats, candle_dates = batch_technicals(selected)
     reconciled = reconcile_run(selected, batch, short_records, successful_price, failed, retry_symbols)
+    # Calendar-day age is a diagnostic, not trading-day staleness: weekends and holidays matter.
+    now_day = datetime.now(timezone.utc).date()
+    candle_age = {ticker: max(0, (now_day - datetime.fromisoformat(day).date()).days)
+                  for ticker, day in candle_dates.items() if ticker in successful_price}
+    stale_threshold = max(1, int(os.environ.get('RADAR_STALE_CALENDAR_DAYS', '5')))
+    stale_tickers = sorted(t for t, age in candle_age.items() if age > stale_threshold)
+    candle_age_buckets = {'0_1_days':sum(v <= 1 for v in candle_age.values()),
+                          '2_3_days':sum(2 <= v <= 3 for v in candle_age.values()),
+                          '4_5_days':sum(4 <= v <= 5 for v in candle_age.values()),
+                          '6_plus_days':sum(v >= 6 for v in candle_age.values())}
     # Report explicit terminal outcomes. If reconciliation fails, leave existing snapshots untouched.
     failed_map={ticker:reason for ticker,reason in failed}
     retry_recovered=[ticker for ticker in retry_symbols if ticker in successful_price]
@@ -386,11 +426,18 @@ def main():
       'last_run_reconciliation_passed':True,
       'download_telemetry':download_stats,
       'benchmark_target_batch_size':batch_size,
+      'retry_quarantine_cooldown_days':7,
+      'retry_quarantined_prior_failures':quarantine_count,
+      'price_candle_age_calendar_day_buckets':candle_age_buckets,
+      'price_candle_stale_threshold_calendar_days':stale_threshold,
+      'price_candle_stale_symbols':stale_tickers[:100],
+      'price_candle_stale_count':len(stale_tickers),
+      'price_candle_dates_recorded':len(candle_age),
       'last_run_verified_regular_symbols':len(set(regular) & successful_price),
       'last_run_unclassified_failure_symbols':reconciled['failed_symbols'],
       'last_run_filtered_or_unranked':len(successful_price)-len(batch),
       'last_run_verified_retries':len(retry_recovered),
-      'note':'V4.2: controlled batch benchmark; per-provider exception fallback; every requested symbol has one terminal result and counts reconcile. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
+      'note':'V4.3: 600-symbol controlled benchmark, seven-day cooldown after 3 failed attempts, UTC calendar-day candle age diagnostics (not trading-day freshness); per-provider exception fallback; every requested symbol has one terminal result and counts reconcile. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
