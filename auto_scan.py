@@ -154,14 +154,14 @@ def batch_technicals(symbols):
     return results, failures, short_records, successful_price, telemetry, candle_dates
 
 
-def update_coverage_ledger(universe, source, selected, qualified, failures, run_time, short_records=None, successful_price=None):
+def update_coverage_ledger(universe, source, selected, qualified, failures, run_time, short_records=None, successful_price=None, candle_dates=None):
     """Track attempted vs qualified symbols independently of the candidate table.
 
     Records an attempt even if a provider rejects data. This is not confirmation of
     a successful price retrieval, and coverage never implies full fundamental review.
     """
     path = DATA / 'scan_coverage.csv'
-    fields = ['ticker', 'last_attempt_utc', 'last_qualified_utc', 'last_result', 'attempt_count', 'failure_class', 'failure_reason', 'price_data_verified_utc']
+    fields = ['ticker', 'last_attempt_utc', 'last_qualified_utc', 'last_result', 'attempt_count', 'failure_class', 'failure_reason', 'price_data_verified_utc', 'last_price_candle_date']
     if path.exists():
         try:
             prior = pd.read_csv(path, dtype={'ticker': str})
@@ -177,6 +177,7 @@ def update_coverage_ledger(universe, source, selected, qualified, failures, run_
     qualified_symbols = {row['ticker'] for row in qualified}
     short_tiers = {row['ticker']:row['history_tier'] for row in (short_records or [])}
     successful_price = set(successful_price or [])
+    candle_dates = candle_dates or {}
     for ticker in selected:
         old = previous.get(ticker, {})
         try:
@@ -196,6 +197,7 @@ def update_coverage_ledger(universe, source, selected, qualified, failures, run_
             'failure_class': classify_failure(failed_symbols[ticker]) if ticker in failed_symbols else '',
             'failure_reason': failed_symbols.get(ticker, ''),
             'price_data_verified_utc': run_time if ticker in successful_price else old.get('price_data_verified_utc', ''),
+            'last_price_candle_date': candle_dates.get(ticker, '') if ticker in successful_price else old.get('last_price_candle_date', ''),
         }
     frame = pd.DataFrame(sorted(previous.values(), key=lambda r: r['ticker']), columns=fields)
     frame.to_csv(path, index=False)
@@ -406,7 +408,7 @@ def main():
     advance = bool(set(regular) & successful_price)
     next_cursor = ((universe.index(regular[-1]) + 1) % len(universe)) if advance and regular else start
     cursor_file.write_text(json.dumps({'cursor': next_cursor, 'universe_size': len(universe), 'source': source}, indent=2))
-    coverage = update_coverage_ledger(universe, source, selected, batch, failed, datetime.now(timezone.utc).isoformat(timespec='seconds'), short_records, successful_price)
+    coverage = update_coverage_ledger(universe, source, selected, batch, failed, datetime.now(timezone.utc).isoformat(timespec='seconds'), short_records, successful_price, candle_dates)
     validate_coverage_ledger(DATA / 'scan_coverage.csv', universe)
     cycle_health = summarize_coverage_cycle(DATA / 'scan_coverage.csv', universe, session_health.get('expected_latest_completed_session'))
     status = {'run_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'),
@@ -432,6 +434,7 @@ def main():
       'benchmark_target_batch_size':batch_size,
       'coverage_cycle':cycle_health,
       'regular_selection':selection_details,
+      'verified_data_backfill': {'previously_unverified_selected':selection_details.get('verification_backfill_symbols_selected',0), 'previously_unverified_succeeded':len(set(regular)&successful_price&set(selection_details.get('verification_backfill_tickers',[]))), 'previously_unverified_failed':len(set(selection_details.get('verification_backfill_tickers',[]))-successful_price)},
       'retry_quarantine_cooldown_days':7,
       'retry_quarantined_prior_failures':quarantine_count,
       'price_candle_age_calendar_day_buckets':candle_age_buckets,
@@ -446,10 +449,9 @@ def main():
       'last_run_failed_symbols':reconciled['failed_symbols'],
       'last_run_filtered_or_unranked':len(successful_price)-len(batch),
       'last_run_verified_retries':len(retry_recovered),
-      'note':'V4.5: prioritize never-attempted symbols, then refresh oldest attempted; distinguish lifetime price verification from expected-session coverage; 1250-symbol controlled benchmark, seven-day cooldown after 3 failed attempts, XNYS session-aware candle diagnostics (plus separate calendar-day age);  per-provider exception fallback; every requested symbol has one terminal result and counts reconcile. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
+      'note':'V4.6: prioritize never-attempted symbols, then refresh oldest attempted; distinguish lifetime price verification from expected-session coverage; 1250-symbol controlled benchmark, seven-day cooldown after 3 failed attempts, XNYS session-aware candle diagnostics (plus separate calendar-day age);  per-provider exception fallback; every requested symbol has one terminal result and counts reconcile. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
 if __name__ == '__main__':
     main()
-
