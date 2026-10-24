@@ -14,6 +14,7 @@ from sec_fundamentals import fetch_sec_annual, fetch_sec_quarterly
 from screen_reliability import classify_failure, is_likely_common_equity, retry_eligible, make_failure_record
 from adaptive_history import evaluate_short_history
 from coverage_validation import reconcile_run, validate_coverage_ledger
+from market_sessions import assess_candle_sessions
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / 'data'
@@ -80,7 +81,7 @@ def batch_technicals(symbols):
     def process_frame(sym, frame):
         try:
             if frame is None or frame.empty:
-                raise ValueError('No price rows')
+                raise ValueError('No price rows (missing ticker data, unsupported security, or provider returned empty)')
             close = pd.to_numeric(frame['Close'], errors='coerce').dropna()
             volume = pd.to_numeric(frame['Volume'], errors='coerce')
             if close.empty or not pd.notna(close.iloc[-1]):
@@ -228,9 +229,9 @@ def select_retries(universe, regular, max_retries=20):
         def cooldown_elapsed(row):
             try:
                 n = int(float(row.get('attempt_count', 0)))
-                if n < 3: return True
                 last = pd.to_datetime(row.get('last_attempt_utc'), utc=True, errors='coerce')
-                return pd.notna(last) and (pd.Timestamp.now(tz='UTC') - last) >= pd.Timedelta(days=7)
+                days = 7 if n >= 3 else 1
+                return pd.notna(last) and (pd.Timestamp.now(tz='UTC') - last) >= pd.Timedelta(days=days)
             except (TypeError, ValueError):
                 return False
         failed=failed[failed.apply(cooldown_elapsed,axis=1)]
@@ -243,7 +244,7 @@ def select_retries(universe, regular, max_retries=20):
 
 def main():
     universe, source = read_universe()
-    batch_size = min(800, max(1, int(os.environ.get('RADAR_BATCH_SIZE', '400'))))
+    batch_size = min(1200, max(1, int(os.environ.get('RADAR_BATCH_SIZE', '1000'))))
     cursor_file = DATA / 'cursor.json'
     try:
         cursor = int(json.loads(cursor_file.read_text()).get('cursor', 0))
@@ -275,6 +276,7 @@ def main():
                   for ticker, day in candle_dates.items() if ticker in successful_price}
     stale_threshold = max(1, int(os.environ.get('RADAR_STALE_CALENDAR_DAYS', '5')))
     stale_tickers = sorted(t for t, age in candle_age.items() if age > stale_threshold)
+    session_health = assess_candle_sessions(candle_dates, successful_price, now=datetime.now(timezone.utc))
     candle_age_buckets = {'0_1_days':sum(v <= 1 for v in candle_age.values()),
                           '2_3_days':sum(2 <= v <= 3 for v in candle_age.values()),
                           '4_5_days':sum(4 <= v <= 5 for v in candle_age.values()),
@@ -433,11 +435,13 @@ def main():
       'price_candle_stale_symbols':stale_tickers[:100],
       'price_candle_stale_count':len(stale_tickers),
       'price_candle_dates_recorded':len(candle_age),
+      'market_session_freshness':session_health,
+      'last_run_failure_details':[{'ticker':t,'reason':r,'failure_class':classify_failure(r)} for t,r in failed][:50],
       'last_run_verified_regular_symbols':len(set(regular) & successful_price),
       'last_run_unclassified_failure_symbols':reconciled['failed_symbols'],
       'last_run_filtered_or_unranked':len(successful_price)-len(batch),
       'last_run_verified_retries':len(retry_recovered),
-      'note':'V4.3: 600-symbol controlled benchmark, seven-day cooldown after 3 failed attempts, UTC calendar-day candle age diagnostics (not trading-day freshness); per-provider exception fallback; every requested symbol has one terminal result and counts reconcile. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
+      'note':'V4.4: 1000-symbol benchmark, seven-day cooldown after 3 failed attempts, XNYS session-aware candle diagnostics (plus separate calendar-day age);  per-provider exception fallback; every requested symbol has one terminal result and counts reconcile. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades.'}
     (DATA / 'status.json').write_text(json.dumps(status, indent=2))
     print(json.dumps(status, indent=2))
 
