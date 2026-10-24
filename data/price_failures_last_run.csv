@@ -1,2 +1,6 @@
 ticker,reason,failure_class
+IAM,Less than 20 daily observations,unclassified_error
+IPHX,Less than 20 daily observations,unclassified_error
+IVAI,Less than 20 daily observations,unclassified_error
+LYCA,Less than 20 daily observations,unclassified_error
 FLSC,Less than 20 daily observations,unclassified_error

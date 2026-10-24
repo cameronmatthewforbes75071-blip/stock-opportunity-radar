@@ -1,8 +1,8 @@
 {
-  "run_utc": "2026-10-24T00:14:03+00:00",
+  "run_utc": "2026-10-24T17:20:26+00:00",
   "attempted": 10,
-  "annual_success": 4,
-  "quarterly_success": 4,
+  "annual_success": 3,
+  "quarterly_success": 3,
   "failures": {
     "EQNR": "No usable annual SEC XBRL metrics",
     "EQNR (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
@@ -12,6 +12,8 @@
     "DHT (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
     "ECO": "No usable annual SEC XBRL metrics",
     "ECO (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "IGR": "No usable annual SEC XBRL metrics",
+    "IGR (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
     "ALLT": "No usable annual SEC XBRL metrics",
     "ALLT (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
     "BTE": "No usable annual SEC XBRL metrics",
