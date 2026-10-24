@@ -1,23 +1,191 @@
 {
-  "run_utc": "2026-10-24T18:16:47+00:00",
-  "attempted": 10,
-  "annual_success": 3,
-  "quarterly_success": 3,
-  "failures": {
-    "EQNR": "No usable annual SEC XBRL metrics",
-    "EQNR (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "HAFN": "No usable annual SEC XBRL metrics",
-    "HAFN (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "ASC": "No usable annual SEC XBRL metrics",
-    "ASC (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "DHT": "No usable annual SEC XBRL metrics",
-    "DHT (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "ECO": "No usable annual SEC XBRL metrics",
-    "ECO (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "IGR": "No usable annual SEC XBRL metrics",
-    "IGR (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "DSGX": "No usable annual SEC XBRL metrics",
-    "DSGX (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics"
-  },
-  "note": "SEC job enriches saved candidates, not the full market. Cached XBRL filings are not point-in-time backtest data."
+  "run_utc": "2026-10-24T19:21:00+00:00",
+  "attempted": 25,
+  "annual_success": 25,
+  "quarterly_success": 25,
+  "any_sec_success": 25,
+  "both_sec_success": 25,
+  "no_sec_success": 0,
+  "selected_never_attempted": 25,
+  "deferred_recent_no_data_failures": 0,
+  "configured_daily_limit": 25,
+  "results_by_ticker": [
+    {
+      "ticker": "AA",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "AAL",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "AAOI",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "AAON",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "AAP",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "AAPL",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ABBV",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ABCL",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ABSI",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ABT",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ABTC",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ABX",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ACA",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ACAD",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ACGL",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ACHC",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ACHV",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ACI",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ACIW",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ACM",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ACMR",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ADAM",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ADC",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ADEA",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ADI",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    }
+  ],
+  "failures": {},
+  "note": "V4.8 SEC throughput benchmark. Missing tags and missing SEC listing do not mean weak fundamentals. SEC retrieval timestamps are not filing dates; cached XBRL data are not point-in-time backtest data."
 }

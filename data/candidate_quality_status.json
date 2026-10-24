@@ -1,13 +1,13 @@
 {
-  "run_utc": "2026-10-24T18:16:51+00:00",
+  "run_utc": "2026-10-24T19:21:02+00:00",
   "candidate_count": 2012,
-  "with_any_financial_metric": 102,
-  "with_all_five_financial_metrics": 56,
-  "with_sec_annual_provenance": 71,
-  "with_sec_quarterly_provenance": 68,
-  "with_quarterly_metrics": 68,
+  "with_any_financial_metric": 131,
+  "with_all_five_financial_metrics": 58,
+  "with_sec_annual_provenance": 96,
+  "with_sec_quarterly_provenance": 93,
+  "with_quarterly_metrics": 93,
   "fundamental_check_older_than_90d": 0,
-  "fundamental_check_date_missing": 1912,
-  "financial_metric_coverage_pct": 4.29,
+  "fundamental_check_date_missing": 1883,
+  "financial_metric_coverage_pct": 5.26,
   "note": "Coverage counts fields with numeric values, not financial accuracy or timeliness. SEC provenance uses saved retrieval timestamps; reported periods are separately extracted. Missing fields are not zero; no new investment score or performance claim."
 }
