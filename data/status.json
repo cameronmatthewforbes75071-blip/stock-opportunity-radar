@@ -1,29 +1,29 @@
 {
-  "run_utc": "2026-10-24T17:37:11+00:00",
-  "universe_coverage_attempted": 4392,
-  "universe_coverage_pct": 78.08,
-  "last_results_qualified_count": 1558,
-  "universe_coverage_unattempted": 1233,
-  "universe_price_data_verified": 3386,
-  "universe_price_data_verified_pct": 60.2,
-  "universe_price_data_unverified": 2239,
+  "run_utc": "2026-10-24T17:57:11+00:00",
+  "universe_coverage_attempted": 5625,
+  "universe_coverage_pct": 100.0,
+  "last_results_qualified_count": 2012,
+  "universe_coverage_unattempted": 0,
+  "universe_price_data_verified": 4629,
+  "universe_price_data_verified_pct": 82.29,
+  "universe_price_data_unverified": 996,
   "coverage_scope": "Attempted from current universe source: nasdaqtrader-symbol-directory (best-effort common-equity filter); some requests may have failed",
   "universe_source": "nasdaqtrader-symbol-directory (best-effort common-equity filter)",
   "universe_count": 5625,
-  "tickers_attempted": 1000,
-  "regular_tickers_attempted": 1000,
+  "tickers_attempted": 1250,
+  "regular_tickers_attempted": 1250,
   "retry_tickers_attempted": 0,
   "retry_symbols": [],
   "retry_recovered_count": 0,
   "retry_failed_count": 0,
   "failure_types": {
-    "unclassified_error": 8
+    "insufficient_history": 7
   },
-  "qualifying_price_liquidity": 352,
-  "failed_price_requests": 8,
+  "qualifying_price_liquidity": 460,
+  "failed_price_requests": 7,
   "short_history_60_200_qualified": 10,
-  "early_history_20_59_qualified": 0,
-  "limited_history_watchlist_size": 45,
+  "early_history_20_59_qualified": 1,
+  "limited_history_watchlist_size": 56,
   "fundamental_enrichments": 5,
   "fundamental_enrichment_failures": 0,
   "fundamental_enrichment_attempts": 5,
@@ -34,115 +34,130 @@
   "sec_quarterly_success_count": 0,
   "sec_quarterly_failure_details": {},
   "sec_configured": true,
-  "stored_candidates": 1799,
-  "next_cursor": 5100,
-  "batch_size_configured": 1000,
+  "stored_candidates": 2012,
+  "next_cursor": 698,
+  "batch_size_configured": 1250,
   "retry_limit_configured": 20,
-  "price_request_success_or_filtered": 992,
-  "last_run_verified_price_symbols": 992,
-  "last_run_verified_price_pct": 99.2,
-  "last_run_failed_price_symbols": 8,
+  "price_request_success_or_filtered": 1243,
+  "last_run_verified_price_symbols": 1243,
+  "last_run_verified_price_pct": 99.44,
+  "last_run_failed_price_symbols": 7,
   "last_run_outcome_counts": {
-    "full_history_qualified": 352,
-    "limited_history_qualified": 10,
-    "price_valid_filtered_out": 630,
-    "price_failed": 8
+    "full_history_qualified": 460,
+    "limited_history_qualified": 11,
+    "price_valid_filtered_out": 772,
+    "price_failed": 7
   },
   "last_run_reconciliation_passed": true,
   "download_telemetry": {
-    "download_calls": 40,
+    "download_calls": 50,
     "download_fallback_splits": 0,
     "download_exception_count": 0,
     "largest_chunk": 25,
-    "download_batches": 40,
+    "download_batches": 50,
     "provider_exception_samples": []
   },
-  "benchmark_target_batch_size": 1000,
+  "benchmark_target_batch_size": 1250,
+  "coverage_cycle": {
+    "universe_size": 5625,
+    "lifetime_unique_attempted": 5625,
+    "lifetime_unique_price_verified": 4629,
+    "first_discovery_pass_attempted_all": true,
+    "remaining_never_attempted": 0,
+    "attempted_today_utc": 4450,
+    "price_verified_today_utc": 4427,
+    "price_verified_at_or_after_expected_session": 4629,
+    "expected_session_date": "2026-10-23",
+    "warning": "Today and session counters reflect retrieval timestamps, not full re-analysis or independent price accuracy."
+  },
+  "regular_selection": {
+    "unattempted_prior_to_run": 1233,
+    "new_discovery_symbols_selected": 1233,
+    "refresh_symbols_selected": 17,
+    "selection_policy": "unattempted-first, then oldest last attempt"
+  },
   "retry_quarantine_cooldown_days": 7,
   "retry_quarantined_prior_failures": 19,
   "price_candle_age_calendar_day_buckets": {
-    "0_1_days": 992,
-    "2_3_days": 0,
+    "0_1_days": 1242,
+    "2_3_days": 1,
     "4_5_days": 0,
     "6_plus_days": 0
   },
   "price_candle_stale_threshold_calendar_days": 5,
   "price_candle_stale_symbols": [],
   "price_candle_stale_count": 0,
-  "price_candle_dates_recorded": 992,
+  "price_candle_dates_recorded": 1243,
   "market_session_freshness": {
     "exchange_calendar": "XNYS",
     "expected_latest_completed_session": "2026-10-23",
     "settlement_grace_minutes": 90,
-    "verified_symbols_evaluated": 992,
+    "verified_symbols_evaluated": 1243,
     "session_age_buckets": {
-      "current_session": 992,
-      "one_session_behind": 0,
+      "current_session": 1242,
+      "one_session_behind": 1,
       "two_or_more_sessions_behind": 0,
       "future_or_unexpected": 0,
       "missing": 0
     },
     "stale_two_plus_sessions_count": 0,
     "stale_two_plus_sessions_symbols": [],
-    "one_session_behind_symbols": [],
+    "one_session_behind_symbols": [
+      "ACA"
+    ],
     "unexpected_candle_date_symbols": [],
     "missing_candle_date_symbols": [],
     "note": "XNYS session lag is a price-date diagnostic, not a proof of quote accuracy or an indicator that all prices have been adjusted correctly."
   },
   "last_run_failure_details": [
     {
-      "ticker": "RTSN",
+      "ticker": "VYLR",
       "reason": "Less than 20 daily observations",
-      "failure_class": "unclassified_error"
+      "failure_class": "insufficient_history"
     },
     {
-      "ticker": "RZAI",
+      "ticker": "WQEY",
       "reason": "Less than 20 daily observations",
-      "failure_class": "unclassified_error"
+      "failure_class": "insufficient_history"
     },
     {
-      "ticker": "SCAT",
+      "ticker": "ACCV",
       "reason": "Less than 20 daily observations",
-      "failure_class": "unclassified_error"
+      "failure_class": "insufficient_history"
     },
     {
-      "ticker": "SVA",
+      "ticker": "AIOK",
       "reason": "Less than 20 daily observations",
-      "failure_class": "unclassified_error"
+      "failure_class": "insufficient_history"
     },
     {
-      "ticker": "TBCV",
+      "ticker": "AMRO",
       "reason": "Less than 20 daily observations",
-      "failure_class": "unclassified_error"
+      "failure_class": "insufficient_history"
     },
     {
-      "ticker": "TCXB",
+      "ticker": "BBCI",
       "reason": "Less than 20 daily observations",
-      "failure_class": "unclassified_error"
+      "failure_class": "insufficient_history"
     },
     {
-      "ticker": "TRBG",
+      "ticker": "CHWM",
       "reason": "Less than 20 daily observations",
-      "failure_class": "unclassified_error"
-    },
-    {
-      "ticker": "TRXB",
-      "reason": "Less than 20 daily observations",
-      "failure_class": "unclassified_error"
+      "failure_class": "insufficient_history"
     }
   ],
-  "last_run_verified_regular_symbols": 992,
-  "last_run_unclassified_failure_symbols": [
-    "RTSN",
-    "RZAI",
-    "SCAT",
-    "SVA",
-    "TBCV",
-    "TCXB",
-    "TRBG",
-    "TRXB"
+  "last_run_verified_regular_symbols": 1243,
+  "last_run_unclassified_failure_symbols": [],
+  "last_run_failed_symbols": [
+    "ACCV",
+    "AIOK",
+    "AMRO",
+    "BBCI",
+    "CHWM",
+    "VYLR",
+    "WQEY"
   ],
-  "last_run_filtered_or_unranked": 640,
+  "last_run_filtered_or_unranked": 783,
   "last_run_verified_retries": 0,
-  "note": "V4.4: 1000-symbol benchmark, seven-day cooldown after 3 failed attempts, XNYS session-aware candle diagnostics (plus separate calendar-day age);  per-provider exception fallback; every requested symbol has one terminal result and counts reconcile. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades."
+  "note": "V4.5: prioritize never-attempted symbols, then refresh oldest attempted; distinguish lifetime price verification from expected-session coverage; 1250-symbol controlled benchmark, seven-day cooldown after 3 failed attempts, XNYS session-aware candle diagnostics (plus separate calendar-day age);  per-provider exception fallback; every requested symbol has one terminal result and counts reconcile. Attempted coverage and verified-price coverage are separate. Historical V3.x attempts are not retroactively counted as verified. Universe directory is best-effort and not guaranteed complete. Provider data may be missing, stale, or throttled. SEC work is separate. No live trades."
 }
