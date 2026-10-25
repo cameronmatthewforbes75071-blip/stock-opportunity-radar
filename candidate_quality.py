@@ -75,12 +75,34 @@ def audit_candidates(frame, now=None):
         else:
             provenance='Non-SEC / not established'
         missing=[k for k in METRICS if not present[k]]
+        annual_period=extract_report_period(r,'sec_periods_json')
+        quarterly_period=extract_report_period(r,'sec_quarterly_periods_json')
+        has_period=bool(annual_period or quarterly_period)
+        period_reference=max(x for x in (annual_period,quarterly_period) if x) if has_period else ''
+        period_age=date_age(period_reference,now) if has_period else None
+        fresh_period=period_age is not None and period_age <= 460
+        # Research readiness is data sufficiency, NOT an investment score.
+        if financial>=3 and has_period and fresh_period:
+            readiness='data_ready_for_manual_review'
+        elif financial>0 or annual_provenance or quarterly_provenance:
+            readiness='partial_financial_research'
+        else:
+            readiness='technical_discovery_only'
+        pe_state=('numeric_reported' if present['trailing_pe'] else
+                  'unavailable_or_not_meaningful_requires_review')
         records.append({
             'ticker':r['ticker'], 'company':r.get('company'), 'as_of':r.get('as_of'),
             'price':r.get('price'), 'score_existing':r.get('score'),
             'fundamentals_source':r.get('fundamentals_source'),
             'fundamentals_fetch_status':r.get('fundamentals_fetch_status'),
             'available_financial_metrics':financial,
+            'research_readiness':readiness,
+            'latest_known_financial_period':period_reference,
+            'latest_known_financial_period_age_days':period_age,
+            'financial_period_recent_460d':fresh_period,
+            'pe_availability_interpretation':pe_state,
+            'sec_reporting_class':r.get('sec_reporting_class',''),
+            'sec_reporting_form':r.get('sec_reporting_form',''),
             'financial_metrics_possible':len(FINANCIAL_METRICS),
             'financial_coverage_pct':round(100*financial/len(FINANCIAL_METRICS),1),
             'market_cap_available':present['market_cap'],
@@ -116,6 +138,10 @@ def audit_candidates(frame, now=None):
         'with_quarterly_metrics':int((out.quarterly_metrics_available>0).sum()),
         'fundamental_check_older_than_90d':int(out.fundamental_check_older_than_90d.sum()),
         'fundamental_check_date_missing':int(out.fundamental_check_age_days.isna().sum()),
+        'research_readiness_counts':out.research_readiness.value_counts().to_dict(),
+        'financial_period_recent_460d_count':int(out.financial_period_recent_460d.sum()),
+        'financial_period_missing_count':int(out.latest_known_financial_period.fillna('').eq('').sum()),
+        'sec_reporting_class_counts':out.sec_reporting_class.fillna('unknown').replace('','unknown').value_counts().to_dict(),
         'financial_metric_coverage_pct':round(100*out.available_financial_metrics.sum()/(len(out)*len(FINANCIAL_METRICS)),2),
         'per_metric_coverage':{k:{'available_count':int(out[k+'_available'].sum()),
              'missing_count':int(len(out)-out[k+'_available'].sum()),
@@ -123,7 +149,7 @@ def audit_candidates(frame, now=None):
         'quarterly_filing_date_recorded':int(out.latest_quarterly_filing_date_in_cached_metadata.fillna('').ne('').sum()),
         'annual_reporting_period_recorded':int(out.latest_annual_period_in_cached_metadata.fillna('').ne('').sum()),
         'quarterly_reporting_period_recorded':int(out.latest_quarterly_period_in_cached_metadata.fillna('').ne('').sum()),
-        'note':'Coverage counts fields with numeric values, not financial accuracy or timeliness. SEC provenance uses saved retrieval timestamps; reported periods are separately extracted. Missing fields are not zero; no new investment score or performance claim.'
+        'note':'V5.0 readiness is data sufficiency only, not an investment score. Coverage counts fields with numeric values, not financial accuracy or timeliness. SEC provenance uses saved retrieval timestamps; reported periods are separately extracted. Missing fields are not zero; no new investment score or performance claim.'
     }
     return out,status
 
