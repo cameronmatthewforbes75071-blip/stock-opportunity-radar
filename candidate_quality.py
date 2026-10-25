@@ -100,6 +100,7 @@ def audit_candidates(frame, now=None):
             'sec_quarterly_retrieved_age_days':quarterly_age,
             'latest_annual_period_in_cached_metadata':extract_report_period(r,'sec_periods_json'),
             'latest_quarterly_period_in_cached_metadata':extract_report_period(r,'sec_quarterly_periods_json'),
+            'latest_quarterly_filing_date_in_cached_metadata':extract_report_period(r,'sec_quarterly_filed_json'),
             'provenance_class':provenance,
             'quality_audit_label': ('financial_data_complete' if financial==5 else
                                     'financial_data_partial' if financial>=3 else
@@ -116,6 +117,12 @@ def audit_candidates(frame, now=None):
         'fundamental_check_older_than_90d':int(out.fundamental_check_older_than_90d.sum()),
         'fundamental_check_date_missing':int(out.fundamental_check_age_days.isna().sum()),
         'financial_metric_coverage_pct':round(100*out.available_financial_metrics.sum()/(len(out)*len(FINANCIAL_METRICS)),2),
+        'per_metric_coverage':{k:{'available_count':int(out[k+'_available'].sum()),
+             'missing_count':int(len(out)-out[k+'_available'].sum()),
+             'coverage_pct':round(100*out[k+'_available'].mean(),2)} for k in FINANCIAL_METRICS},
+        'quarterly_filing_date_recorded':int(out.latest_quarterly_filing_date_in_cached_metadata.fillna('').ne('').sum()),
+        'annual_reporting_period_recorded':int(out.latest_annual_period_in_cached_metadata.fillna('').ne('').sum()),
+        'quarterly_reporting_period_recorded':int(out.latest_quarterly_period_in_cached_metadata.fillna('').ne('').sum()),
         'note':'Coverage counts fields with numeric values, not financial accuracy or timeliness. SEC provenance uses saved retrieval timestamps; reported periods are separately extracted. Missing fields are not zero; no new investment score or performance claim.'
     }
     return out,status
