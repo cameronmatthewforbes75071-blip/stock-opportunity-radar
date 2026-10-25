@@ -17,7 +17,7 @@ def main():
     if df.empty or 'ticker' not in df:
         print('SEC: no candidates yet');return
     agent=os.getenv('RADAR_SEC_USER_AGENT','').strip()
-    limit=min(50,max(0,int(os.getenv('RADAR_SEC_DAILY_LIMIT','25'))))
+    limit=min(75,max(0,int(os.getenv('RADAR_SEC_DAILY_LIMIT','50'))))
     if not agent or limit==0:
         print('SEC enrichment skipped: no configured contact or zero limit');return
     df['ticker']=df.ticker.astype(str)
@@ -98,8 +98,12 @@ def main():
       'selected_never_attempted':selected_never_attempted,
       'deferred_recent_no_data_failures':deferred_failure_cooldown,
       'configured_daily_limit':limit,
+      'selected_with_missing_both_sec':int(missing_both.loc[prioritized.index].sum()),
+      'selected_with_missing_one_sec':int(missing_one.loc[prioritized.index].sum()),
+      'annual_success_rate_pct':round(100*successes/len(prioritized),2) if len(prioritized) else 0.0,
+      'quarterly_success_rate_pct':round(100*quarterly_successes/len(prioritized),2) if len(prioritized) else 0.0,
       'results_by_ticker':selected_details,
-      'failures':failures,'note':'V4.8 SEC throughput benchmark. Missing tags and missing SEC listing do not mean weak fundamentals. SEC retrieval timestamps are not filing dates; cached XBRL data are not point-in-time backtest data.'}
+      'failures':failures,'note':'V4.9 SEC 50-candidate controlled throughput benchmark. Missing tags and missing SEC listing do not mean weak fundamentals. SEC retrieval timestamps are not filing dates; cached XBRL data are not point-in-time backtest data.'}
     (DATA/'sec_enrichment_status.json').write_text(json.dumps(report,indent=2))
     print(json.dumps(report,indent=2))
 
