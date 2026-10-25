@@ -6,6 +6,7 @@ import pandas as pd
 from quality import enrich_dataframe
 from scanner import score_candidate, categories
 from sec_fundamentals import fetch_sec_annual, fetch_sec_quarterly
+from sec_reporting import inspect_sec_filing_type, classify_reason
 
 DATA=Path(__file__).resolve().parent/'data'
 
@@ -51,6 +52,7 @@ def main():
     selected_never_attempted=int(prior.loc[prioritized.index].isna().sum())
     deferred_failure_cooldown=int((~eligible).sum())
     successes=0; failures={}; quarterly_successes=0; full_successes=0; any_successes=0; selected_details=[]
+    filing_type_counts={}; diagnostic_count=0
     for idx,row in prioritized.iterrows():
         ticker=row['ticker']
         df.at[idx,'sec_enrichment_last_attempt_utc']=datetime.now(timezone.utc).isoformat(timespec='seconds')
@@ -79,10 +81,21 @@ def main():
         if annual and quarterly: full_successes+=1
         if not annual and not quarterly:
             df.at[idx,'sec_enrichment_failure_reason']=f'annual: {msg}; quarterly: {qmsg}'[:320]
+            diagnostic_count += 1
+            filing_info=inspect_sec_filing_type(ticker,agent,DATA/'sec_cache')
+            filing_type_counts[filing_info['filing_type_class']]=filing_type_counts.get(filing_info['filing_type_class'],0)+1
+            df.at[idx,'sec_reporting_class']=filing_info['filing_type_class']
+            df.at[idx,'sec_reporting_form']=filing_info.get('most_recent_relevant_form','')
+        else:
+            filing_info={'filing_type_class':'supported_metrics_found','most_recent_relevant_form':'','diagnostic_status':'not_needed'}
         selected_details.append({'ticker':ticker, 'annual_success':bool(annual),
                                  'quarterly_success':bool(quarterly),
                                  'annual_result':'OK' if annual else str(msg)[:180],
-                                 'quarterly_result':'OK' if quarterly else str(qmsg)[:180]})
+                                 'quarterly_result':'OK' if quarterly else str(qmsg)[:180],
+                                 'reason_class':classify_reason(str(msg) if not annual else str(qmsg) if not quarterly else ''),
+                                 'filing_type_class':filing_info['filing_type_class'],
+                                 'recent_sec_form':filing_info.get('most_recent_relevant_form',''),
+                                 'filing_diagnostic_status':filing_info.get('diagnostic_status','')})
         time.sleep(.25)
     # Recompute scores when financial metrics change. Never use missing data as zero.
     for idx in prioritized.index:
@@ -103,7 +116,8 @@ def main():
       'annual_success_rate_pct':round(100*successes/len(prioritized),2) if len(prioritized) else 0.0,
       'quarterly_success_rate_pct':round(100*quarterly_successes/len(prioritized),2) if len(prioritized) else 0.0,
       'results_by_ticker':selected_details,
-      'failures':failures,'note':'V4.9 SEC 50-candidate controlled throughput benchmark. Missing tags and missing SEC listing do not mean weak fundamentals. SEC retrieval timestamps are not filing dates; cached XBRL data are not point-in-time backtest data.'}
+      'filing_type_diagnostics_count':diagnostic_count,'filing_type_counts':filing_type_counts,
+      'failures':failures,'note':'V5.0 SEC filing-type diagnostic on no-data lookups; 50-candidate benchmark. Missing tags and missing SEC listing do not mean weak fundamentals. SEC retrieval timestamps are not filing dates; cached XBRL data are not point-in-time backtest data.'}
     (DATA/'sec_enrichment_status.json').write_text(json.dumps(report,indent=2))
     print(json.dumps(report,indent=2))
 
