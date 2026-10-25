@@ -1,18 +1,6 @@
 ticker,reason,failure_class
-SXTC,Less than 20 daily observations,insufficient_history
-TWG,Less than 20 daily observations,insufficient_history
-IAM,Less than 20 daily observations,insufficient_history
-IPHX,Less than 20 daily observations,insufficient_history
-IVAI,Less than 20 daily observations,insufficient_history
-LYCA,Less than 20 daily observations,insufficient_history
-NSTR,Less than 20 daily observations,insufficient_history
-NXDR,Less than 20 daily observations,insufficient_history
-PAXG,Less than 20 daily observations,insufficient_history
-RTSN,Less than 20 daily observations,insufficient_history
-RZAI,Less than 20 daily observations,insufficient_history
-SCAT,Less than 20 daily observations,insufficient_history
-SVA,Less than 20 daily observations,insufficient_history
-TBCV,Less than 20 daily observations,insufficient_history
-TCXB,Less than 20 daily observations,insufficient_history
-TRBG,Less than 20 daily observations,insufficient_history
-TRXB,Less than 20 daily observations,insufficient_history
+AXG,Less than 20 daily observations,insufficient_history
+AZTR,Less than 20 daily observations,insufficient_history
+BUUU,Less than 20 daily observations,insufficient_history
+CHOW,Less than 20 daily observations,insufficient_history
+COCH,Less than 20 daily observations,insufficient_history
