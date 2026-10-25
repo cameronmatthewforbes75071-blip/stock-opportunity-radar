@@ -1,13 +1,43 @@
 {
-  "run_utc": "2026-10-24T19:21:02+00:00",
+  "run_utc": "2026-10-25T18:10:34+00:00",
   "candidate_count": 2012,
-  "with_any_financial_metric": 131,
+  "with_any_financial_metric": 173,
   "with_all_five_financial_metrics": 58,
-  "with_sec_annual_provenance": 96,
-  "with_sec_quarterly_provenance": 93,
-  "with_quarterly_metrics": 93,
+  "with_sec_annual_provenance": 136,
+  "with_sec_quarterly_provenance": 133,
+  "with_quarterly_metrics": 133,
   "fundamental_check_older_than_90d": 0,
-  "fundamental_check_date_missing": 1883,
-  "financial_metric_coverage_pct": 5.26,
+  "fundamental_check_date_missing": 1839,
+  "financial_metric_coverage_pct": 6.55,
+  "per_metric_coverage": {
+    "revenue_growth": {
+      "available_count": 165,
+      "missing_count": 1847,
+      "coverage_pct": 8.2
+    },
+    "earnings_growth": {
+      "available_count": 108,
+      "missing_count": 1904,
+      "coverage_pct": 5.37
+    },
+    "profit_margin": {
+      "available_count": 161,
+      "missing_count": 1851,
+      "coverage_pct": 8.0
+    },
+    "free_cash_flow": {
+      "available_count": 156,
+      "missing_count": 1856,
+      "coverage_pct": 7.75
+    },
+    "trailing_pe": {
+      "available_count": 69,
+      "missing_count": 1943,
+      "coverage_pct": 3.43
+    }
+  },
+  "quarterly_filing_date_recorded": 133,
+  "annual_reporting_period_recorded": 136,
+  "quarterly_reporting_period_recorded": 133,
   "note": "Coverage counts fields with numeric values, not financial accuracy or timeliness. SEC provenance uses saved retrieval timestamps; reported periods are separately extracted. Missing fields are not zero; no new investment score or performance claim."
 }

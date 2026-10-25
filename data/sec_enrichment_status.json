@@ -1,191 +1,391 @@
 {
-  "run_utc": "2026-10-24T19:21:00+00:00",
-  "attempted": 25,
-  "annual_success": 25,
-  "quarterly_success": 25,
-  "any_sec_success": 25,
-  "both_sec_success": 25,
-  "no_sec_success": 0,
-  "selected_never_attempted": 25,
+  "run_utc": "2026-10-25T18:10:32+00:00",
+  "attempted": 50,
+  "annual_success": 40,
+  "quarterly_success": 40,
+  "any_sec_success": 40,
+  "both_sec_success": 40,
+  "no_sec_success": 10,
+  "selected_never_attempted": 50,
   "deferred_recent_no_data_failures": 0,
-  "configured_daily_limit": 25,
+  "configured_daily_limit": 50,
+  "selected_with_missing_both_sec": 50,
+  "selected_with_missing_one_sec": 0,
+  "annual_success_rate_pct": 80.0,
+  "quarterly_success_rate_pct": 80.0,
   "results_by_ticker": [
     {
-      "ticker": "AA",
+      "ticker": "ADM",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "AAL",
+      "ticker": "ADMA",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "AAOI",
+      "ticker": "ADNT",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "AAON",
+      "ticker": "ADPT",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "AAP",
+      "ticker": "ADSK",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "AAPL",
+      "ticker": "ADT",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ABBV",
+      "ticker": "ADTN",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ABCL",
+      "ticker": "AEE",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ABSI",
+      "ticker": "AEG",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics"
+    },
+    {
+      "ticker": "AEHL",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics"
+    },
+    {
+      "ticker": "AEHR",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ABT",
+      "ticker": "AEIS",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ABTC",
+      "ticker": "AEM",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics"
+    },
+    {
+      "ticker": "AEO",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ABX",
+      "ticker": "AEP",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ACA",
+      "ticker": "AER",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics"
+    },
+    {
+      "ticker": "AESI",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ACAD",
+      "ticker": "AEVA",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ACGL",
+      "ticker": "AFRM",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ACHC",
+      "ticker": "AG",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics"
+    },
+    {
+      "ticker": "AGCO",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ACHV",
+      "ticker": "AGEN",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ACI",
+      "ticker": "AGI",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics"
+    },
+    {
+      "ticker": "AGIO",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ACIW",
+      "ticker": "AGNC",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ACM",
+      "ticker": "AGRO",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics"
+    },
+    {
+      "ticker": "AHCO",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ACMR",
+      "ticker": "AHR",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ADAM",
+      "ticker": "AHRT",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ADC",
+      "ticker": "AI",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ADEA",
+      "ticker": "AIP",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     },
     {
-      "ticker": "ADI",
+      "ticker": "AIR",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "AJG",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "AKAM",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "AKR",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALAB",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALB",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALC",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics"
+    },
+    {
+      "ticker": "ALGM",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALGN",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALH",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALHC",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALK",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALKS",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALKT",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALL",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALLT",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics"
+    },
+    {
+      "ticker": "ALLY",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK"
+    },
+    {
+      "ticker": "ALM",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics"
+    },
+    {
+      "ticker": "ALMS",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
       "quarterly_result": "OK"
     }
   ],
-  "failures": {},
-  "note": "V4.8 SEC throughput benchmark. Missing tags and missing SEC listing do not mean weak fundamentals. SEC retrieval timestamps are not filing dates; cached XBRL data are not point-in-time backtest data."
+  "failures": {
+    "AEG": "No usable annual SEC XBRL metrics",
+    "AEG (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "AEHL": "No usable annual SEC XBRL metrics",
+    "AEHL (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "AEM": "No usable annual SEC XBRL metrics",
+    "AEM (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "AER": "No usable annual SEC XBRL metrics",
+    "AER (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "AG": "No usable annual SEC XBRL metrics",
+    "AG (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "AGI": "No usable annual SEC XBRL metrics",
+    "AGI (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "AGRO": "No usable annual SEC XBRL metrics",
+    "AGRO (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "ALC": "No usable annual SEC XBRL metrics",
+    "ALC (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "ALLT": "No usable annual SEC XBRL metrics",
+    "ALLT (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "ALM": "No usable annual SEC XBRL metrics",
+    "ALM (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics"
+  },
+  "note": "V4.9 SEC 50-candidate controlled throughput benchmark. Missing tags and missing SEC listing do not mean weak fundamentals. SEC retrieval timestamps are not filing dates; cached XBRL data are not point-in-time backtest data."
 }
