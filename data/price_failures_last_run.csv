@@ -1,6 +1,9 @@
 ticker,reason,failure_class
-AXG,Less than 20 daily observations,insufficient_history
-AZTR,Less than 20 daily observations,insufficient_history
-BUUU,Less than 20 daily observations,insufficient_history
-CHOW,Less than 20 daily observations,insufficient_history
-COCH,Less than 20 daily observations,insufficient_history
+FCDH,Less than 20 daily observations,insufficient_history
+PTIV,Less than 20 daily observations,insufficient_history
+AETR,Less than 20 daily observations,insufficient_history
+ENLV,Less than 20 daily observations,insufficient_history
+GCTK,Less than 20 daily observations,insufficient_history
+HCTI,Less than 20 daily observations,insufficient_history
+HKPD,Less than 20 daily observations,insufficient_history
+IPW,Less than 20 daily observations,insufficient_history
