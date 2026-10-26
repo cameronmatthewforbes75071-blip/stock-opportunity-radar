@@ -136,3 +136,27 @@ def render_research_dashboard(data_dir: Path):
             st.dataframe(audit,hide_index=True,width='stretch')
             st.download_button('Download financial validation CSV',audit.to_csv(index=False).encode('utf-8'),
                                file_name='financial_validation.csv',mime='text/csv')
+
+
+    render_experimental_scores(data_dir)
+
+def render_experimental_scores(data_dir: Path):
+    st.markdown('#### V5.3 experimental investment research scores')
+    st.caption('Unvalidated research heuristics only, not buy/sell signals. Only SEC-period candidates passing basic checks are scored. No sector-relative valuation or historical performance test.')
+    scores=_read_csv(data_dir/'investment_research_scores.csv')
+    status=_read_json(data_dir/'investment_research_status.json')
+    if scores.empty:
+        st.info('No V5.3 score report found. Run the updated GitHub workflow.')
+        return
+    if status:
+        c1,c2,c3=st.columns(3)
+        c1.metric('Candidates',status.get('candidate_count',0))
+        c2.metric('Experimental scored',status.get('experimental_scored_count',0))
+        c3.metric('Unranked',status.get('unranked_count',0))
+    show_only=st.checkbox('Show only scored research candidates',value=True,key='v53_scored_only')
+    view=scores.copy()
+    if show_only: view=view[view.experimental_research_score.notna()]
+    st.caption('Growth, health, valuation and technical components are illustrative and not normalized by sector. Missing valuation remains missing; available-component weights are re-normalized, with coverage shown separately.')
+    cols=[k for k in ['ticker','experimental_research_score','growth','health','valuation','technical','scoring_coverage_pct','financial_fields_present','scoring_status','data_confidence_tier'] if k in view]
+    st.dataframe(view[cols],hide_index=True,width='stretch')
+    st.download_button('Download experimental scoring report',view.to_csv(index=False).encode('utf-8'),file_name='investment_research_scores.csv',mime='text/csv',key='v53_download')
