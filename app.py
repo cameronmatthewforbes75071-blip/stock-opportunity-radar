@@ -30,7 +30,7 @@ DISPLAY_COLUMNS = financial_column_config()
 
 def money_text(value):
     return 'Unavailable' if pd.isna(value) else f'${float(value):,.2f}'
-st.caption('V4.1 • Separate price and scan freshness • Financial request diagnostics • Research only')
+st.caption('V5.2 • Stock discovery and financial research • Not investment advice')
 
 with st.sidebar:
     st.header('Scan controls')
@@ -82,7 +82,7 @@ b.metric('Candidates displayed',len(filtered))
 c.metric('Bullish trends',int((df.trend=='Bullish').sum()))
 d.metric('Average data coverage',f'{df.data_coverage.mean():.0f}%')
 st.divider()
-tab0,tab1,tab2,tab3=st.tabs(['🤖 Auto discovery','🎯 Opportunities','🔬 Stock research','ℹ️ Methodology'])
+tab0,tab1,tab2,tab3=st.tabs(['🤖 Auto discovery','🎯 Opportunities','🔬 Stock research','ℹ️ Methodology','📊 Financial research'])
 with tab0:
     from pathlib import Path
     import json
@@ -220,3 +220,7 @@ with tab3:
 
 **No automatic trading.** Nothing in this project places orders, connects to a brokerage, or promises profitability.
 ''')
+
+with tab4:
+    from research_dashboard import render_research_dashboard
+    render_research_dashboard(__import__("pathlib").Path(__file__).resolve().parent / "data")
