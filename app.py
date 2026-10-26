@@ -82,7 +82,7 @@ b.metric('Candidates displayed',len(filtered))
 c.metric('Bullish trends',int((df.trend=='Bullish').sum()))
 d.metric('Average data coverage',f'{df.data_coverage.mean():.0f}%')
 st.divider()
-tab0,tab1,tab2,tab3=st.tabs(['🤖 Auto discovery','🎯 Opportunities','🔬 Stock research','ℹ️ Methodology','📊 Financial research'])
+tab0, tab1, tab2, tab3, tab4 = st.tabs(['🤖 Auto discovery','🎯 Opportunities','🔬 Stock research','ℹ️ Methodology','📊 Financial research'])
 with tab0:
     from pathlib import Path
     import json
