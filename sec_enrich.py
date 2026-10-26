@@ -7,6 +7,7 @@ from quality import enrich_dataframe
 from scanner import score_candidate, categories
 from sec_fundamentals import fetch_sec_annual, fetch_sec_quarterly
 from sec_reporting import inspect_sec_filing_type, classify_reason
+from financial_validation import prioritize_candidates
 
 DATA=Path(__file__).resolve().parent/'data'
 
@@ -46,9 +47,11 @@ def main():
     priority[missing_both]=1
     priority[missing_both & prior.isna()]=0
     oldest=prior.fillna(pd.Timestamp('1970-01-01',tz='UTC'))
-    prioritized=(df.loc[eligible].assign(_priority=priority.loc[eligible],_last_attempt=oldest.loc[eligible])
-                 .sort_values(['_priority','_last_attempt','ticker'],kind='stable')
-                 .head(limit))
+    eligible_rows=df.loc[eligible].assign(_priority=priority.loc[eligible],_last_attempt=oldest.loc[eligible])
+    eligible_rows=prioritize_candidates(eligible_rows)
+    prioritized=(eligible_rows.sort_values(['_priority','_research_priority_score','_last_attempt','ticker'],
+                       ascending=[True,False,True,True],kind='stable').head(limit))
+    prioritized=prioritized.drop(columns=['_research_priority_score'])
     selected_never_attempted=int(prior.loc[prioritized.index].isna().sum())
     deferred_failure_cooldown=int((~eligible).sum())
     successes=0; failures={}; quarterly_successes=0; full_successes=0; any_successes=0; selected_details=[]
@@ -109,6 +112,7 @@ def main():
       'any_sec_success':any_successes,'both_sec_success':full_successes,
       'no_sec_success':len(prioritized)-any_successes,
       'selected_never_attempted':selected_never_attempted,
+      'selection_policy':'unchecked first, then existing technical score descending, with cooldowns; score is research-queue priority only',
       'deferred_recent_no_data_failures':deferred_failure_cooldown,
       'configured_daily_limit':limit,
       'selected_with_missing_both_sec':int(missing_both.loc[prioritized.index].sum()),
@@ -117,7 +121,7 @@ def main():
       'quarterly_success_rate_pct':round(100*quarterly_successes/len(prioritized),2) if len(prioritized) else 0.0,
       'results_by_ticker':selected_details,
       'filing_type_diagnostics_count':diagnostic_count,'filing_type_counts':filing_type_counts,
-      'failures':failures,'note':'V5.0 SEC filing-type diagnostic on no-data lookups; 50-candidate benchmark. Missing tags and missing SEC listing do not mean weak fundamentals. SEC retrieval timestamps are not filing dates; cached XBRL data are not point-in-time backtest data.'}
+      'failures':failures,'note':'V5.1 research-queue priority using existing technical scores (not an investment signal). V5.0 SEC filing-type diagnostic on no-data lookups; 50-candidate benchmark. Missing tags and missing SEC listing do not mean weak fundamentals. SEC retrieval timestamps are not filing dates; cached XBRL data are not point-in-time backtest data.'}
     (DATA/'sec_enrichment_status.json').write_text(json.dumps(report,indent=2))
     print(json.dumps(report,indent=2))
 
