@@ -1,99 +1,132 @@
-import streamlit as st
-import pandas as pd
-from scanner import DEFAULT_UNIVERSE, demo_data, fetch_live
-from quality import enrich_dataframe
-from reliability import add_freshness
 
-st.set_page_config(page_title='Stock Opportunity Radar',page_icon='📡',layout='wide')
-st.markdown('''<style>
-.stApp {background: #0c1421; color: #eaf2ff}
-[data-testid="stMetric"] {background: #152236; border:1px solid #304462; border-radius:12px;padding:14px}
-h1,h2,h3 {color:#f3f7ff}
-</style>''', unsafe_allow_html=True)
-st.title('📡 Stock Opportunity Radar')
-
-# Display-only formatting: keep CSV exports and calculations numeric/unmodified.
-def financial_column_config():
-    money = ('$%.2f', ['price', 'Price', 'sma50', 'sma200'])
-    config = {key: st.column_config.NumberColumn(format=money[0]) for key in money[1]}
-    config['free_cash_flow'] = st.column_config.NumberColumn(format='$%.0f')
-    config['market_cap'] = st.column_config.NumberColumn(format='$%.0f')
-    # Historical price returns and coverage are already stored as percentage points.
-    for key in ('return_3m', 'return_6m', '3M %', '6M %', 'Coverage %', 'data_coverage',
-                'fundamental_coverage_pct', 'quarterly_revenue_yoy_growth', 'quarterly_earnings_yoy_growth', 'quarterly_profit_margin'):
-        config[key] = st.column_config.NumberColumn(format='%.2f%%')
-    for key in ('score', 'Score / 100', 'growth_score', 'value_score', 'momentum_score'):
-        config[key] = st.column_config.NumberColumn(format='%.0f')
-    return config
-
-DISPLAY_COLUMNS = financial_column_config()
-
-def money_text(value):
-    return 'Unavailable' if pd.isna(value) else f'${float(value):,.2f}'
-st.caption('V5.2 • Stock discovery and financial research • Not investment advice')
-
-with st.sidebar:
-    st.header('Scan controls')
-    mode=st.radio('Data mode',['Demo (synthetic)','Live (limited universe)'],index=0,
-                  help='Demo is illustrative only. Live pulls from unofficial Yahoo Finance data.')
-    symbols=st.text_area('Tickers (comma separated)',', '.join(DEFAULT_UNIVERSE[:12]),height=110)
-    min_score=st.slider('Minimum research score',0,100,0)
-    min_coverage=st.slider('Minimum data coverage (%)',0,100,35)
-    st.caption('Live scanning is limited to 30 tickers per run to avoid heavy unofficial requests. This does NOT scan the entire stock market.')
-    clicked=st.button('🔎 Run scan',type='primary',width='stretch')
-
-@st.cache_data(ttl=3600, show_spinner=False)
-def load_live(names):
-    return fetch_live(list(names))
-
-if 'scan_data' not in st.session_state:
-    st.session_state.scan_data=demo_data()
-    st.session_state.scan_errors=[]
-    st.session_state.current_mode='Demo (synthetic)'
-if clicked:
-    if mode.startswith('Demo'):
-        st.session_state.scan_data=demo_data();st.session_state.scan_errors=[];st.session_state.current_mode=mode
-    else:
-        names=tuple(dict.fromkeys(v.strip().upper() for v in symbols.split(',') if v.strip()))[:30]
-        if not names: st.error('Enter at least one ticker.')
-        else:
-            with st.spinner('Retrieving price history and financial metrics…'):
-                df,errors=load_live(names)
-            st.session_state.scan_data=df;st.session_state.scan_errors=errors;st.session_state.current_mode=mode
-
-df=enrich_dataframe(st.session_state.scan_data.copy())
-if st.session_state.current_mode.startswith('Demo'):
-    st.warning('DEMO MODE: ALL CANDIDATES AND METRICS ARE FICTIONAL. Press Run scan in Live mode for current third-party data.')
-else:
-    st.info('Live pilot scans only the tickers entered, not the whole US market. Yahoo/yfinance data is unofficial and may be missing or stale. Validate company filings before making decisions.')
-if st.session_state.scan_errors:
-    with st.expander(f'{len(st.session_state.scan_errors)} tickers unavailable / failed'):
-        st.write(pd.DataFrame(st.session_state.scan_errors,columns=['Ticker','Reason']))
-
-if df.empty:
-    st.error('No usable records. Try fewer tickers, or Demo mode. No candidates have been fabricated.')
-    st.stop()
-
-total=len(df)
-filtered=df[(df.score>=min_score)&(df.data_coverage>=min_coverage)].copy().sort_values(['score','data_coverage'],ascending=False)
-a,b,c,d=st.columns(4)
-a.metric('Tickers analyzed',total)
-b.metric('Candidates displayed',len(filtered))
-c.metric('Bullish trends',int((df.trend=='Bullish').sum()))
-d.metric('Average data coverage',f'{df.data_coverage.mean():.0f}%')
-st.divider()
-tab0,tab1,tab2,tab3=st.tabs(['🤖 Auto discovery','🎯 Opportunities','🔬 Stock research','ℹ️ Methodology','📊 Financial research'])
-with tab0:
-    from pathlib import Path
-    import json
-    data_dir=Path(__file__).parent / 'data'
-    snapshot=data_dir / 'discovery.csv'
-    status_path=data_dir / 'status.json'
-    st.subheader('Incremental automated discovery')
-    st.caption('Background jobs scan a rotating subset of symbols. This is NOT full-market daily coverage. Data may be delayed or incomplete.')
-    if status_path.exists():
-        status=json.loads(status_path.read_text())
-        st.write(f"**Last scan (UTC):** {status.get('run_utc', 'Unknown')} · **Universe source:** {status.get('universe_source','Unknown')}")
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
         st.write(f"**Symbols in universe:** {status.get('universe_count',0):,} · **Last run attempted:** {status.get('tickers_attempted',0)} · **Last run errors:** {status.get('failed_price_requests',0)}")
         coverage_pct=status.get('universe_coverage_pct')
         if coverage_pct is not None:
@@ -222,5 +255,3 @@ with tab3:
 ''')
 
 with tab4:
-    from research_dashboard import render_research_dashboard
-    render_research_dashboard(__import__("pathlib").Path(__file__).resolve().parent / "data")
