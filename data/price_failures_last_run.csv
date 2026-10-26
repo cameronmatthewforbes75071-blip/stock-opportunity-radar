@@ -1,9 +1,4 @@
 ticker,reason,failure_class
-FCDH,Less than 20 daily observations,insufficient_history
-PTIV,Less than 20 daily observations,insufficient_history
-AETR,Less than 20 daily observations,insufficient_history
-ENLV,Less than 20 daily observations,insufficient_history
-GCTK,Less than 20 daily observations,insufficient_history
-HCTI,Less than 20 daily observations,insufficient_history
-HKPD,Less than 20 daily observations,insufficient_history
-IPW,Less than 20 daily observations,insufficient_history
+LHSW,Less than 20 daily observations,insufficient_history
+NUWE,Less than 20 daily observations,insufficient_history
+PARA,Less than 20 daily observations,insufficient_history
