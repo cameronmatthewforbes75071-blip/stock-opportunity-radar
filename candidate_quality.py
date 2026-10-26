@@ -7,6 +7,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 import pandas as pd
+from financial_validation import check_financial_row
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / 'data'
@@ -92,6 +93,8 @@ def audit_candidates(frame, now=None):
                   'unavailable_or_not_meaningful_requires_review')
         records.append({
             'ticker':r['ticker'], 'company':r.get('company'), 'as_of':r.get('as_of'),
+            'profit_margin':r.get('profit_margin'), 'trailing_pe':r.get('trailing_pe'),
+            'market_cap':r.get('market_cap'), 'free_cash_flow':r.get('free_cash_flow'),
             'price':r.get('price'), 'score_existing':r.get('score'),
             'fundamentals_source':r.get('fundamentals_source'),
             'fundamentals_fetch_status':r.get('fundamentals_fetch_status'),
@@ -128,9 +131,16 @@ def audit_candidates(frame, now=None):
                                     'financial_data_partial' if financial>=3 else
                                     'financial_data_sparse'),
         })
+    for item in records:
+        label, flags = check_financial_row(item,now=now)
+        item['financial_validation_status']=label
+        item['financial_validation_flags']='; '.join(flags)
+        item['financial_validation_flag_count']=len(flags)
     out=pd.DataFrame(records).sort_values(['financial_coverage_pct','ticker'],ascending=[False,True])
     status={
         'candidate_count':len(out),
+        'financial_validation_status_counts':out.financial_validation_status.value_counts().to_dict(),
+        'financial_validation_flag_counts':{key:int(sum(key in str(v).split('; ') for v in out.financial_validation_flags)) for key in sorted(set(flag for value in out.financial_validation_flags if value for flag in value.split('; ')))},
         'with_any_financial_metric':int((out.available_financial_metrics>0).sum()),
         'with_all_five_financial_metrics':int((out.available_financial_metrics==5).sum()),
         'with_sec_annual_provenance':int(out.annual_sec_data_recorded.sum()),
@@ -149,7 +159,7 @@ def audit_candidates(frame, now=None):
         'quarterly_filing_date_recorded':int(out.latest_quarterly_filing_date_in_cached_metadata.fillna('').ne('').sum()),
         'annual_reporting_period_recorded':int(out.latest_annual_period_in_cached_metadata.fillna('').ne('').sum()),
         'quarterly_reporting_period_recorded':int(out.latest_quarterly_period_in_cached_metadata.fillna('').ne('').sum()),
-        'note':'V5.0 readiness is data sufficiency only, not an investment score. Coverage counts fields with numeric values, not financial accuracy or timeliness. SEC provenance uses saved retrieval timestamps; reported periods are separately extracted. Missing fields are not zero; no new investment score or performance claim.'
+        'note':'V5.1 basic date, provenance and plausibility diagnostics are not financial-statement audits or investment ratings. V5.0 readiness is data sufficiency only, not an investment score. Coverage counts fields with numeric values, not financial accuracy or timeliness. SEC provenance uses saved retrieval timestamps; reported periods are separately extracted. Missing fields are not zero; no new investment score or performance claim.'
     }
     return out,status
 
@@ -172,6 +182,7 @@ def main():
         snapshot=pd.concat([previous,snapshot],ignore_index=True)
     snapshot=snapshot.drop_duplicates(['ticker','as_of'],keep='first')
     report.to_csv(DATA/'candidate_quality.csv',index=False)
+    report[['ticker','research_readiness','financial_validation_status','financial_validation_flags','financial_validation_flag_count','provenance_class','latest_known_financial_period']].to_csv(DATA/'financial_validation.csv',index=False)
     snapshot.to_csv(snapshot_file,index=False)
     payload={'run_utc':datetime.now(timezone.utc).isoformat(timespec='seconds'),**status}
     (DATA/'candidate_quality_status.json').write_text(json.dumps(payload,indent=2))
