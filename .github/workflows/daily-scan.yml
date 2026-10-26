@@ -21,14 +21,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
-        with:
-          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-          cache: pip
 
       - name: Install dependencies
         run: |
@@ -59,6 +56,10 @@ jobs:
         run: |
           python candidate_quality.py
 
+      - name: Build experimental V5.3 research scores
+        run: |
+          python investment_research.py
+
       - name: Verify required reports
         run: |
           python - <<'PY'
@@ -73,6 +74,8 @@ jobs:
               "data/candidate_quality_status.json",
               "data/candidate_snapshots.csv",
               "data/financial_validation.csv",
+              "data/investment_research_scores.csv",
+              "data/investment_research_status.json",
           ]
 
           missing = [
@@ -90,11 +93,10 @@ jobs:
 
           if scan.get("last_run_reconciliation_passed") is not True:
               raise SystemExit(
-                  "Scan outcome reconciliation did not pass."
+                  "Scan reconciliation did not pass."
               )
 
-          print("Required reports verified.")
-          print("Scan accounting reconciliation passed.")
+          print("All required V5.3 reports verified.")
           PY
 
       - name: Commit updated research data
@@ -105,7 +107,7 @@ jobs:
           git add data/
 
           if ! git diff --cached --quiet; then
-            git commit -m "chore: update stock discovery and research data"
+            git commit -m "chore: update V5.3 stock research data"
             git push
           else
             echo "No changes to commit."
