@@ -1,3 +1,3 @@
 ticker,reason,failure_class
-PPCB,Less than 20 daily observations,insufficient_history
-SBFM,Less than 20 daily observations,insufficient_history
+MSGK,Less than 20 daily observations,insufficient_history
+MSGR,Less than 20 daily observations,insufficient_history

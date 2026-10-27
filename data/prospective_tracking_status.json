@@ -1,0 +1,8 @@
+{
+  "run_utc": "2026-10-27T14:27:54.645308+00:00",
+  "total_unique_snapshots": 248,
+  "new_snapshots": 248,
+  "total_price_observations": 0,
+  "new_price_observations": 0,
+  "notes": "Forward observation only. No historical backfill or point-in-time backtest. Price-only changes can be distorted by splits, distributions and stale prices; not total return, alpha, or executable performance."
+}
