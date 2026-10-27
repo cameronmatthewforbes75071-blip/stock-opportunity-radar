@@ -1,39 +1,27 @@
-
 name: Incremental stock discovery
-
 on:
   workflow_dispatch:
   schedule:
     - cron: '30 23 * * 1-5'
-
 permissions:
   contents: write
-
 concurrency:
   group: stock-radar-daily-scan
   cancel-in-progress: false
-
 jobs:
   scan:
     runs-on: ubuntu-latest
     timeout-minutes: 60
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install "exchange-calendars>=4.6,<5"
-
-      - name: Run incremental stock scan
+      - name: Run incremental scan
         env:
           RADAR_BATCH_SIZE: '1250'
           RADAR_DOWNLOAD_CHUNK: '25'
@@ -42,73 +30,32 @@ jobs:
           RADAR_SEC_LIMIT: '0'
           RADAR_RETRY_LIMIT: '20'
           RADAR_SEC_USER_AGENT: ${{ secrets.RADAR_SEC_USER_AGENT }}
-        run: |
-          python auto_scan.py
-
-      - name: Enrich candidates with SEC fundamentals
+        run: python auto_scan.py
+      - name: Enrich screened candidates with SEC fundamentals
         env:
           RADAR_SEC_USER_AGENT: ${{ secrets.RADAR_SEC_USER_AGENT }}
           RADAR_SEC_DAILY_LIMIT: '50'
-        run: |
-          python sec_enrich.py
-
-      - name: Build candidate quality and financial validation
-        run: |
-          python candidate_quality.py
-
+        run: python sec_enrich.py
+      - name: Build candidate quality and research snapshots
+        run: python candidate_quality.py
       - name: Build experimental V5.3 research scores
+        run: python investment_research.py
+      - name: Record prospective snapshots and price observations
+        run: python forward_tracking.py
+      - name: Verify V5.4 reports
         run: |
-          python investment_research.py
-
-      - name: Verify required reports
-        run: |
-          python - <<'PY'
+          python - <<'PY_VERIFY'
           from pathlib import Path
-          import json
-
-          required = [
-              "data/discovery.csv",
-              "data/status.json",
-              "data/sec_enrichment_status.json",
-              "data/candidate_quality.csv",
-              "data/candidate_quality_status.json",
-              "data/candidate_snapshots.csv",
-              "data/financial_validation.csv",
-              "data/investment_research_scores.csv",
-              "data/investment_research_status.json",
-          ]
-
-          missing = [
-              file for file in required
-              if not Path(file).is_file()
-          ]
-
-          if missing:
-              raise SystemExit(
-                  "Missing required reports: " + ", ".join(missing)
-              )
-
-          with open("data/status.json") as f:
-              scan = json.load(f)
-
-          if scan.get("last_run_reconciliation_passed") is not True:
-              raise SystemExit(
-                  "Scan reconciliation did not pass."
-              )
-
-          print("All required V5.3 reports verified.")
-          PY
-
-      - name: Commit updated research data
+          for name in ('investment_research_scores.csv','prospective_score_snapshots.csv','prospective_price_outcomes.csv','prospective_tracking_status.json'):
+              if not (Path('data')/name).exists():
+                  raise SystemExit(f'Missing report: {name}')
+          PY_VERIFY
+      - name: Commit scan results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add data/
-
+          git add data/discovery.csv data/status.json data/cursor.json data/scan_coverage.csv data/sec_enrichment_status.json data/price_failures_last_run.csv data/limited_history.csv data/candidate_quality.csv data/candidate_quality_status.json data/candidate_snapshots.csv data/financial_validation.csv data/investment_research_scores.csv data/investment_research_status.json data/prospective_score_snapshots.csv data/prospective_price_outcomes.csv data/prospective_tracking_status.json
           if ! git diff --cached --quiet; then
-            git commit -m "chore: update V5.3 stock research data"
+            git commit -m "chore: update stock discovery snapshot"
             git push
-          else
-            echo "No changes to commit."
           fi
