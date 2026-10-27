@@ -1,8 +1,8 @@
 {
-  "run_utc": "2026-10-26T22:21:52.607960+00:00",
-  "candidate_count": 2013,
-  "experimental_scored_count": 217,
-  "unranked_count": 1796,
-  "with_all_four_components": 77,
+  "run_utc": "2026-10-27T00:00:07.418850+00:00",
+  "candidate_count": 2014,
+  "experimental_scored_count": 248,
+  "unranked_count": 1766,
+  "with_all_four_components": 79,
   "note": "Experimental unvalidated relative research heuristic, not investment advice, fair value, or tested alpha. Only SEC period plus basic data checks required. No point-in-time validation, sector normalization, or backtest. Missing inputs are excluded rather than treated as zero."
 }

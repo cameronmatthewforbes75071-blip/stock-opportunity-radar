@@ -1,4 +1,3 @@
 ticker,reason,failure_class
-LHSW,Less than 20 daily observations,insufficient_history
-NUWE,Less than 20 daily observations,insufficient_history
-PARA,Less than 20 daily observations,insufficient_history
+PPCB,Less than 20 daily observations,insufficient_history
+SBFM,Less than 20 daily observations,insufficient_history
