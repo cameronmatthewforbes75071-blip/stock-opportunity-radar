@@ -139,6 +139,7 @@ def render_research_dashboard(data_dir: Path):
 
 
     render_experimental_scores(data_dir)
+    render_forward_performance(data_dir)
 
 def render_experimental_scores(data_dir: Path):
     st.markdown('#### V5.4 experimental research scores and comparability')
@@ -167,3 +168,30 @@ def render_experimental_scores(data_dir: Path):
 
 
 # The existing dashboard remains read-only; future price observations are diagnostic only.
+
+
+def render_forward_performance(data_dir: Path):
+    st.markdown('#### V5.5 prospective performance observations')
+    st.caption('Observations begin only after snapshots were recorded. Raw price changes are not total returns or demonstrated alpha. SPY comparisons are shown only if both benchmark samples were saved during live runs.')
+    status=_read_json(data_dir/'prospective_tracking_status.json')
+    if not status:
+        st.info('Prospective tracking status unavailable. Run the updated GitHub workflow.')
+        return
+    a,b,c=st.columns(3)
+    a.metric('Original snapshots',status.get('total_unique_snapshots',0))
+    b.metric('Price observations',status.get('total_price_observations',0))
+    c.metric('SPY ledger dates',status.get('spy_ledger_entries',0))
+    outs=_read_csv(data_dir/'prospective_price_outcomes.csv')
+    if outs.empty:
+        st.info('No observation windows have matured yet. Initial zero observations is expected.')
+        return
+    options=['All']+sorted(outs.horizon_days.dropna().astype(int).unique().tolist()) if 'horizon_days' in outs else ['All']
+    h=st.selectbox('Observation horizon (calendar days)',options,key='v55_horizon')
+    if h!='All': outs=outs[outs.horizon_days==h]
+    if 'comparability_group' in outs:
+        names=['All']+sorted(outs.comparability_group.dropna().astype(str).unique().tolist())
+        g=st.selectbox('Snapshot score comparability group',names,key='v55_group')
+        if g!='All': outs=outs[outs.comparability_group==g]
+    cols=[x for x in ['ticker','run_date','horizon_days','score_at_snapshot','comparability_group','origin_price_date','observed_price_date','raw_price_change_pct','benchmark_status','spy_price_change_pct','relative_to_spy_pct_points'] if x in outs]
+    st.dataframe(outs[cols],hide_index=True,width='stretch')
+    st.download_button('Download prospective observations',outs.to_csv(index=False).encode('utf-8'),file_name='prospective_price_outcomes.csv',mime='text/csv',key='v55_outcomes_download')
