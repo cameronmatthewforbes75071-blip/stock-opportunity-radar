@@ -1,169 +1,165 @@
-"""Read-only candidate financial research dashboard. No trading decisions or data mutations."""
+"""V5.5 prospective-only observations. NEVER backfill historical snapshots.
+
+Price changes are informational; not alpha, total return, or trade P&L.
+SPY is sampled only on live workflow runs. Benchmarks are matched only when
+baseline dates and horizon observation dates are recorded in the ledger.
+"""
 from __future__ import annotations
-from pathlib import Path
 import json
+from datetime import datetime, timezone
+from pathlib import Path
 import pandas as pd
-import streamlit as st
 
-METRICS = {
-    'revenue_growth':'Revenue growth',
-    'earnings_growth':'Earnings growth',
-    'profit_margin':'Profit margin',
-    'free_cash_flow':'Free cash flow',
-    'trailing_pe':'Trailing P/E',
-}
+DATA=Path(__file__).resolve().parent/'data'
+SNAP=DATA/'prospective_score_snapshots.csv'
+OUT=DATA/'prospective_price_outcomes.csv'
+STATUS=DATA/'prospective_tracking_status.json'
+SPY=DATA/'prospective_spy_observations.csv'
+HORIZONS=(7,30,90)
 
-def _read_json(path: Path) -> dict:
-    if not path.exists(): return {}
+
+def _utc(value):
+    return pd.to_datetime(value,errors='coerce',utc=True)
+
+
+def _valid_price(value):
+    v=pd.to_numeric(value,errors='coerce')
+    return v if pd.notna(v) and float(v)>0 else None
+
+
+def _lookup_spy(spy_history, run_date):
+    if spy_history is None or spy_history.empty: return None
+    match=spy_history[spy_history.run_date.astype(str)==str(run_date)]
+    if match.empty: return None
+    return match.iloc[0]
+
+
+def run(scores, discovery, today=None, old_snapshots=None, old_outcomes=None, spy_history=None, spy_observation=None):
+    now=_utc(today if today is not None else datetime.now(timezone.utc))
+    if pd.isna(now): raise ValueError('Invalid run timestamp')
+    today_str=now.date().isoformat()
+    previous=old_snapshots.copy() if old_snapshots is not None else pd.DataFrame()
+    prior_outcomes=old_outcomes.copy() if old_outcomes is not None else pd.DataFrame()
+    benchmark=spy_history.copy() if spy_history is not None else pd.DataFrame(columns=['run_date','price_date','spy_close','observed_utc'])
+    new_spy=0
+    if spy_observation is not None and (benchmark.empty or today_str not in set(benchmark.run_date.astype(str))):
+        d=_utc(spy_observation.get('price_date'))
+        v=_valid_price(spy_observation.get('spy_close'))
+        if pd.notna(d) and d.date()<=now.date() and v is not None and (now.date()-d.date()).days<=5:
+            benchmark=pd.concat([benchmark,pd.DataFrame([dict(run_date=today_str,price_date=d.date().isoformat(),spy_close=float(v),observed_utc=now.isoformat())])],ignore_index=True)
+            new_spy=1
+    if not benchmark.empty:
+        benchmark=benchmark.drop_duplicates(['run_date'],keep='first')
+
+    records=[]
+    if not scores.empty and not discovery.empty and {'ticker','price','as_of'}.issubset(discovery.columns) and {'ticker','experimental_research_score'}.issubset(scores.columns):
+        d=discovery[['ticker','price','as_of']].copy().drop_duplicates('ticker',keep='last')
+        d['as_of']=pd.to_datetime(d.as_of,errors='coerce',utc=True)
+        d['price']=pd.to_numeric(d.price,errors='coerce')
+        s=scores[scores.experimental_research_score.notna()].merge(d,on='ticker',how='left')
+        spy_base=_lookup_spy(benchmark,today_str)
+        for r in s.to_dict('records'):
+            asof=r.get('as_of'); price=_valid_price(r.get('price'))
+            if pd.isna(asof) or price is None or asof.date()>now.date(): continue
+            if (now.date()-asof.date()).days>5: continue  # stale reference
+            record=dict(ticker=str(r['ticker']),recorded_utc=now.isoformat(),run_date=today_str,
+                reference_price_date=asof.date().isoformat(),reference_price=float(price),
+                research_score=float(r['experimental_research_score']),
+                comparability_group=r.get('score_comparability_group',''),
+                scoring_coverage_pct=r.get('scoring_coverage_pct',''),
+                growth=r.get('growth',''),health=r.get('health',''),valuation=r.get('valuation',''),technical=r.get('technical',''),
+                spy_reference_run_date=today_str if spy_base is not None else '',
+                spy_reference_price_date=str(spy_base.price_date) if spy_base is not None else '',
+                spy_reference_price=float(spy_base.spy_close) if spy_base is not None else float('nan'))
+            records.append(record)
+    snaps=pd.concat([previous,pd.DataFrame(records)],ignore_index=True)
+    if not snaps.empty: snaps=snaps.drop_duplicates(['ticker','run_date'],keep='first')
+    new_snapshots=len(snaps)-len(previous)
+
+    prior=set()
+    if not prior_outcomes.empty and {'ticker','run_date','horizon_days'}.issubset(prior_outcomes.columns):
+        for r in prior_outcomes[['ticker','run_date','horizon_days']].itertuples(index=False,name=None):
+            try: prior.add((str(r[0]),str(r[1]),int(r[2])))
+            except (ValueError,TypeError): pass
+    added=[]; eligible_unobserved=0; spy_missing=0
+    if not snaps.empty and not discovery.empty and {'ticker','price','as_of'}.issubset(discovery.columns):
+        current=discovery.drop_duplicates('ticker',keep='last').set_index('ticker')
+        spy_current=_lookup_spy(benchmark,today_str)
+        for r in snaps.to_dict('records'):
+            sym=str(r['ticker'])
+            if sym not in current.index: continue
+            price=_valid_price(current.loc[sym].get('price'))
+            dt=_utc(current.loc[sym].get('as_of'))
+            origin=_utc(r.get('reference_price_date'))
+            starting=_valid_price(r.get('reference_price'))
+            start_run=_utc(r.get('run_date'))
+            if price is None or pd.isna(dt) or pd.isna(origin) or starting is None or pd.isna(start_run): continue
+            if dt.date()>now.date() or (now.date()-dt.date()).days>5: continue
+            if origin.date()>start_run.date(): continue
+            for h in HORIZONS:
+                key=(sym,str(r['run_date']),h)
+                if key in prior: continue
+                due=(start_run+pd.Timedelta(days=h)).date()
+                if now.date()<due: continue
+                if dt.date()<due: eligible_unobserved+=1; continue
+                # Do not apply today's prices as if they were recorded on a historic target date.
+                row=dict(ticker=sym,run_date=str(r['run_date']),horizon_days=h,
+                    origin_price_date=origin.date().isoformat(),observed_price_date=dt.date().isoformat(),
+                    origin_price=float(starting),observed_price=float(price),
+                    raw_price_change_pct=round((float(price)/float(starting)-1)*100,5),
+                    score_at_snapshot=r.get('research_score'),comparability_group=r.get('comparability_group'),
+                    recorded_utc=now.isoformat(),benchmark_status='unavailable',
+                    spy_price_change_pct=float('nan'),relative_to_spy_pct_points=float('nan'))
+                spy_origin=_valid_price(r.get('spy_reference_price'))
+                if spy_origin is not None and spy_current is not None:
+                    spy_now=_valid_price(spy_current.spy_close)
+                    if spy_now is not None and _utc(spy_current.price_date).date()>=due:
+                        # SPY sampled today (not pulled from a later historical backfill).
+                        spy_move=(float(spy_now)/float(spy_origin)-1)*100
+                        row.update(benchmark_status='matched_live_samples',spy_price_change_pct=round(spy_move,5),relative_to_spy_pct_points=round(row['raw_price_change_pct']-spy_move,5))
+                    else: spy_missing+=1
+                else: spy_missing+=1
+                added.append(row); prior.add(key)
+    outcomes=pd.concat([prior_outcomes,pd.DataFrame(added)],ignore_index=True)
+    if not outcomes.empty: outcomes=outcomes.drop_duplicates(['ticker','run_date','horizon_days'],keep='first')
+    status=dict(run_utc=now.isoformat(),total_unique_snapshots=len(snaps),new_snapshots=new_snapshots,
+        total_price_observations=len(outcomes),new_price_observations=len(added),
+        spy_ledger_entries=len(benchmark),new_spy_ledger_entries=new_spy,
+        new_outcomes_without_matching_spy=spy_missing,eligible_but_price_not_mature=eligible_unobserved,
+        tracked_horizons_calendar_days=list(HORIZONS),
+        notes='Prospective-only. Existing snapshot and outcome rows retained. SPY is sampled live; no retroactive benchmark reconstruction. Raw price comparisons ignore distributions, split discrepancies, costs, liquidity, execution, and risk. No demonstrated alpha.')
+    return snaps,outcomes,benchmark,status
+
+
+def _fetch_spy():
+    """Optional current SPY daily observation; failure does not erase prior ledger."""
     try:
-        with path.open(encoding='utf-8') as f:
-            obj=json.load(f)
-        return obj if isinstance(obj,dict) else {}
-    except (ValueError, OSError): return {}
-
-def _read_csv(path: Path) -> pd.DataFrame:
-    if not path.exists(): return pd.DataFrame()
-    try: return pd.read_csv(path, low_memory=False)
-    except (ValueError, OSError, pd.errors.EmptyDataError): return pd.DataFrame()
-
-def _clean(series: pd.Series) -> pd.Series:
-    return series.fillna('Not recorded').astype(str).str.strip().replace('', 'Not recorded')
-
-def filter_research(df: pd.DataFrame, *, readiness='All', validation='All', min_metrics=0,
-                    require_sec=False, search='', only_flags=False) -> pd.DataFrame:
-    """Pure, independently testable filter. A missing column must not crash the dashboard."""
-    out=df.copy()
-    if readiness!='All' and 'research_readiness' in out:
-        out=out[_clean(out['research_readiness'])==readiness]
-    if validation!='All' and 'financial_validation_status' in out:
-        out=out[_clean(out['financial_validation_status'])==validation]
-    if 'available_financial_metrics' in out:
-        out=out[pd.to_numeric(out['available_financial_metrics'],errors='coerce').fillna(0)>=min_metrics]
-    elif min_metrics: return out.iloc[0:0]
-    if require_sec:
-        if 'provenance_class' not in out: return out.iloc[0:0]
-        out=out[_clean(out['provenance_class']).str.startswith('SEC')]
-    if only_flags:
-        if 'financial_validation_flags' in out:
-            out=out[out['financial_validation_flags'].notna() & (_clean(out['financial_validation_flags'])!='Not recorded')]
-        elif 'validation_flags' in out:
-            out=out[out['validation_flags'].notna() & (_clean(out['validation_flags'])!='Not recorded')]
-        else: return out.iloc[0:0]
-    if search and 'ticker' in out:
-        out=out[_clean(out['ticker']).str.contains(search.strip(),case=False,regex=False)]
-    return out
-
-def render_research_dashboard(data_dir: Path):
-    st.subheader('Candidate financial research')
-    st.caption('Read-only V5.1 research reports. Research readiness is not a buy signal, and basic checks are not financial-statement audits. Missing values are not zero.')
-    quality=_read_csv(data_dir/'candidate_quality.csv')
-    status=_read_json(data_dir/'candidate_quality_status.json')
-    audit=_read_csv(data_dir/'financial_validation.csv')
-    if not status and quality.empty:
-        st.info('No financial research report yet. Run the GitHub Actions workflow that executes candidate_quality.py after SEC enrichment.')
-        return
-    if status:
-        st.caption(f"Last report (UTC): {status.get('run_utc','Unknown')}")
-        cols=st.columns(4)
-        for col,label,key in zip(cols,('Candidates','Any financial data','Ready for manual review','Basic checks passed'),('candidate_count','with_any_financial_metric',None,None)):
-            if key: v=status.get(key,0)
-            elif label=='Ready for manual review': v=status.get('research_readiness_counts',{}).get('data_ready_for_manual_review',0)
-            else: v=status.get('financial_validation_status_counts',{}).get('basic_checks_passed_not_audited',0)
-            col.metric(label, f'{int(v):,}' if isinstance(v,(int,float)) else '—')
-        per=status.get('per_metric_coverage',{})
-        if per:
-            st.markdown('#### Financial metric availability')
-            metric_rows=[]
-            for key,label in METRICS.items():
-                item=per.get(key,{})
-                metric_rows.append({'Metric':label,'Available':item.get('available_count',0),
-                                    'Missing':item.get('missing_count',0),
-                                    'Coverage %':item.get('coverage_pct',0)})
-            cov=pd.DataFrame(metric_rows)
-            st.dataframe(cov,hide_index=True,width='stretch',column_config={'Coverage %':st.column_config.NumberColumn(format='%.2f%%')})
-            st.bar_chart(cov.set_index('Metric')['Coverage %'],horizontal=True)
-        status_counts=status.get('financial_validation_status_counts',{})
-        if status_counts:
-            st.markdown('#### Validation status')
-            st.dataframe(pd.DataFrame([{'Status':k.replace('_',' ').title(),'Candidates':v} for k,v in status_counts.items()]),hide_index=True,width='stretch')
-        flag_counts=status.get('financial_validation_flag_counts',{})
-        if flag_counts:
-            with st.expander('Validation warnings by type'):
-                st.dataframe(pd.DataFrame([{'Flag':k,'Count':v} for k,v in flag_counts.items()]),hide_index=True,width='stretch')
-    if quality.empty:
-        st.warning('candidate_quality.csv is missing or unreadable, so individual candidate filtering is unavailable.')
-        return
-    if 'ticker' not in quality:
-        st.warning('The financial research CSV does not have a ticker column.')
-        return
-    if not audit.empty and 'ticker' in audit.columns:
-        # Merge only validation fields that the quality file does not already contain.
-        audit=audit.drop_duplicates('ticker',keep='last')
-        adds=['ticker']+[c for c in audit.columns if c not in quality.columns and (c.startswith('financial_validation') or c.startswith('validation_'))]
-        if len(adds)>1:
-            quality=quality.merge(audit[adds],on='ticker',how='left',validate='many_to_one')
-    st.markdown('#### Explore researched candidates')
-    a,b,c=st.columns(3)
-    readiness_opts=['All']+sorted(_clean(quality['research_readiness']).unique().tolist()) if 'research_readiness' in quality else ['All']
-    validation_col='financial_validation_status' if 'financial_validation_status' in quality else 'validation_status' if 'validation_status' in quality else None
-    validation_opts=['All']+sorted(_clean(quality[validation_col]).unique().tolist()) if validation_col else ['All']
-    with a: readiness=st.selectbox('Research readiness',readiness_opts)
-    with b: validation=st.selectbox('Financial validation',validation_opts)
-    with c: min_metrics=st.slider('Minimum available financial metrics',0,5,0)
-    d,e,f=st.columns([1,1,2])
-    with d: require_sec=st.checkbox('Require SEC provenance')
-    with e: only_flags=st.checkbox('Only flagged records')
-    with f: search=st.text_input('Ticker contains',placeholder='e.g. AAPL')
-    # Allow compatibility with alternative V5.1 validation_status column.
-    if validation_col=='validation_status' and 'financial_validation_status' not in quality:
-        quality=quality.rename(columns={'validation_status':'financial_validation_status'})
-    view=filter_research(quality,readiness=readiness,validation=validation,min_metrics=min_metrics,
-                         require_sec=require_sec,search=search,only_flags=only_flags)
-    if 'score_existing' in view: view=view.sort_values('score_existing',ascending=False,na_position='last')
-    st.caption(f'{len(view):,} of {len(quality):,} candidate records match these research filters. The technical score is an existing unvalidated heuristic.')
-    chosen=['ticker','company','score_existing','research_readiness','financial_validation_status',
-            'available_financial_metrics','financial_coverage_pct','provenance_class','latest_known_financial_period',
-            'financial_validation_flags','validation_flags','missing_metrics','price','as_of']
-    chosen=[c for c in chosen if c in view.columns]
-    cfg={'price':st.column_config.NumberColumn(format='$%.2f'),
-         'financial_coverage_pct':st.column_config.NumberColumn(format='%.2f%%'),
-         'score_existing':st.column_config.NumberColumn(format='%.0f')}
-    st.dataframe(view[chosen],hide_index=True,width='stretch',column_config=cfg)
-    st.download_button('Download filtered research table',view.to_csv(index=False).encode('utf-8'),
-                       file_name='filtered_research.csv',mime='text/csv')
-    if not audit.empty:
-        with st.expander('Full validation audit report'):
-            st.dataframe(audit,hide_index=True,width='stretch')
-            st.download_button('Download financial validation CSV',audit.to_csv(index=False).encode('utf-8'),
-                               file_name='financial_validation.csv',mime='text/csv')
+        import yfinance as yf
+        h=yf.download('SPY',period='12d',interval='1d',auto_adjust=True,progress=False,threads=False)
+        if h is None or h.empty: return None
+        close=h['Close']
+        if isinstance(close,pd.DataFrame): close=close.iloc[:,0]
+        close=close.dropna()
+        if close.empty: return None
+        d=_utc(close.index[-1]); v=_valid_price(close.iloc[-1])
+        if pd.isna(d) or v is None: return None
+        return dict(price_date=d.date().isoformat(),spy_close=float(v))
+    except Exception as e:
+        print('SPY sample unavailable:',type(e).__name__,str(e)[:150]); return None
 
 
-    render_experimental_scores(data_dir)
+def main():
+    scores=pd.read_csv(DATA/'investment_research_scores.csv',low_memory=False)
+    discovery=pd.read_csv(DATA/'discovery.csv',low_memory=False)
+    prev=pd.read_csv(SNAP,low_memory=False) if SNAP.exists() else None
+    old=pd.read_csv(OUT,low_memory=False) if OUT.exists() and OUT.stat().st_size else None
+    spy=pd.read_csv(SPY,low_memory=False) if SPY.exists() and SPY.stat().st_size else None
+    snaps,outcomes,benchmark,status=run(scores,discovery,old_snapshots=prev,old_outcomes=old,spy_history=spy,spy_observation=_fetch_spy())
+    DATA.mkdir(exist_ok=True)
+    snaps.to_csv(SNAP,index=False)
+    outcomes.to_csv(OUT,index=False)
+    benchmark.to_csv(SPY,index=False)
+    STATUS.write_text(json.dumps(status,indent=2)+'\n')
+    print(json.dumps(status,indent=2))
 
-def render_experimental_scores(data_dir: Path):
-    st.markdown('#### V5.4 experimental research scores and comparability')
-    st.caption('Unvalidated research heuristics only, not buy/sell signals. Only SEC-period candidates passing basic checks are scored. No sector-relative valuation or historical performance test.')
-    scores=_read_csv(data_dir/'investment_research_scores.csv')
-    status=_read_json(data_dir/'investment_research_status.json')
-    if scores.empty:
-        st.info('No V5.3 score report found. Run the updated GitHub workflow.')
-        return
-    if status:
-        c1,c2,c3=st.columns(3)
-        c1.metric('Candidates',status.get('candidate_count',0))
-        c2.metric('Experimental scored',status.get('experimental_scored_count',0))
-        c3.metric('Unranked',status.get('unranked_count',0))
-    show_only=st.checkbox('Show only scored research candidates',value=True,key='v53_scored_only')
-    view=scores.copy()
-    if show_only: view=view[view.experimental_research_score.notna()]
-    st.caption('Complete four-component and partial composite scores are NOT directly comparable. Scoring is experimental and not backtested; missing inputs are not scored as zero.')
-    if 'score_comparability_group' in view:
-        groups=['All']+sorted(view['score_comparability_group'].dropna().unique().tolist())
-        selected=st.selectbox('Score comparability group',groups,key='v54_comparability')
-        if selected!='All': view=view[view['score_comparability_group']==selected]
-    cols=[k for k in ['ticker','experimental_research_score','growth','health','valuation','technical','scoring_coverage_pct','component_count','missing_components','score_comparability_group','financial_fields_present','scoring_status','data_confidence_tier'] if k in view]
-    st.dataframe(view[cols],hide_index=True,width='stretch')
-    st.download_button('Download experimental scoring report',view.to_csv(index=False).encode('utf-8'),file_name='investment_research_scores.csv',mime='text/csv',key='v53_download')
-
-
-# The existing dashboard remains read-only; future price observations are diagnostic only.
+if __name__=='__main__': main()
