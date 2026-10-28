@@ -1,89 +1,169 @@
-"""Prospective research-score snapshots and subsequent price observations.
-No historical backfill: records are created only from today's workflow execution.
-Horizon is calendar days, observation is first later observed trading session.
-NOT a backtest; returns omit dividends, corporate actions, transaction costs, benchmarks.
-"""
+"""Read-only candidate financial research dashboard. No trading decisions or data mutations."""
 from __future__ import annotations
-import json
-from datetime import datetime, timezone
 from pathlib import Path
+import json
 import pandas as pd
+import streamlit as st
 
-DATA=Path(__file__).resolve().parent/'data'
-SNAP=DATA/'prospective_score_snapshots.csv'
-OUT=DATA/'prospective_price_outcomes.csv'
-STATUS=DATA/'prospective_tracking_status.json'
-HORIZONS=(7,30,90)
+METRICS = {
+    'revenue_growth':'Revenue growth',
+    'earnings_growth':'Earnings growth',
+    'profit_margin':'Profit margin',
+    'free_cash_flow':'Free cash flow',
+    'trailing_pe':'Trailing P/E',
+}
+
+def _read_json(path: Path) -> dict:
+    if not path.exists(): return {}
+    try:
+        with path.open(encoding='utf-8') as f:
+            obj=json.load(f)
+        return obj if isinstance(obj,dict) else {}
+    except (ValueError, OSError): return {}
+
+def _read_csv(path: Path) -> pd.DataFrame:
+    if not path.exists(): return pd.DataFrame()
+    try: return pd.read_csv(path, low_memory=False)
+    except (ValueError, OSError, pd.errors.EmptyDataError): return pd.DataFrame()
+
+def _clean(series: pd.Series) -> pd.Series:
+    return series.fillna('Not recorded').astype(str).str.strip().replace('', 'Not recorded')
+
+def filter_research(df: pd.DataFrame, *, readiness='All', validation='All', min_metrics=0,
+                    require_sec=False, search='', only_flags=False) -> pd.DataFrame:
+    """Pure, independently testable filter. A missing column must not crash the dashboard."""
+    out=df.copy()
+    if readiness!='All' and 'research_readiness' in out:
+        out=out[_clean(out['research_readiness'])==readiness]
+    if validation!='All' and 'financial_validation_status' in out:
+        out=out[_clean(out['financial_validation_status'])==validation]
+    if 'available_financial_metrics' in out:
+        out=out[pd.to_numeric(out['available_financial_metrics'],errors='coerce').fillna(0)>=min_metrics]
+    elif min_metrics: return out.iloc[0:0]
+    if require_sec:
+        if 'provenance_class' not in out: return out.iloc[0:0]
+        out=out[_clean(out['provenance_class']).str.startswith('SEC')]
+    if only_flags:
+        if 'financial_validation_flags' in out:
+            out=out[out['financial_validation_flags'].notna() & (_clean(out['financial_validation_flags'])!='Not recorded')]
+        elif 'validation_flags' in out:
+            out=out[out['validation_flags'].notna() & (_clean(out['validation_flags'])!='Not recorded')]
+        else: return out.iloc[0:0]
+    if search and 'ticker' in out:
+        out=out[_clean(out['ticker']).str.contains(search.strip(),case=False,regex=False)]
+    return out
+
+def render_research_dashboard(data_dir: Path):
+    st.subheader('Candidate financial research')
+    st.caption('Read-only V5.1 research reports. Research readiness is not a buy signal, and basic checks are not financial-statement audits. Missing values are not zero.')
+    quality=_read_csv(data_dir/'candidate_quality.csv')
+    status=_read_json(data_dir/'candidate_quality_status.json')
+    audit=_read_csv(data_dir/'financial_validation.csv')
+    if not status and quality.empty:
+        st.info('No financial research report yet. Run the GitHub Actions workflow that executes candidate_quality.py after SEC enrichment.')
+        return
+    if status:
+        st.caption(f"Last report (UTC): {status.get('run_utc','Unknown')}")
+        cols=st.columns(4)
+        for col,label,key in zip(cols,('Candidates','Any financial data','Ready for manual review','Basic checks passed'),('candidate_count','with_any_financial_metric',None,None)):
+            if key: v=status.get(key,0)
+            elif label=='Ready for manual review': v=status.get('research_readiness_counts',{}).get('data_ready_for_manual_review',0)
+            else: v=status.get('financial_validation_status_counts',{}).get('basic_checks_passed_not_audited',0)
+            col.metric(label, f'{int(v):,}' if isinstance(v,(int,float)) else '—')
+        per=status.get('per_metric_coverage',{})
+        if per:
+            st.markdown('#### Financial metric availability')
+            metric_rows=[]
+            for key,label in METRICS.items():
+                item=per.get(key,{})
+                metric_rows.append({'Metric':label,'Available':item.get('available_count',0),
+                                    'Missing':item.get('missing_count',0),
+                                    'Coverage %':item.get('coverage_pct',0)})
+            cov=pd.DataFrame(metric_rows)
+            st.dataframe(cov,hide_index=True,width='stretch',column_config={'Coverage %':st.column_config.NumberColumn(format='%.2f%%')})
+            st.bar_chart(cov.set_index('Metric')['Coverage %'],horizontal=True)
+        status_counts=status.get('financial_validation_status_counts',{})
+        if status_counts:
+            st.markdown('#### Validation status')
+            st.dataframe(pd.DataFrame([{'Status':k.replace('_',' ').title(),'Candidates':v} for k,v in status_counts.items()]),hide_index=True,width='stretch')
+        flag_counts=status.get('financial_validation_flag_counts',{})
+        if flag_counts:
+            with st.expander('Validation warnings by type'):
+                st.dataframe(pd.DataFrame([{'Flag':k,'Count':v} for k,v in flag_counts.items()]),hide_index=True,width='stretch')
+    if quality.empty:
+        st.warning('candidate_quality.csv is missing or unreadable, so individual candidate filtering is unavailable.')
+        return
+    if 'ticker' not in quality:
+        st.warning('The financial research CSV does not have a ticker column.')
+        return
+    if not audit.empty and 'ticker' in audit.columns:
+        # Merge only validation fields that the quality file does not already contain.
+        audit=audit.drop_duplicates('ticker',keep='last')
+        adds=['ticker']+[c for c in audit.columns if c not in quality.columns and (c.startswith('financial_validation') or c.startswith('validation_'))]
+        if len(adds)>1:
+            quality=quality.merge(audit[adds],on='ticker',how='left',validate='many_to_one')
+    st.markdown('#### Explore researched candidates')
+    a,b,c=st.columns(3)
+    readiness_opts=['All']+sorted(_clean(quality['research_readiness']).unique().tolist()) if 'research_readiness' in quality else ['All']
+    validation_col='financial_validation_status' if 'financial_validation_status' in quality else 'validation_status' if 'validation_status' in quality else None
+    validation_opts=['All']+sorted(_clean(quality[validation_col]).unique().tolist()) if validation_col else ['All']
+    with a: readiness=st.selectbox('Research readiness',readiness_opts)
+    with b: validation=st.selectbox('Financial validation',validation_opts)
+    with c: min_metrics=st.slider('Minimum available financial metrics',0,5,0)
+    d,e,f=st.columns([1,1,2])
+    with d: require_sec=st.checkbox('Require SEC provenance')
+    with e: only_flags=st.checkbox('Only flagged records')
+    with f: search=st.text_input('Ticker contains',placeholder='e.g. AAPL')
+    # Allow compatibility with alternative V5.1 validation_status column.
+    if validation_col=='validation_status' and 'financial_validation_status' not in quality:
+        quality=quality.rename(columns={'validation_status':'financial_validation_status'})
+    view=filter_research(quality,readiness=readiness,validation=validation,min_metrics=min_metrics,
+                         require_sec=require_sec,search=search,only_flags=only_flags)
+    if 'score_existing' in view: view=view.sort_values('score_existing',ascending=False,na_position='last')
+    st.caption(f'{len(view):,} of {len(quality):,} candidate records match these research filters. The technical score is an existing unvalidated heuristic.')
+    chosen=['ticker','company','score_existing','research_readiness','financial_validation_status',
+            'available_financial_metrics','financial_coverage_pct','provenance_class','latest_known_financial_period',
+            'financial_validation_flags','validation_flags','missing_metrics','price','as_of']
+    chosen=[c for c in chosen if c in view.columns]
+    cfg={'price':st.column_config.NumberColumn(format='$%.2f'),
+         'financial_coverage_pct':st.column_config.NumberColumn(format='%.2f%%'),
+         'score_existing':st.column_config.NumberColumn(format='%.0f')}
+    st.dataframe(view[chosen],hide_index=True,width='stretch',column_config=cfg)
+    st.download_button('Download filtered research table',view.to_csv(index=False).encode('utf-8'),
+                       file_name='filtered_research.csv',mime='text/csv')
+    if not audit.empty:
+        with st.expander('Full validation audit report'):
+            st.dataframe(audit,hide_index=True,width='stretch')
+            st.download_button('Download financial validation CSV',audit.to_csv(index=False).encode('utf-8'),
+                               file_name='financial_validation.csv',mime='text/csv')
 
 
-def run(scores, discovery, today=None, old_snapshots=None, old_outcomes=None):
-    now=pd.Timestamp(today or datetime.now(timezone.utc))
-    if now.tzinfo is None: now=now.tz_localize('UTC')
-    run_date=now.date().isoformat()
-    records=[]
-    if not discovery.empty and {'ticker','price','as_of'}.issubset(discovery.columns) and not scores.empty:
-        d=discovery[['ticker','price','as_of']].copy().drop_duplicates('ticker',keep='last')
-        d['as_of']=pd.to_datetime(d.as_of,errors='coerce',utc=True)
-        d['price']=pd.to_numeric(d.price,errors='coerce')
-        s=scores[scores.experimental_research_score.notna()].merge(d,on='ticker',how='left')
-        for r in s.to_dict('records'):
-            asof=r.get('as_of')
-            if pd.isna(asof) or pd.isna(r.get('price')): continue
-            if not (0<float(r['price']) and asof.date()<=now.date()): continue
-            # This price is the most recent recorded candle, not an execution price.
-            records.append(dict(ticker=str(r['ticker']),recorded_utc=now.isoformat(),run_date=run_date,
-                reference_price_date=asof.date().isoformat(),reference_price=float(r['price']),
-                research_score=float(r['experimental_research_score']),
-                comparability_group=r.get('score_comparability_group',''),
-                scoring_coverage_pct=r.get('scoring_coverage_pct',''),
-                growth=r.get('growth',''),health=r.get('health',''),valuation=r.get('valuation',''),technical=r.get('technical','')))
-    previous=old_snapshots if old_snapshots is not None else pd.DataFrame()
-    snaps=pd.concat([previous,pd.DataFrame(records)],ignore_index=True)
-    if not snaps.empty:
-        snaps=snaps.drop_duplicates(['ticker','run_date'],keep='first')
-    old=old_outcomes if old_outcomes is not None else pd.DataFrame()
-    outcomes=old.copy()
-    prior=set()
-    if not old.empty and {'ticker','run_date','horizon_days'}.issubset(old.columns):
-        prior=set(zip(old.ticker.astype(str),old.run_date.astype(str),old.horizon_days.astype(int)))
-    added=[]
-    if not snaps.empty and not discovery.empty and {'ticker','price','as_of'}.issubset(discovery.columns):
-        current=discovery.drop_duplicates('ticker',keep='last').set_index('ticker')
-        for r in snaps.to_dict('records'):
-            sym=str(r['ticker'])
-            if sym not in current.index: continue
-            price=pd.to_numeric(current.loc[sym].get('price'),errors='coerce')
-            dt=pd.to_datetime(current.loc[sym].get('as_of'),errors='coerce',utc=True)
-            origin=pd.to_datetime(r.get('reference_price_date'),errors='coerce',utc=True)
-            starting=pd.to_numeric(r.get('reference_price'),errors='coerce')
-            if pd.isna(price) or pd.isna(dt) or pd.isna(origin) or pd.isna(starting): continue
-            if price<=0 or starting<=0 or dt.date()>now.date(): continue
-            for h in HORIZONS:
-                key=(sym,str(r['run_date']),h)
-                if key in prior or dt.date() < (pd.to_datetime(r['run_date'],utc=True)+pd.Timedelta(days=h)).date(): continue
-                added.append(dict(ticker=sym,run_date=str(r['run_date']),horizon_days=h,
-                    origin_price_date=origin.date().isoformat(),observed_price_date=dt.date().isoformat(),
-                    origin_price=float(starting),observed_price=float(price),
-                    raw_price_change_pct=round((float(price)/float(starting)-1)*100,5),
-                    score_at_snapshot=r.get('research_score'),comparability_group=r.get('comparability_group')))
-                prior.add(key)
-    outcomes=pd.concat([outcomes,pd.DataFrame(added)],ignore_index=True)
-    status=dict(run_utc=now.isoformat(),total_unique_snapshots=len(snaps),new_snapshots=len(snaps)-len(previous),
-        total_price_observations=len(outcomes),new_price_observations=len(added),
-        notes='Forward observation only. No historical backfill or point-in-time backtest. Price-only changes can be distorted by splits, distributions and stale prices; not total return, alpha, or executable performance.')
-    return snaps,outcomes,status
+    render_experimental_scores(data_dir)
+
+def render_experimental_scores(data_dir: Path):
+    st.markdown('#### V5.4 experimental research scores and comparability')
+    st.caption('Unvalidated research heuristics only, not buy/sell signals. Only SEC-period candidates passing basic checks are scored. No sector-relative valuation or historical performance test.')
+    scores=_read_csv(data_dir/'investment_research_scores.csv')
+    status=_read_json(data_dir/'investment_research_status.json')
+    if scores.empty:
+        st.info('No V5.3 score report found. Run the updated GitHub workflow.')
+        return
+    if status:
+        c1,c2,c3=st.columns(3)
+        c1.metric('Candidates',status.get('candidate_count',0))
+        c2.metric('Experimental scored',status.get('experimental_scored_count',0))
+        c3.metric('Unranked',status.get('unranked_count',0))
+    show_only=st.checkbox('Show only scored research candidates',value=True,key='v53_scored_only')
+    view=scores.copy()
+    if show_only: view=view[view.experimental_research_score.notna()]
+    st.caption('Complete four-component and partial composite scores are NOT directly comparable. Scoring is experimental and not backtested; missing inputs are not scored as zero.')
+    if 'score_comparability_group' in view:
+        groups=['All']+sorted(view['score_comparability_group'].dropna().unique().tolist())
+        selected=st.selectbox('Score comparability group',groups,key='v54_comparability')
+        if selected!='All': view=view[view['score_comparability_group']==selected]
+    cols=[k for k in ['ticker','experimental_research_score','growth','health','valuation','technical','scoring_coverage_pct','component_count','missing_components','score_comparability_group','financial_fields_present','scoring_status','data_confidence_tier'] if k in view]
+    st.dataframe(view[cols],hide_index=True,width='stretch')
+    st.download_button('Download experimental scoring report',view.to_csv(index=False).encode('utf-8'),file_name='investment_research_scores.csv',mime='text/csv',key='v53_download')
 
 
-def main():
-    scores=pd.read_csv(DATA/'investment_research_scores.csv')
-    discovery=pd.read_csv(DATA/'discovery.csv',low_memory=False)
-    prev=pd.read_csv(SNAP,low_memory=False) if SNAP.exists() else None
-    old=pd.read_csv(OUT,low_memory=False) if OUT.exists() else None
-    snaps,outcomes,status=run(scores,discovery,old_snapshots=prev,old_outcomes=old)
-    DATA.mkdir(exist_ok=True)
-    snaps.to_csv(SNAP,index=False)
-    outcomes.to_csv(OUT,index=False)
-    STATUS.write_text(json.dumps(status,indent=2)+'\n')
-    print(json.dumps(status,indent=2))
-
-if __name__=='__main__':main()
+# The existing dashboard remains read-only; future price observations are diagnostic only.
