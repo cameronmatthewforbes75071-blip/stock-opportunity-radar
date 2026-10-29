@@ -1,3 +1,4 @@
 ticker,reason,failure_class
-MSGK,Less than 20 daily observations,insufficient_history
-MSGR,Less than 20 daily observations,insufficient_history
+FFTT,Less than 20 daily observations,insufficient_history
+GBC,No usable closing prices,unclassified_error
+AZR,Less than 20 daily observations,insufficient_history
