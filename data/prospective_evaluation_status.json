@@ -1,0 +1,49 @@
+{
+  "run_utc": "2026-10-29T15:06:13.092687+00:00",
+  "evaluation_version": "5.7",
+  "snapshot_count": 495,
+  "outcome_count": 0,
+  "spy_ledger_entries": 1,
+  "integrity_status": "PASS",
+  "snapshot_comparability_groups": {
+    "unknown_comparability": 495
+  },
+  "spy_baseline_present": 247,
+  "spy_baseline_missing": 248,
+  "horizons": {
+    "7": {
+      "horizon_calendar_days": 7,
+      "comparability_group": "all",
+      "snapshots": 495,
+      "matured_eligible": 0,
+      "pending_not_due": 495,
+      "observed": 0,
+      "matured_missing_observation": 0,
+      "observations_with_spy": 0,
+      "baseline_spy_present": 247
+    },
+    "30": {
+      "horizon_calendar_days": 30,
+      "comparability_group": "all",
+      "snapshots": 495,
+      "matured_eligible": 0,
+      "pending_not_due": 495,
+      "observed": 0,
+      "matured_missing_observation": 0,
+      "observations_with_spy": 0,
+      "baseline_spy_present": 247
+    },
+    "90": {
+      "horizon_calendar_days": 90,
+      "comparability_group": "all",
+      "snapshots": 495,
+      "matured_eligible": 0,
+      "pending_not_due": 495,
+      "observed": 0,
+      "matured_missing_observation": 0,
+      "observations_with_spy": 0,
+      "baseline_spy_present": 247
+    }
+  },
+  "notes": "Prospective-only cohorts. Completion is observation coverage, not investment return. No retrospective benchmarks, scoring changes, total-return estimates, or demonstrated alpha."
+}

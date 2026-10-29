@@ -1,2 +1,2 @@
 ticker,reason,failure_class
-IVF,Less than 20 daily observations,insufficient_history
+NXXT,Less than 20 daily observations,insufficient_history

@@ -1,0 +1,7 @@
+horizon_calendar_days,comparability_group,snapshots,matured_eligible,pending_not_due,observed,matured_missing_observation,observations_with_spy,baseline_spy_present,completion_pct
+7,all,495,0,495,0,0,0,247,
+7,unknown_comparability,495,0,495,0,0,0,247,
+30,all,495,0,495,0,0,0,247,
+30,unknown_comparability,495,0,495,0,0,0,247,
+90,all,495,0,495,0,0,0,247,
+90,unknown_comparability,495,0,495,0,0,0,247,
