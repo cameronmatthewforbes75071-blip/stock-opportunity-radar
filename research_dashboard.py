@@ -140,6 +140,7 @@ def render_research_dashboard(data_dir: Path):
 
     render_experimental_scores(data_dir)
     render_forward_performance(data_dir)
+    render_tracking_audit(data_dir)
 
 def render_experimental_scores(data_dir: Path):
     st.markdown('#### V5.4 experimental research scores and comparability')
@@ -195,3 +196,23 @@ def render_forward_performance(data_dir: Path):
     cols=[x for x in ['ticker','run_date','horizon_days','score_at_snapshot','comparability_group','origin_price_date','observed_price_date','raw_price_change_pct','benchmark_status','spy_price_change_pct','relative_to_spy_pct_points'] if x in outs]
     st.dataframe(outs[cols],hide_index=True,width='stretch')
     st.download_button('Download prospective observations',outs.to_csv(index=False).encode('utf-8'),file_name='prospective_price_outcomes.csv',mime='text/csv',key='v55_outcomes_download')
+
+
+def render_tracking_audit(data_dir: Path):
+    st.markdown('#### V5.6 tracking integrity and benchmark coverage')
+    report=_read_json(data_dir/'prospective_audit_status.json')
+    if not report:
+        st.info('V5.6 audit not generated yet. Run the updated GitHub workflow.')
+        return
+    st.caption('An integrity PASS checks records against hashes saved since the first V5.6 audit. It is not a financial audit or a historical data verification.')
+    a,b,c=st.columns(3)
+    a.metric('Integrity status',report.get('integrity_status','unknown'))
+    b.metric('SPY baselines',report.get('snapshot_spy_baseline_present',0))
+    c.metric('SPY coverage',str(report.get('spy_baseline_coverage_pct',0))+'%')
+    st.caption(f"Snapshots: {report.get('snapshot_count',0):,} · Outcomes: {report.get('outcome_count',0):,} · SPY rows: {report.get('spy_entries',0):,}")
+    if report.get('integrity_violations'):
+        st.error('Tracking integrity warnings: '+'; '.join(report['integrity_violations']))
+    if report.get('baseline_initialized_this_run'):
+        st.warning('This is the FIRST audit: it establishes a baseline; prior row contents cannot be verified retroactively.')
+    with st.expander('Detailed tracking audit'):
+        st.json(report)
