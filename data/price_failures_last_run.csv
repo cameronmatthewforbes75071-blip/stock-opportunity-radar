@@ -1,4 +1,2 @@
 ticker,reason,failure_class
-FFTT,Less than 20 daily observations,insufficient_history
-GBC,No usable closing prices,unclassified_error
-AZR,Less than 20 daily observations,insufficient_history
+IVF,Less than 20 daily observations,insufficient_history
