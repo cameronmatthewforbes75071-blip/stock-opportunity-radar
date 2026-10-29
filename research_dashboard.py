@@ -141,6 +141,7 @@ def render_research_dashboard(data_dir: Path):
     render_experimental_scores(data_dir)
     render_forward_performance(data_dir)
     render_tracking_audit(data_dir)
+    render_prospective_evaluation(data_dir)
 
 def render_experimental_scores(data_dir: Path):
     st.markdown('#### V5.4 experimental research scores and comparability')
@@ -215,4 +216,29 @@ def render_tracking_audit(data_dir: Path):
     if report.get('baseline_initialized_this_run'):
         st.warning('This is the FIRST audit: it establishes a baseline; prior row contents cannot be verified retroactively.')
     with st.expander('Detailed tracking audit'):
+        st.json(report)
+
+
+def render_prospective_evaluation(data_dir: Path):
+    st.markdown('#### V5.7 prospective cohort completion')
+    st.caption('This is observation coverage, NOT strategy performance. Complete and partial research scores are displayed separately. No retroactive benchmarks.')
+    report=_read_json(data_dir/'prospective_evaluation_status.json')
+    table=_read_csv(data_dir/'prospective_evaluation.csv')
+    if not report or table.empty:
+        st.info('V5.7 prospective evaluation report is not yet available. Run the updated workflow.')
+        return
+    if report.get('integrity_status')!='PASS':
+        st.error('Tracking audit has not passed. Do not interpret evaluation output.')
+        return
+    x,y,z=st.columns(3)
+    x.metric('Tracked snapshots',report.get('snapshot_count',0))
+    y.metric('Recorded forward outcomes',report.get('outcome_count',0))
+    z.metric('SPY baselines',report.get('spy_baseline_present',0))
+    if 'horizon_calendar_days' in table:
+        h=st.selectbox('Cohort observation horizon (calendar days)',[7,30,90],key='v57_eval_horizon')
+        table=table[pd.to_numeric(table.horizon_calendar_days,errors='coerce')==h]
+    cols=[c for c in ['comparability_group','snapshots','matured_eligible','observed','matured_missing_observation','pending_not_due','observations_with_spy','baseline_spy_present','completion_pct'] if c in table]
+    st.dataframe(table[cols],hide_index=True,width='stretch')
+    st.download_button('Download cohort coverage CSV',table.to_csv(index=False).encode('utf-8'),file_name='prospective_evaluation.csv',mime='text/csv',key='v57_eval_download')
+    with st.expander('Evaluation methodology and diagnostics'):
         st.json(report)
