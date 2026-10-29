@@ -42,11 +42,13 @@ jobs:
         run: python investment_research.py
       - name: Record prospective snapshots and price observations
         run: python forward_tracking.py
-      - name: Verify V5.5 reports
+      - name: Audit prospective ledger integrity
+        run: python tracking_audit.py
+      - name: Verify V5.6 reports
         run: |
           python - <<'PY_VERIFY'
           from pathlib import Path
-          for name in ('investment_research_scores.csv','prospective_score_snapshots.csv','prospective_price_outcomes.csv','prospective_tracking_status.json','prospective_spy_observations.csv'):
+          for name in ('investment_research_scores.csv','prospective_score_snapshots.csv','prospective_price_outcomes.csv','prospective_tracking_status.json','prospective_spy_observations.csv','prospective_audit_status.json','prospective_audit_manifest.json'):
               if not (Path('data')/name).exists():
                   raise SystemExit(f'Missing report: {name}')
           PY_VERIFY
@@ -54,7 +56,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/discovery.csv data/status.json data/cursor.json data/scan_coverage.csv data/sec_enrichment_status.json data/price_failures_last_run.csv data/limited_history.csv data/candidate_quality.csv data/candidate_quality_status.json data/candidate_snapshots.csv data/financial_validation.csv data/investment_research_scores.csv data/investment_research_status.json data/prospective_score_snapshots.csv data/prospective_price_outcomes.csv data/prospective_tracking_status.json data/prospective_spy_observations.csv
+          git add data/discovery.csv data/status.json data/cursor.json data/scan_coverage.csv data/sec_enrichment_status.json data/price_failures_last_run.csv data/limited_history.csv data/candidate_quality.csv data/candidate_quality_status.json data/candidate_snapshots.csv data/financial_validation.csv data/investment_research_scores.csv data/investment_research_status.json data/prospective_score_snapshots.csv data/prospective_price_outcomes.csv data/prospective_tracking_status.json data/prospective_spy_observations.csv data/prospective_audit_status.json data/prospective_audit_manifest.json
           if ! git diff --cached --quiet; then
             git commit -m "chore: update stock discovery snapshot"
             git push
