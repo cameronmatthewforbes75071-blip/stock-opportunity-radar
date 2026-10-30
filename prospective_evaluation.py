@@ -56,7 +56,18 @@ def build(data_dir=DATA, today=None):
     s['run_ts'] = ts(s['run_date'])
     s['price_ts'] = ts(s['reference_price_date'])
     s['baseline_spy'] = pd.to_numeric(s.get('spy_reference_price',pd.Series(index=s.index,dtype=str)), errors='coerce').gt(0)
-    s['group'] = s.get('comparability_group',pd.Series(index=s.index,dtype=str)).map(group_label)
+    # V5.8 joins read-only recovery sidecar by exact original snapshot key.
+    recovery = read_ledger(data_dir/'prospective_comparability_recovery.csv',
+                           ['ticker','run_date','recovered_comparability_group'])
+    if recovery.duplicated(['ticker','run_date']).any():
+        raise ValueError('Duplicate comparability recovery keys')
+    if len(recovery) != len(s):
+        raise ValueError('Recovery row count differs from immutable snapshot ledger')
+    s = s.merge(recovery[['ticker','run_date','recovered_comparability_group']],
+                on=['ticker','run_date'], how='left', validate='one_to_one')
+    if s['recovered_comparability_group'].isna().any():
+        raise ValueError('Recovery missing immutable snapshot keys')
+    s['group'] = s['recovered_comparability_group'].map(group_label)
     o = outcomes.copy()
     if not o.empty:
         o['horizon_num'] = pd.to_numeric(o['horizon_days'],errors='coerce')
@@ -80,7 +91,7 @@ def build(data_dir=DATA, today=None):
             n_spy=int((elig & matched.loc[idx]).sum())
             rows.append(dict(horizon_calendar_days=horizon,comparability_group=cohort,snapshots=int(len(idx)),matured_eligible=n_eligible,pending_not_due=int((~elig).sum()),observed=n_recorded,matured_missing_observation=n_eligible-n_recorded,observations_with_spy=n_spy,baseline_spy_present=int(s.loc[idx,'baseline_spy'].sum()),completion_pct=round(100*n_recorded/n_eligible,2) if n_eligible else None))
     report=pd.DataFrame(rows)
-    status=dict(run_utc=now.isoformat(),evaluation_version='5.7',snapshot_count=int(len(s)),outcome_count=int(len(o)),spy_ledger_entries=int(len(spy)),integrity_status=audit.get('integrity_status'),snapshot_comparability_groups={str(k):int(v) for k,v in s['group'].value_counts().items()},spy_baseline_present=int(s['baseline_spy'].sum()),spy_baseline_missing=int((~s['baseline_spy']).sum()),horizons={str(h):dict(report.loc[(report.horizon_calendar_days==h)&(report.comparability_group=='all')].iloc[0].dropna().to_dict()) for h in HORIZONS},notes='Prospective-only cohorts. Completion is observation coverage, not investment return. No retrospective benchmarks, scoring changes, total-return estimates, or demonstrated alpha.')
+    status=dict(run_utc=now.isoformat(),evaluation_version='5.8',snapshot_count=int(len(s)),outcome_count=int(len(o)),spy_ledger_entries=int(len(spy)),integrity_status=audit.get('integrity_status'),snapshot_comparability_groups={str(k):int(v) for k,v in s['group'].value_counts().items()},spy_baseline_present=int(s['baseline_spy'].sum()),spy_baseline_missing=int((~s['baseline_spy']).sum()),horizons={str(h):dict(report.loc[(report.horizon_calendar_days==h)&(report.comparability_group=='all')].iloc[0].dropna().to_dict()) for h in HORIZONS},notes='Read-only snapshot-field comparability recovery; prospective-only cohorts. Completion is observation coverage, not investment return. No retrospective benchmarks, scoring changes, total-return estimates, or demonstrated alpha.')
     return report, status
 
 
