@@ -55,8 +55,7 @@ def _read_optional_csv(path):
         return None
 
     try:
-        return pd.read_csv(path, low_memory=False)
-
+return pd.read_csv(path, dtype=str, keep_default_na=False)
     except EmptyDataError:
         if not path.read_bytes().strip():
             print(
