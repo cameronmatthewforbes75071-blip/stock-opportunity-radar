@@ -220,7 +220,7 @@ def render_tracking_audit(data_dir: Path):
 
 
 def render_prospective_evaluation(data_dir: Path):
-    st.markdown('#### V5.7 prospective cohort completion')
+    st.markdown('#### V5.8 prospective cohort completion')
     st.caption('This is observation coverage, NOT strategy performance. Complete and partial research scores are displayed separately. No retroactive benchmarks.')
     report=_read_json(data_dir/'prospective_evaluation_status.json')
     table=_read_csv(data_dir/'prospective_evaluation.csv')
@@ -240,5 +240,10 @@ def render_prospective_evaluation(data_dir: Path):
     cols=[c for c in ['comparability_group','snapshots','matured_eligible','observed','matured_missing_observation','pending_not_due','observations_with_spy','baseline_spy_present','completion_pct'] if c in table]
     st.dataframe(table[cols],hide_index=True,width='stretch')
     st.download_button('Download cohort coverage CSV',table.to_csv(index=False).encode('utf-8'),file_name='prospective_evaluation.csv',mime='text/csv',key='v57_eval_download')
+    recovery=_read_json(data_dir/'prospective_comparability_status.json')
+    if recovery:
+        st.caption('Comparability evidence from immutable snapshot fields (no retrospective scoring).')
+        st.json({'recovered_group_counts': recovery.get('recovered_group_counts', {}),
+                 'evidence_counts': recovery.get('evidence_counts', {})})
     with st.expander('Evaluation methodology and diagnostics'):
         st.json(report)
