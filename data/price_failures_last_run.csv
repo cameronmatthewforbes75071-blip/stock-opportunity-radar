@@ -1,3 +1,4 @@
 ticker,reason,failure_class
-WFF,Less than 20 daily observations,insufficient_history
-ZONE,Less than 20 daily observations,insufficient_history
+ASPE,Less than 20 daily observations,insufficient_history
+BBTX,Less than 20 daily observations,insufficient_history
+GBC,Less than 20 daily observations,insufficient_history

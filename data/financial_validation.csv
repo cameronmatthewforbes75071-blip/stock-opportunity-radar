@@ -19,9 +19,11 @@ AVPT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual 
 BBY,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-08-01
 BDX,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 BIIB,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-03-31
+BLMN,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-28
 BOX,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-07-31
-CAKE,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
-CART,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
+BP,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
+CAKE,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+CART,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 CBRL,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-07-31
 CCC,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 CDNA,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -33,6 +35,7 @@ CRM,data_ready_for_manual_review,manual_validation_needed,annual_period_old,1,SE
 CRWD,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-07-31
 CTSH,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-03-31
 CVI,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+DE,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-08-02
 DHT,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 DINO,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 DOCS,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -57,6 +60,7 @@ HAFN,partial_financial_research,unverified_provider_metadata,sec_provenance_not_
 HALO,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 IGR,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 IT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+KNSA,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 MANH,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 MPC,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 OKTA,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
@@ -131,10 +135,12 @@ CHD,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual a
 CINF,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 CME,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 CNC,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+CODI,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 CON,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 COR,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 CROX,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 CRSR,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
+CSX,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 CTAS,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-08-31
 CVLT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 CXM,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-07-31
@@ -147,6 +153,7 @@ DIS,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual a
 DLB,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-26
 DNOW,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 DV,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+EAT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-23
 EBAY,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 ECL,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 EHC,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -175,7 +182,7 @@ GTE,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual a
 HAS,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-28
 HCSG,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 HLT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
-HNGE,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
+HNGE,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 HOG,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 HP,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 HPK,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -189,10 +196,10 @@ ITGR,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual 
 JNJ,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-27
 KDP,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 KMI,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
-KNSA,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 KO,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-04-03
 LFST,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 LH,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+LITE,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-27
 LNG,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 MAX,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 MCK,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -213,7 +220,7 @@ NWE,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual a
 OGN,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 OKE,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 OPCH,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
-OPRT,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
+OPRT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 OSPN,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 OUT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 OVV,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -261,12 +268,14 @@ VLO,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual a
 VLTO,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-04-03
 VSXY,data_ready_for_manual_review,manual_validation_needed,annual_period_old,1,SEC annual and quarterly,2026-08-01
 WDAY,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-07-31
-WK,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
+WK,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 WMB,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 WMG,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 WSM,data_ready_for_manual_review,manual_validation_needed,annual_period_old,1,SEC annual and quarterly,2026-08-02
 WST,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
+WTTR,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 XP,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
+ZM,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-07-31
 AAL,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 AAOI,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 AAON,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -323,19 +332,32 @@ ARQT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual 
 ASAN,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 ASST,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 AUPH,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+AXGN,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 AZTA,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual,2025-09-30
+BAH,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
+BALL,data_ready_for_manual_review,manual_validation_needed,quarterly_period_old,1,SEC annual and quarterly,2025-12-31
 BB,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-08-31
 BBNX,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 BLCO,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 BMBL,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+BOOM,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 BRZE,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-07-31
+BTSG,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
+CB,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
+CBLL,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 CBOE,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 CERT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+CHDN,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 CHPT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-07-31
 CHRD,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+CL,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 CLF,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 CNK,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-03-31
+CNO,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 CNXC,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
+COLD,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+COLM,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+CPRI,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-26
 CRBG,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 CRL,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 CRMD,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -349,6 +371,7 @@ DNA,partial_financial_research,unverified_provider_metadata,sec_provenance_not_e
 DRH,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 DRI,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-08-30
 DVN,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+EBC,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 EGY,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 EOG,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 EQH,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -392,7 +415,6 @@ KEX,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual a
 KNTK,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 KSS,data_ready_for_manual_review,manual_validation_needed,annual_period_old,1,SEC annual and quarterly,2026-08-01
 KYMR,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
-LITE,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 LLY,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 LTC,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 LXP,data_ready_for_manual_review,manual_validation_needed,profit_margin_scale_review,1,SEC annual and quarterly,2026-09-30
@@ -413,7 +435,7 @@ NCNO,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual 
 NE,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 NET,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 NRIX,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-08-31
-NTRA,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
+NTRA,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 NTSK,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-07-31
 NWS,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 NWSA,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -487,10 +509,12 @@ W,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and
 WAT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-07-04
 WNC,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 WTRG,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+XHR,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 XNCR,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 YEXT,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-07-31
 ZETA,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 ZS,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
+ZYME,data_ready_for_manual_review,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 ABTC,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 ABX,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 AEP,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-03-31
@@ -505,10 +529,13 @@ AMLX,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual an
 AMRZ,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 ASH,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 BAX,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+BHVN,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 BWIN,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 CI,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 CTOS,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
+CUBE,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-03-31
 DEC,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+DLTR,partial_financial_research,manual_validation_needed,annual_period_old,1,SEC annual and quarterly,2026-08-01
 EGBN,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 FANG,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 FOX,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -546,6 +573,8 @@ VRNS,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual an
 VTRS,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 WAY,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 WEAV,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+XERS,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+XMTR,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 XRPN,partial_financial_research,unverified_provider_metadata,sec_provenance_not_established,1,Non-SEC / not established,
 ACHV,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 ADAM,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -557,8 +586,8 @@ ANGI,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual an
 ANRO,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 APLD,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-08-31
 ARCC,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
-BHVN,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 CBC,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
+DOW,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-09-30
 INN,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 IRON,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
 NOG,partial_financial_research,basic_checks_passed_not_audited,,0,SEC annual and quarterly,2026-06-30
@@ -601,6 +630,7 @@ ATEN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1
 ATI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 ATMU,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 ATO,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
+ATR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 ATRO,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 AU,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 AUB,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -614,7 +644,7 @@ AVO,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,
 AVR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 AVT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 AVTX,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-AXGN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
+AWI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 AXON,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 AXP,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 AXS,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -626,8 +656,6 @@ AZN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,
 B,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BA,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BAC,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-BAH,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-BALL,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BAM,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BANC,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BAND,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -672,9 +700,10 @@ BL,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,N
 BLBD,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BLDR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BLLN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-BLMN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BLSH,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BLZE,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
+BMGL,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
+BMI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BMNR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BMO,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BMRN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -685,7 +714,6 @@ BNS,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,
 BNY,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BOLT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BOOT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-BP,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BPRE,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BRBR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BRKR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -697,7 +725,6 @@ BRX,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,
 BSX,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BTDR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BTI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-BTSG,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BTU,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BTX,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 BUD,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -731,7 +758,6 @@ CARS,technical_discovery_only,no_financial_data,sec_provenance_not_established,1
 CASY,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CAT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CAVA,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-CB,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CBRE,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CBSH,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CC,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -763,7 +789,6 @@ CGEM,technical_discovery_only,no_financial_data,sec_provenance_not_established,1
 CGNT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CGNX,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CGON,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-CHDN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CHEF,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CHH,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CHKP,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -774,7 +799,6 @@ CHYM,technical_discovery_only,no_financial_data,sec_provenance_not_established,1
 CIEN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CIFR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CIM,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-CL,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CLB,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CLBK,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CLBT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -798,20 +822,16 @@ CMS,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,
 CNH,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CNI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CNM,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-CNO,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CNP,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CNX,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 COCO,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-CODI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 COF,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 COGT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 COHR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 COHU,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 COIN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 COLB,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-COLD,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 COLL,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-COLM,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 COMP,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 COO,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CORT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -821,7 +841,6 @@ COUR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1
 CP,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CPB,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CPNG,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-CPRI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CPRT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CPT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CRC,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -842,12 +861,10 @@ CSGP,technical_discovery_only,no_financial_data,sec_provenance_not_established,1
 CSIQ,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CSTM,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CSWC,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-CSX,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CTNM,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CTRE,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CTRI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CTVA,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-CUBE,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CURB,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CUZ,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CVBF,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -855,6 +872,7 @@ CVE,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,
 CVNA,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CVS,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CWEN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
+CWH,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CWK,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CWST,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CX,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -862,6 +880,7 @@ CXW,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,
 CYTK,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 CZR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 D,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
+DAKT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DAL,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DAN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DAR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -872,7 +891,6 @@ DC,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,N
 DCH,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DCI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DD,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-DE,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DEA,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DECK,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DEI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -889,7 +907,7 @@ DKNG,technical_discovery_only,no_financial_data,sec_provenance_not_established,1
 DKS,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DLO,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DLR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-DLTR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
+DMC,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DNLI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DNP,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DNTH,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -897,7 +915,6 @@ DOC,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,
 DOCN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DOLE,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DOV,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-DOW,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DOX,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DPZ,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DRS,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -916,8 +933,6 @@ DXYZ,technical_discovery_only,no_financial_data,sec_provenance_not_established,1
 DY,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 DYN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 EAF,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-EAT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-EBC,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 EBS,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 ECAT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 ECG,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -1996,7 +2011,6 @@ WSC,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,
 WSO,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 WT,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 WTFC,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-WTTR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 WTW,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 WU,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 WULF,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -2007,10 +2021,7 @@ WYFI,technical_discovery_only,no_financial_data,sec_provenance_not_established,1
 WYNN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 XEL,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 XENE,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-XERS,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-XHR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 XMAX,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-XMTR,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 XOM,partial_financial_research,no_financial_data,,0,SEC quarterly,2026-06-30
 XPO,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 XPRO,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
@@ -2030,8 +2041,6 @@ ZG,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,N
 ZGN,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 ZIM,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 ZION,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-ZM,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 ZTS,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 ZVRA,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
 ZWS,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,
-ZYME,technical_discovery_only,no_financial_data,sec_provenance_not_established,1,Non-SEC / not established,

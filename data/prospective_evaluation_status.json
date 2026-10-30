@@ -1,12 +1,13 @@
 {
-  "run_utc": "2026-10-30T00:05:21.434790+00:00",
-  "evaluation_version": "5.7",
+  "run_utc": "2026-10-30T22:19:27.782638+00:00",
+  "evaluation_version": "5.8",
   "snapshot_count": 742,
   "outcome_count": 0,
   "spy_ledger_entries": 2,
   "integrity_status": "PASS",
   "snapshot_comparability_groups": {
-    "unknown_comparability": 742
+    "partial_components_not_directly_comparable": 589,
+    "complete_four_components": 153
   },
   "spy_baseline_present": 494,
   "spy_baseline_missing": 248,
@@ -45,5 +46,5 @@
       "baseline_spy_present": 494
     }
   },
-  "notes": "Prospective-only cohorts. Completion is observation coverage, not investment return. No retrospective benchmarks, scoring changes, total-return estimates, or demonstrated alpha."
+  "notes": "Read-only snapshot-field comparability recovery; prospective-only cohorts. Completion is observation coverage, not investment return. No retrospective benchmarks, scoring changes, total-return estimates, or demonstrated alpha."
 }
