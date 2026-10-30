@@ -54,9 +54,8 @@ def _read_optional_csv(path):
     if not path.exists():
         return None
 
-    try:
-return pd.read_csv(path, dtype=str, keep_default_na=False)
-    except EmptyDataError:
+try:
+    return pd.read_csv(path, dtype=str, keep_default_na=False)    except EmptyDataError:
         if not path.read_bytes().strip():
             print(
                 f"Empty CSV without columns, initializing: {path.name}"
