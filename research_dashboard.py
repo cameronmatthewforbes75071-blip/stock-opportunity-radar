@@ -247,3 +247,39 @@ def render_prospective_evaluation(data_dir: Path):
                  'evidence_counts': recovery.get('evidence_counts', {})})
     with st.expander('Evaluation methodology and diagnostics'):
         st.json(report)
+    render_v59_performance(data_dir)
+
+
+def render_v59_performance(data_dir: Path):
+    """Read-only forward outcomes. Never call this as a replacement for the integrity audit."""
+    st.markdown('#### V5.9 forward-performance analytics')
+    status=_read_json(data_dir/'prospective_performance_status.json')
+    if not status:
+        st.info('V5.9 performance diagnostics not generated yet. Run the GitHub Actions workflow.')
+        return
+    audit=_read_json(data_dir/'prospective_audit_status.json')
+    if audit.get('integrity_status')!='PASS' or status.get('integrity_status')!='PASS':
+        st.error('Integrity verification is not PASS. Performance reporting withheld.')
+        return
+    st.caption('Descriptive raw price changes only; not total returns, trades, independent samples, or demonstrated alpha. SPY relative performance is withheld until adjusted price methods are reconciled.')
+    a,b,c=st.columns(3)
+    a.metric('Tracked snapshots',status.get('snapshot_count',0))
+    b.metric('Validated forward outcomes',status.get('validated_outcome_count',0))
+    c.metric('Cohorts with outcomes',status.get('summary_cohort_count',0))
+    if not status.get('validated_outcome_count'):
+        st.info('No matured observations yet. This is expected at the beginning of the prospective trial; no performance numbers are shown.')
+        return
+    summary=_read_csv(data_dir/'prospective_performance_summary.csv')
+    details=_read_csv(data_dir/'prospective_performance_details.csv')
+    if summary.empty:
+        st.warning('Performance summary is missing; results are withheld.')
+        return
+    h=st.selectbox('Forward horizon (calendar days)',[7,30,90],key='v59_horizon')
+    subset=summary[pd.to_numeric(summary['horizon_days'],errors='coerce')==h]
+    st.dataframe(subset,hide_index=True,width='stretch')
+    st.caption('Each ticker can appear on multiple snapshot dates; outcome rows are not independent trades. Means, win-like percentages and score ranks are exploratory descriptive statistics only.')
+    st.download_button('Download V5.9 cohort summary',summary.to_csv(index=False).encode(),file_name='prospective_performance_summary.csv',mime='text/csv',key='v59_summary_dl')
+    with st.expander('Verified individual forward observations'):
+        st.dataframe(details[pd.to_numeric(details['horizon_days'],errors='coerce')==h],hide_index=True,width='stretch')
+    with st.expander('V5.9 report controls and limitations'):
+        st.json(status)
