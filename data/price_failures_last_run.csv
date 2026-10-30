@@ -1,4 +1,1 @@
 ticker,reason,failure_class
-ASPE,Less than 20 daily observations,insufficient_history
-BBTX,Less than 20 daily observations,insufficient_history
-GBC,Less than 20 daily observations,insufficient_history

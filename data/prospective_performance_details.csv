@@ -1,0 +1,1 @@
+ticker,run_date,horizon_days,comparability_group,score_at_snapshot,score_bucket,origin_price_date,observed_price_date,raw_price_change_pct,benchmark_status,spy_price_change_pct,relative_to_spy_pct_points,validity_status

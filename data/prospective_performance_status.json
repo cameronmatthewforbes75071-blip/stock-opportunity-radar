@@ -1,0 +1,31 @@
+{
+  "version": "5.9",
+  "run_utc": "2026-10-30T22:37:06.138128+00:00",
+  "integrity_status": "PASS",
+  "snapshot_count": 742,
+  "outcome_count": 0,
+  "validated_outcome_count": 0,
+  "invalid_outcome_count": 0,
+  "summary_cohort_count": 0,
+  "classification_counts": {
+    "partial_components_not_directly_comparable": 589,
+    "complete_four_components": 153
+  },
+  "horizons": {
+    "7": {
+      "observations": 0,
+      "cohorts_with_observations": 0
+    },
+    "30": {
+      "observations": 0,
+      "cohorts_with_observations": 0
+    },
+    "90": {
+      "observations": 0,
+      "cohorts_with_observations": 0
+    }
+  },
+  "benchmark_relative_metrics": "WITHHELD_price_adjustment_unverified",
+  "interpretation": "NO_FORWARD_PERFORMANCE_DATA",
+  "notes": "Immutable, prospective-only analysis. No outcomes are fabricated; no score edits or backfill. Score quartiles are within original run date and comparability group and are NOT trading signals. Multiple snapshots per ticker are dependent samples; do not interpret as independent trade results. Raw prices exclude dividends, corporate-action issues, spread, slippage, commissions and execution. No alpha claim."
+}
