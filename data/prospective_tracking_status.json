@@ -1,11 +1,11 @@
 {
-  "run_utc": "2026-10-30T22:37:02.367803+00:00",
-  "total_unique_snapshots": 742,
-  "new_snapshots": 0,
+  "run_utc": "2026-10-31T00:04:45.487831+00:00",
+  "total_unique_snapshots": 989,
+  "new_snapshots": 247,
   "total_price_observations": 0,
   "new_price_observations": 0,
-  "spy_ledger_entries": 2,
-  "new_spy_ledger_entries": 0,
+  "spy_ledger_entries": 3,
+  "new_spy_ledger_entries": 1,
   "new_outcomes_without_matching_spy": 0,
   "eligible_but_price_not_mature": 0,
   "tracked_horizons_calendar_days": [

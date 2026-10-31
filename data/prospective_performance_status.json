@@ -1,15 +1,15 @@
 {
   "version": "5.9",
-  "run_utc": "2026-10-30T22:37:06.138128+00:00",
+  "run_utc": "2026-10-31T00:04:49.682203+00:00",
   "integrity_status": "PASS",
-  "snapshot_count": 742,
+  "snapshot_count": 989,
   "outcome_count": 0,
   "validated_outcome_count": 0,
   "invalid_outcome_count": 0,
   "summary_cohort_count": 0,
   "classification_counts": {
-    "partial_components_not_directly_comparable": 589,
-    "complete_four_components": 153
+    "partial_components_not_directly_comparable": 785,
+    "complete_four_components": 204
   },
   "horizons": {
     "7": {
