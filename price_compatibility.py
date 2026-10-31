@@ -64,15 +64,29 @@ def build(base=DATA, *, now=None):
     step_info={}
     checked_steps=0
     large_steps=0
+    conflicting_groups=[]
     for name,items in by_name.items():
-        unique={}
-        for pdate,run,price in sorted(items,key=lambda x:(x[0],x[1])):
-            if pdate in unique and unique[pdate]!=price:
-                raise ValueError(f'Different prices for the same recorded price date: {name} {pdate}')
-            unique[pdate]=price
+        # Retain every source row. A common historical price date is NOT
+        # evidence that two different recorded prices can be reconciled.
+        values=defaultdict(set)
+        for pdate,run,price in items:
+            values[pdate].add(price)
+        conflict_dates={d for d,prices in values.items() if len(prices)>1}
+        for pdate in sorted(conflict_dates):
+            amounts=sorted(values[pdate])
+            nums=[valid(x) for x in amounts]
+            precision_only=(all(x is not None for x in nums) and
+                all(math.isclose(nums[0],x,rel_tol=1e-10,abs_tol=1e-8) for x in nums[1:]))
+            conflicting_groups.append(dict(record_type=name[0],ticker=name[1],
+                price_date=pdate,distinct_recorded_prices=len(amounts),
+                kind='POSSIBLE_PRECISION_VARIATION' if precision_only else 'PRICE_DISAGREEMENT'))
         prev=None
-        for pdate in sorted(unique):
-            value=unique[pdate]
+        for pdate in sorted(values):
+            if pdate in conflict_dates:
+                step_info[(name,pdate)]=('SAME_DATE_PRICE_CONFLICT','','','')
+                prev=None  # No comparison across an unresolved conflict
+                continue
+            value=next(iter(values[pdate]))
             v=valid(value)
             if v is None: raise ValueError(f'Invalid audited recorded price: {name} {pdate}')
             if prev is None:
@@ -82,15 +96,16 @@ def build(base=DATA, *, now=None):
                 flag='LARGE_STEP_REVIEW' if abs(pct)>=35 else 'NO_LARGE_STEP_DETECTED'
                 checked_steps+=1
                 if flag=='LARGE_STEP_REVIEW': large_steps+=1
-                step_info[(name,pdate)]=(flag,prev[0],unique[prev[0]],format(pct,'.8f'))
-            prev=(pdate,v)
+                step_info[(name,pdate)]=(flag,prev[0],prev[2],format(pct,'.8f'))
+            prev=(pdate,v,value)
     rows=[]
     for (kind,ticker,run),(pdate,price) in sorted(sources.items()):
         item=prov[(kind,ticker,run)]
         flag,prev_date,prev_price,percent=step_info[((kind,ticker),pdate)]
         # No source is independently verified by the V6.2 sidecar.
         # Even a future provenance assertion must not silently release returns.
-        reason=('Price step >=35% across recorded distinct dates; could be market move, split, or data issue; independent review required' if flag=='LARGE_STEP_REVIEW'
+        reason=('Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld' if flag=='SAME_DATE_PRICE_CONFLICT'
+                else 'Price step >=35% across recorded distinct dates; could be market move, split, or data issue; independent review required' if flag=='LARGE_STEP_REVIEW'
                 else 'Only recorded dates checked; no split/dividend feed or adjustment verification')
         rows.append(dict(record_type=kind,ticker=ticker,run_date=run,price_date=pdate,
             recorded_price=price,method_status='UNVERIFIED',price_step_flag=flag,
@@ -99,13 +114,15 @@ def build(base=DATA, *, now=None):
     report=dict(version='6.4',run_utc=str(timestamp),integrity_status='PASS',
         snapshot_count=len(snaps),spy_ledger_entries=len(spy),diagnostic_rows=len(rows),
         distinct_price_date_steps_checked=checked_steps,large_price_steps_requiring_review=large_steps,
+        conflicting_same_date_groups=len(conflicting_groups),
+        conflicting_same_date_details=conflicting_groups[:50],
         row_flags=dict(Counter(x['price_step_flag'] for x in rows)),
         equity_adjustment_verified=False,spy_adjustment_verified=False,
         corporate_actions_independently_checked=False,price_method_comparability='UNVERIFIED',
         return_metric_status='RAW_DESCRIPTIVE_ONLY_WITH_UNVERIFIED_ADJUSTMENTS',
         benchmark_relative_results='WITHHELD',
         interpretation='DIAGNOSTIC_ONLY_NO_PRICE_CERTIFICATION',
-        notes='Read-only; 35% step threshold is a review heuristic, not a split detector. Repeated identical price dates are deduplicated for change detection. No historical backfill, modification, external data verification, or total return claim.')
+        notes='Read-only; 35% step threshold is a review heuristic, not a split detector. Conflicting prices on the same date are flagged and not silently reconciled; steps crossing such conflicts are withheld. No historical backfill, modification, external data verification, or total return claim.')
     return rows,report
 
 def main():
