@@ -1,0 +1,23 @@
+{
+  "version": "6.1",
+  "run_utc": "2026-10-31T17:07:33.536623+00:00",
+  "integrity_status": "PASS",
+  "snapshot_count": 989,
+  "outcome_count": 0,
+  "spy_ledger_entries": 3,
+  "snapshot_rows_with_diagnostic_flags": 0,
+  "invalid_equity_price_or_date_rows": 0,
+  "spy_baseline_present": 741,
+  "spy_baseline_missing": 248,
+  "spy_ledger_missing_or_mismatched": 0,
+  "outcomes_failing_crosscheck": 0,
+  "equity_data_source": "UNVERIFIED_from_recorded_snapshots",
+  "equity_adjustment_method": "UNVERIFIED_not_recorded_per_snapshot",
+  "spy_source_code_observation": "forward_tracking._fetch_spy requests yfinance download auto_adjust=True; not independent validation of returned prices",
+  "spy_adjustment_method": "CODE_CONFIG_ONLY_not_verified_per_observation",
+  "split_dividend_corporate_action_validation": "NOT_PERFORMED",
+  "price_adjustment_comparability": "UNVERIFIED",
+  "benchmark_relative_results": "WITHHELD",
+  "interpretation": "STRUCTURAL_DIAGNOSTICS_ONLY_NOT_PRICE_CERTIFICATION",
+  "notes": "Read-only. Checks historical price/date/ledger consistency and flags potential issues. Does not fetch history, infer corporate actions, correct past values, or unlock benchmark relative returns. Numeric price comparisons exclude distribution/adjustment validation."
+}
