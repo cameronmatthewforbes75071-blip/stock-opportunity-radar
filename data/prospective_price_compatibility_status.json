@@ -1,0 +1,195 @@
+{
+  "version": "6.4",
+  "run_utc": "2026-10-31T18:42:23.950271+00:00",
+  "integrity_status": "PASS",
+  "snapshot_count": 989,
+  "spy_ledger_entries": 3,
+  "diagnostic_rows": 992,
+  "distinct_price_date_steps_checked": 305,
+  "large_price_steps_requiring_review": 1,
+  "conflicting_same_date_groups": 24,
+  "conflicting_same_date_details": [
+    {
+      "record_type": "equity",
+      "ticker": "LTC",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "LNG",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "KNTK",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "OSPN",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "NDAQ",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "KMI",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "PD",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "OTEX",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "PAGP",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "MKTX",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "ALLE",
+      "price_date": "2026-10-28",
+      "distinct_recorded_prices": 2,
+      "kind": "POSSIBLE_PRECISION_VARIATION"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "MPC",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "PCRX",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "PR",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "OVV",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "NTSK",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "MMSI",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "PAYC",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "NE",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "MANH",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "NWE",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "OXY",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "equity",
+      "ticker": "MUR",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    },
+    {
+      "record_type": "spy",
+      "ticker": "SPY",
+      "price_date": "2026-10-29",
+      "distinct_recorded_prices": 2,
+      "kind": "PRICE_DISAGREEMENT"
+    }
+  ],
+  "row_flags": {
+    "NO_PRIOR_DISTINCT_DATE": 478,
+    "NO_LARGE_STEP_DETECTED": 465,
+    "SAME_DATE_PRICE_CONFLICT": 48,
+    "LARGE_STEP_REVIEW": 1
+  },
+  "equity_adjustment_verified": false,
+  "spy_adjustment_verified": false,
+  "corporate_actions_independently_checked": false,
+  "price_method_comparability": "UNVERIFIED",
+  "return_metric_status": "RAW_DESCRIPTIVE_ONLY_WITH_UNVERIFIED_ADJUSTMENTS",
+  "benchmark_relative_results": "WITHHELD",
+  "interpretation": "DIAGNOSTIC_ONLY_NO_PRICE_CERTIFICATION",
+  "notes": "Read-only; 35% step threshold is a review heuristic, not a split detector. Conflicting prices on the same date are flagged and not silently reconciled; steps crossing such conflicts are withheld. No historical backfill, modification, external data verification, or total return claim."
+}
