@@ -1,0 +1,19 @@
+{
+  "version": "6.2",
+  "run_utc": "2026-10-31T17:54:31.692751+00:00",
+  "integrity_status": "PASS",
+  "snapshot_count": 989,
+  "spy_ledger_entries": 3,
+  "provenance_rows": 992,
+  "new_provenance_rows": 992,
+  "same_date_capture_new_rows": 248,
+  "retrospective_metadata_new_rows": 744,
+  "verified_price_source_rows": 0,
+  "verified_adjustment_rows": 0,
+  "equity_adjustment_method": "UNVERIFIED",
+  "spy_adjustment_method": "CODE_CONFIG_NOT_INDEPENDENTLY_VERIFIED",
+  "corporate_actions_validation": "NOT_PERFORMED",
+  "benchmark_relative_results": "WITHHELD",
+  "interpretation": "PROVENANCE_METADATA_ONLY_NOT_PRICE_CERTIFICATION",
+  "notes": "Append-only sidecar; source snapshots and benchmark ledger untouched. Same-date capture is not proof of original source or adjustment. Existing historical records can only receive retrospective metadata; no price backfill."
+}
