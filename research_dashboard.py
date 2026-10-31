@@ -333,5 +333,25 @@ def render_v61_price_validation(data_dir: Path):
         if not details.empty and 'flags' in details:
             flagged=details[details['flags'].fillna('').astype(str).str.len()>0]
             st.dataframe(flagged,hide_index=True,width='stretch')
+    render_v62_price_provenance(data_dir)
     with st.expander('V6.1 methodology and status'):
+        st.json(report)
+
+
+def render_v62_price_provenance(data_dir: Path):
+    st.markdown('#### V6.2 prospective price provenance')
+    report=_read_json(data_dir/'prospective_price_provenance_status.json')
+    if not report:
+        st.info('V6.2 provenance report not available yet.')
+        return
+    audit=_read_json(data_dir/'prospective_audit_status.json')
+    if audit.get('integrity_status')!='PASS' or report.get('integrity_status')!='PASS':
+        st.error('Price provenance withheld: integrity check did not pass.')
+        return
+    a,b,c=st.columns(3)
+    a.metric('Recorded provenance entries',report.get('provenance_rows',0))
+    b.metric('New entries',report.get('new_provenance_rows',0))
+    c.metric('Independently verified adjustments',report.get('verified_adjustment_rows',0))
+    st.warning('Source and price adjustments are UNVERIFIED. SPY-relative results remain withheld. Same-date metadata is not independent provenance certification.')
+    with st.expander('V6.2 metadata report'):
         st.json(report)
