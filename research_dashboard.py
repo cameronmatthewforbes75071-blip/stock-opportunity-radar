@@ -355,3 +355,28 @@ def render_v62_price_provenance(data_dir: Path):
     st.warning('Source and price adjustments are UNVERIFIED. SPY-relative results remain withheld. Same-date metadata is not independent provenance certification.')
     with st.expander('V6.2 metadata report'):
         st.json(report)
+    render_v63_readiness(data_dir)
+
+
+def render_v63_readiness(data_dir: Path):
+    st.markdown('#### V6.3 forward observation readiness')
+    report=_read_json(data_dir/'prospective_observation_readiness_status.json')
+    if not report:
+        st.info('V6.3 readiness has not been generated yet.')
+        return
+    if report.get('integrity_status')!='PASS':
+        st.error('Readiness diagnostics withheld: failed integrity audit.')
+        return
+    a,b,c=st.columns(3)
+    a.metric('Snapshot horizons checked',report.get('evaluated_snapshot_horizons',0))
+    b.metric('Potential missing observations',report.get('potential_missing_outcomes',0))
+    c.metric('Invalid recorded outcomes',report.get('invalid_existing_outcomes',0))
+    st.caption('Diagnostic only. Source/adjustment methods unverified; no outcomes created or historical data changed.')
+    st.json(report.get('status_counts',{}))
+    details=_read_csv(data_dir/'prospective_observation_readiness.csv')
+    if not details.empty and 'readiness_status' in details:
+        flagged=details[details['readiness_status'].astype(str).str.startswith(('DUE_','INVALID_'))]
+        if not flagged.empty:
+            st.dataframe(flagged,hide_index=True,width='stretch')
+    with st.expander('V6.3 complete status'):
+        st.json(report)
