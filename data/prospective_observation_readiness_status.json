@@ -1,0 +1,28 @@
+{
+  "version": "6.3",
+  "run_utc": "2026-10-31T18:23:42.390658+00:00",
+  "integrity_status": "PASS",
+  "snapshot_count": 989,
+  "outcome_count": 0,
+  "evaluated_snapshot_horizons": 2967,
+  "status_counts": {
+    "NOT_DUE": 2967
+  },
+  "horizons": {
+    "7": {
+      "NOT_DUE": 989
+    },
+    "30": {
+      "NOT_DUE": 989
+    },
+    "90": {
+      "NOT_DUE": 989
+    }
+  },
+  "potential_missing_outcomes": 0,
+  "invalid_existing_outcomes": 0,
+  "historical_snapshots_modified": 0,
+  "source_or_adjustment_verified": false,
+  "interpretation": "READ_ONLY_OBSERVATION_READINESS_NOT_PERFORMANCE_CERTIFICATION",
+  "notes": "Uses recorded discovery dates/prices only. Same-day bar is conservatively unconfirmed. Calendar-day horizons may land on non-trading days. Flags are diagnostic and do not create outcomes or price backfills. Provenance/adjustments remain unverified."
+}
