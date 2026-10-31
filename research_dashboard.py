@@ -266,6 +266,7 @@ def render_v59_performance(data_dir: Path):
     a.metric('Tracked snapshots',status.get('snapshot_count',0))
     b.metric('Validated forward outcomes',status.get('validated_outcome_count',0))
     c.metric('Cohorts with outcomes',status.get('summary_cohort_count',0))
+    render_v60_evidence_quality(data_dir)
     if not status.get('validated_outcome_count'):
         st.info('No matured observations yet. This is expected at the beginning of the prospective trial; no performance numbers are shown.')
         return
@@ -282,4 +283,30 @@ def render_v59_performance(data_dir: Path):
     with st.expander('Verified individual forward observations'):
         st.dataframe(details[pd.to_numeric(details['horizon_days'],errors='coerce')==h],hide_index=True,width='stretch')
     with st.expander('V5.9 report controls and limitations'):
+        st.json(status)
+
+
+def render_v60_evidence_quality(data_dir: Path):
+    st.markdown('#### V6.0 evidence quality and repeated-ticker sensitivity')
+    status=_read_json(data_dir/'prospective_evidence_quality_status.json')
+    if not status:
+        st.info('V6.0 evidence-quality report not available yet.')
+        return
+    audit=_read_json(data_dir/'prospective_audit_status.json')
+    if audit.get('integrity_status')!='PASS' or status.get('integrity_status')!='PASS':
+        st.error('Audit not PASS. Evidence quality results withheld.')
+        return
+    a,b,c=st.columns(3)
+    a.metric('Valid forward outcomes',status.get('validated_outcome_count',0))
+    b.metric('One per ticker/horizon',status.get('one_per_ticker_horizon_count',0))
+    c.metric('Repeated observations excluded',status.get('excluded_repeated_ticker_observations',0))
+    st.warning('SPY-relative results and statistical significance remain withheld. Stock and benchmark price adjustment methods have not been validated.')
+    if not status.get('one_per_ticker_horizon_count'):
+        st.info('No matured forward observations yet. No returns or significance claims.')
+    else:
+        summary=_read_csv(data_dir/'prospective_evidence_quality.csv')
+        if not summary.empty:
+            st.dataframe(summary,hide_index=True,width='stretch')
+            st.download_button('Download evidence quality',summary.to_csv(index=False).encode(),file_name='prospective_evidence_quality.csv',mime='text/csv',key='v60_evidence_download')
+    with st.expander('V6.0 controls and limitations'):
         st.json(status)
