@@ -378,5 +378,29 @@ def render_v63_readiness(data_dir: Path):
         flagged=details[details['readiness_status'].astype(str).str.startswith(('DUE_','INVALID_'))]
         if not flagged.empty:
             st.dataframe(flagged,hide_index=True,width='stretch')
+    render_v64_compatibility(data_dir)
     with st.expander('V6.3 complete status'):
         st.json(report)
+
+
+def render_v64_compatibility(data_dir: Path):
+    st.markdown('#### V6.4 price-method compatibility and large-step diagnostics')
+    status=_read_json(data_dir/'prospective_price_compatibility_status.json')
+    if not status:
+        st.info('V6.4 compatibility report not generated yet.')
+        return
+    if status.get('integrity_status')!='PASS':
+        st.error('Audit not PASS; results withheld.')
+        return
+    a,b,c=st.columns(3)
+    a.metric('Recorded prices checked',status.get('diagnostic_rows',0))
+    b.metric('Distinct-date steps',status.get('distinct_price_date_steps_checked',0))
+    c.metric('Large steps for review',status.get('large_price_steps_requiring_review',0))
+    st.warning('Price adjustment and corporate actions remain unverified; do not interpret raw price changes as total returns. SPY-relative performance remains withheld.')
+    details=_read_csv(data_dir/'prospective_price_compatibility.csv')
+    if not details.empty and 'price_step_flag' in details:
+        flagged=details[details['price_step_flag']=='LARGE_STEP_REVIEW']
+        if not flagged.empty:
+            st.dataframe(flagged,hide_index=True,width='stretch')
+    with st.expander('V6.4 methodology and limitations'):
+        st.json(status)
