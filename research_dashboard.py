@@ -402,5 +402,28 @@ def render_v64_compatibility(data_dir: Path):
         flagged=details[details['price_step_flag']=='LARGE_STEP_REVIEW']
         if not flagged.empty:
             st.dataframe(flagged,hide_index=True,width='stretch')
+    render_v65_release_validation(data_dir)
     with st.expander('V6.4 methodology and limitations'):
         st.json(status)
+
+
+def render_v65_release_validation(data_dir: Path):
+    st.markdown('#### V6.5 release validation and unresolved price cases')
+    report=_read_json(data_dir/'prospective_release_validation_status.json')
+    if not report:
+        st.info('V6.5 release validation report is pending. Run GitHub Actions.')
+        return
+    if report.get('integrity_status')!='PASS':
+        st.error('Release diagnostics withheld: integrity check did not pass.')
+        return
+    st.warning('Release status: '+str(report.get('release_status','UNKNOWN'))+'. Price adjustments and corporate actions are not independently verified. Benchmark-relative returns remain withheld.')
+    a,b,c=st.columns(3)
+    a.metric('Same-date disagreements',report.get('material_price_disagreement_groups',0))
+    b.metric('Precision-only differences',report.get('precision_variation_groups',0))
+    c.metric('Large price steps',report.get('large_steps_to_review',0))
+    reviews=_read_csv(data_dir/'prospective_release_review.csv')
+    if not reviews.empty:
+        st.dataframe(reviews,hide_index=True,width='stretch')
+        st.download_button('Download V6.5 review cases',reviews.to_csv(index=False).encode(),file_name='prospective_release_review.csv',mime='text/csv',key='v65_reviews')
+    with st.expander('V6.5 full release validation'):
+        st.json(report)
