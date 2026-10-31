@@ -308,5 +308,30 @@ def render_v60_evidence_quality(data_dir: Path):
         if not summary.empty:
             st.dataframe(summary,hide_index=True,width='stretch')
             st.download_button('Download evidence quality',summary.to_csv(index=False).encode(),file_name='prospective_evidence_quality.csv',mime='text/csv',key='v60_evidence_download')
+    render_v61_price_validation(data_dir)
     with st.expander('V6.0 controls and limitations'):
         st.json(status)
+
+
+def render_v61_price_validation(data_dir: Path):
+    st.markdown('#### V6.1 recorded price provenance and consistency')
+    report=_read_json(data_dir/'prospective_price_validation_status.json')
+    if not report:
+        st.info('V6.1 diagnostic is not available yet. Run GitHub Actions.')
+        return
+    audit=_read_json(data_dir/'prospective_audit_status.json')
+    if audit.get('integrity_status')!='PASS' or report.get('integrity_status')!='PASS':
+        st.error('Integrity audit did not pass. Price diagnostics withheld.')
+        return
+    a,b,c=st.columns(3)
+    a.metric('Recorded snapshots',report.get('snapshot_count',0))
+    b.metric('SPY baseline present',report.get('spy_baseline_present',0))
+    c.metric('Diagnostic flags',report.get('snapshot_rows_with_diagnostic_flags',0))
+    st.warning('Adjustment methods are NOT verified. Benchmark-relative returns remain withheld. SPY downloader configuration is not proof of actual price treatment.')
+    if report.get('snapshot_rows_with_diagnostic_flags'):
+        details=_read_csv(data_dir/'prospective_price_validation.csv')
+        if not details.empty and 'flags' in details:
+            flagged=details[details['flags'].fillna('').astype(str).str.len()>0]
+            st.dataframe(flagged,hide_index=True,width='stretch')
+    with st.expander('V6.1 methodology and status'):
+        st.json(report)
