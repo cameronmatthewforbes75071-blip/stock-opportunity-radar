@@ -1,68 +1,68 @@
 {
-  "run_utc": "2026-10-31T19:02:29+00:00",
-  "candidate_count": 2056,
+  "run_utc": "2026-11-03T00:04:16+00:00",
+  "candidate_count": 2057,
   "financial_validation_status_counts": {
-    "no_financial_data": 1209,
-    "basic_checks_passed_not_audited": 767,
-    "manual_validation_needed": 47,
-    "unverified_provider_metadata": 33
+    "no_financial_data": 1177,
+    "basic_checks_passed_not_audited": 796,
+    "manual_validation_needed": 49,
+    "unverified_provider_metadata": 35
   },
   "financial_validation_flag_counts": {
-    "annual_period_old": 30,
+    "annual_period_old": 32,
     "profit_margin_scale_review": 11,
     "quarterly_period_old": 6,
-    "sec_provenance_not_established": 1239
+    "sec_provenance_not_established": 1207
   },
-  "with_any_financial_metric": 847,
-  "with_all_five_financial_metrics": 91,
-  "with_sec_annual_provenance": 816,
-  "with_sec_quarterly_provenance": 814,
-  "with_quarterly_metrics": 814,
+  "with_any_financial_metric": 880,
+  "with_all_five_financial_metrics": 92,
+  "with_sec_annual_provenance": 848,
+  "with_sec_quarterly_provenance": 847,
+  "with_quarterly_metrics": 847,
   "fundamental_check_older_than_90d": 0,
-  "fundamental_check_date_missing": 1207,
+  "fundamental_check_date_missing": 1174,
   "research_readiness_counts": {
-    "technical_discovery_only": 1206,
-    "data_ready_for_manual_review": 690,
-    "partial_financial_research": 160
+    "technical_discovery_only": 1172,
+    "data_ready_for_manual_review": 715,
+    "partial_financial_research": 170
   },
-  "financial_period_recent_460d_count": 817,
-  "financial_period_missing_count": 1239,
+  "financial_period_recent_460d_count": 850,
+  "financial_period_missing_count": 1207,
   "sec_reporting_class_counts": {
-    "unknown": 1967,
-    "foreign_issuer_form_observed": 82,
+    "unknown": 1966,
+    "foreign_issuer_form_observed": 84,
     "other_or_no_recent_supported_form": 4,
     "domestic_form_observed_but_metrics_missing": 3
   },
-  "financial_metric_coverage_pct": 27.94,
+  "financial_metric_coverage_pct": 28.95,
   "per_metric_coverage": {
     "revenue_growth": {
-      "available_count": 793,
-      "missing_count": 1263,
-      "coverage_pct": 38.57
+      "available_count": 823,
+      "missing_count": 1234,
+      "coverage_pct": 40.01
     },
     "earnings_growth": {
-      "available_count": 580,
-      "missing_count": 1476,
-      "coverage_pct": 28.21
+      "available_count": 601,
+      "missing_count": 1456,
+      "coverage_pct": 29.22
     },
     "profit_margin": {
-      "available_count": 740,
-      "missing_count": 1316,
-      "coverage_pct": 35.99
+      "available_count": 771,
+      "missing_count": 1286,
+      "coverage_pct": 37.48
     },
     "free_cash_flow": {
-      "available_count": 646,
-      "missing_count": 1410,
-      "coverage_pct": 31.42
+      "available_count": 667,
+      "missing_count": 1390,
+      "coverage_pct": 32.43
     },
     "trailing_pe": {
-      "available_count": 113,
-      "missing_count": 1943,
-      "coverage_pct": 5.5
+      "available_count": 115,
+      "missing_count": 1942,
+      "coverage_pct": 5.59
     }
   },
-  "quarterly_filing_date_recorded": 814,
-  "annual_reporting_period_recorded": 816,
-  "quarterly_reporting_period_recorded": 814,
+  "quarterly_filing_date_recorded": 847,
+  "annual_reporting_period_recorded": 848,
+  "quarterly_reporting_period_recorded": 847,
   "note": "V5.1 basic date, provenance and plausibility diagnostics are not financial-statement audits or investment ratings. V5.0 readiness is data sufficiency only, not an investment score. Coverage counts fields with numeric values, not financial accuracy or timeliness. SEC provenance uses saved retrieval timestamps; reported periods are separately extracted. Missing fields are not zero; no new investment score or performance claim."
 }

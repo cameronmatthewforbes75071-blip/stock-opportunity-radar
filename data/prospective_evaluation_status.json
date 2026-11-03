@@ -1,49 +1,50 @@
 {
-  "run_utc": "2026-10-31T19:02:35.253380+00:00",
+  "run_utc": "2026-11-03T00:04:21.940420+00:00",
   "evaluation_version": "5.8",
-  "snapshot_count": 989,
+  "snapshot_count": 1235,
   "outcome_count": 0,
-  "spy_ledger_entries": 3,
+  "spy_ledger_entries": 4,
   "integrity_status": "PASS",
   "snapshot_comparability_groups": {
-    "partial_components_not_directly_comparable": 785,
-    "complete_four_components": 204
+    "partial_components_not_directly_comparable": 980,
+    "complete_four_components": 255
   },
-  "spy_baseline_present": 741,
+  "spy_baseline_present": 987,
   "spy_baseline_missing": 248,
   "horizons": {
     "7": {
       "horizon_calendar_days": 7,
       "comparability_group": "all",
-      "snapshots": 989,
-      "matured_eligible": 0,
-      "pending_not_due": 989,
+      "snapshots": 1235,
+      "matured_eligible": 248,
+      "pending_not_due": 987,
       "observed": 0,
-      "matured_missing_observation": 0,
+      "matured_missing_observation": 248,
       "observations_with_spy": 0,
-      "baseline_spy_present": 741
+      "baseline_spy_present": 987,
+      "completion_pct": 0.0
     },
     "30": {
       "horizon_calendar_days": 30,
       "comparability_group": "all",
-      "snapshots": 989,
+      "snapshots": 1235,
       "matured_eligible": 0,
-      "pending_not_due": 989,
+      "pending_not_due": 1235,
       "observed": 0,
       "matured_missing_observation": 0,
       "observations_with_spy": 0,
-      "baseline_spy_present": 741
+      "baseline_spy_present": 987
     },
     "90": {
       "horizon_calendar_days": 90,
       "comparability_group": "all",
-      "snapshots": 989,
+      "snapshots": 1235,
       "matured_eligible": 0,
-      "pending_not_due": 989,
+      "pending_not_due": 1235,
       "observed": 0,
       "matured_missing_observation": 0,
       "observations_with_spy": 0,
-      "baseline_spy_present": 741
+      "baseline_spy_present": 987
     }
   },
   "notes": "Read-only snapshot-field comparability recovery; prospective-only cohorts. Completion is observation coverage, not investment return. No retrospective benchmarks, scoring changes, total-return estimates, or demonstrated alpha."

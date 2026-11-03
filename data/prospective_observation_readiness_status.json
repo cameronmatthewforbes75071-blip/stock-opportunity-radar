@@ -1,22 +1,26 @@
 {
   "version": "6.3",
-  "run_utc": "2026-10-31T19:02:39.018746+00:00",
+  "run_utc": "2026-11-03T00:04:24.821061+00:00",
   "integrity_status": "PASS",
-  "snapshot_count": 989,
+  "snapshot_count": 1235,
   "outcome_count": 0,
-  "evaluated_snapshot_horizons": 2967,
+  "evaluated_snapshot_horizons": 3705,
   "status_counts": {
-    "NOT_DUE": 2967
+    "DUE_PRICE_PREDATES_HORIZON": 246,
+    "DUE_STALE_PRICE": 2,
+    "NOT_DUE": 3457
   },
   "horizons": {
     "7": {
-      "NOT_DUE": 989
+      "DUE_PRICE_PREDATES_HORIZON": 246,
+      "DUE_STALE_PRICE": 2,
+      "NOT_DUE": 987
     },
     "30": {
-      "NOT_DUE": 989
+      "NOT_DUE": 1235
     },
     "90": {
-      "NOT_DUE": 989
+      "NOT_DUE": 1235
     }
   },
   "potential_missing_outcomes": 0,

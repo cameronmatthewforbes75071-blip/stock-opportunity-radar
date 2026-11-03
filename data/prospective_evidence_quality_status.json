@@ -1,8 +1,8 @@
 {
   "version": "6.0",
-  "run_utc": "2026-10-31T19:02:36.310474+00:00",
+  "run_utc": "2026-11-03T00:04:22.688379+00:00",
   "integrity_status": "PASS",
-  "snapshot_count": 989,
+  "snapshot_count": 1235,
   "validated_outcome_count": 0,
   "one_per_ticker_horizon_count": 0,
   "excluded_repeated_ticker_observations": 0,

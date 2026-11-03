@@ -1,13 +1,13 @@
 {
-  "run_utc": "2026-10-31T19:02:31.499767+00:00",
-  "total_unique_snapshots": 989,
-  "new_snapshots": 0,
+  "run_utc": "2026-11-03T00:04:18.647507+00:00",
+  "total_unique_snapshots": 1235,
+  "new_snapshots": 246,
   "total_price_observations": 0,
   "new_price_observations": 0,
-  "spy_ledger_entries": 3,
-  "new_spy_ledger_entries": 0,
+  "spy_ledger_entries": 4,
+  "new_spy_ledger_entries": 1,
   "new_outcomes_without_matching_spy": 0,
-  "eligible_but_price_not_mature": 0,
+  "eligible_but_price_not_mature": 246,
   "tracked_horizons_calendar_days": [
     7,
     30,
@@ -45,7 +45,7 @@
     "deferred_counts": {
       "unconfirmed_or_same_day": 0,
       "unresolved_ticker": 0,
-      "no_completed_due_price": 0
+      "no_completed_due_price": 246
     },
     "historical_outcomes_rewritten": false
   },
