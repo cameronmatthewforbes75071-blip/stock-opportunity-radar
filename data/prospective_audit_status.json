@@ -1,14 +1,14 @@
 {
-  "run_utc": "2026-11-03T00:04:20.378589+00:00",
+  "run_utc": "2026-11-04T00:06:30.751380+00:00",
   "audit_version": "5.6",
   "baseline_initialized_this_run": false,
   "integrity_status": "PASS",
   "integrity_violations": [],
   "ledger_details": {
     "snapshots": {
-      "rows": 1235,
+      "rows": 1481,
       "new_fingerprints": 246,
-      "previous_fingerprints": 989,
+      "previous_fingerprints": 1235,
       "duplicate_keys": 0,
       "changed_prior_rows": 0,
       "missing_prior_rows": 0,
@@ -16,8 +16,8 @@
       "examples_missing": []
     },
     "outcomes": {
-      "rows": 0,
-      "new_fingerprints": 0,
+      "rows": 3,
+      "new_fingerprints": 3,
       "previous_fingerprints": 0,
       "duplicate_keys": 0,
       "changed_prior_rows": 0,
@@ -26,9 +26,9 @@
       "examples_missing": []
     },
     "spy": {
-      "rows": 4,
+      "rows": 5,
       "new_fingerprints": 1,
-      "previous_fingerprints": 3,
+      "previous_fingerprints": 4,
       "duplicate_keys": 0,
       "changed_prior_rows": 0,
       "missing_prior_rows": 0,
@@ -36,20 +36,20 @@
       "examples_missing": []
     }
   },
-  "snapshot_count": 1235,
-  "snapshot_spy_baseline_present": 987,
+  "snapshot_count": 1481,
+  "snapshot_spy_baseline_present": 1233,
   "snapshot_spy_baseline_missing": 248,
-  "spy_baseline_coverage_pct": 79.92,
+  "spy_baseline_coverage_pct": 83.25,
   "snapshot_invalid_prices": 0,
   "snapshot_invalid_dates": 0,
   "snapshot_future_or_out_of_order_dates": 0,
   "snapshot_stale_reference_price_gt_5_calendar_days": 0,
-  "outcome_count": 0,
+  "outcome_count": 3,
   "outcome_invalid_prices": 0,
   "outcome_premature_or_invalid_horizon": 0,
   "outcome_spy_matched_count": 0,
-  "outcome_spy_unmatched_count": 0,
-  "spy_entries": 4,
+  "outcome_spy_unmatched_count": 3,
+  "spy_entries": 5,
   "spy_invalid_rows": 0,
   "notes": "First manifest establishes integrity baseline only; it cannot verify unchanged historical data predating V5.6. No historical backfill or return claim. Benchmark price adjustments may differ from equity price adjustments."
 }

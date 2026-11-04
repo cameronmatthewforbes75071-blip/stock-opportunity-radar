@@ -1,18 +1,18 @@
 {
   "version": "6.0",
-  "run_utc": "2026-11-03T00:04:22.688379+00:00",
+  "run_utc": "2026-11-04T00:06:34.198536+00:00",
   "integrity_status": "PASS",
-  "snapshot_count": 1235,
-  "validated_outcome_count": 0,
-  "one_per_ticker_horizon_count": 0,
+  "snapshot_count": 1481,
+  "validated_outcome_count": 3,
+  "one_per_ticker_horizon_count": 3,
   "excluded_repeated_ticker_observations": 0,
   "price_adjustment_validation": "UNVERIFIED",
   "spy_relative_results": "WITHHELD",
   "significance_claim": "WITHHELD_DEPENDENCE_AND_SAMPLE_SIZE",
   "horizons": {
     "7": {
-      "original_observations": 0,
-      "selected_unique_tickers": 0
+      "original_observations": 3,
+      "selected_unique_tickers": 3
     },
     "30": {
       "original_observations": 0,
@@ -23,6 +23,6 @@
       "selected_unique_tickers": 0
     }
   },
-  "interpretation": "NO_FORWARD_PERFORMANCE_DATA",
+  "interpretation": "EXPLORATORY_DESCRIPTIVE_ONLY",
   "notes": "Read-only one-per-ticker sensitivity view selects earliest observed snapshot per ticker and horizon before assigning score cohorts; no repeated ticker appears more than once within a horizon. Selection is observational and may favor earlier dates; it does not establish independent returns, eliminate market-date correlation, correct selection bias, or constitute statistical significance. Price adjustment/corporate actions remain unverified; SPY-relative comparisons withheld. No claims of alpha or executable trade P&L."
 }

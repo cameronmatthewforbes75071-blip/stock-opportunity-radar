@@ -1,1 +1,3 @@
 horizon_days,comparability_group,score_bucket,observations,distinct_tickers,distinct_snapshot_dates,mean_raw_price_change_pct,median_raw_price_change_pct,min_raw_price_change_pct,max_raw_price_change_pct,positive_change_pct,benchmark_matched_count,benchmark_comparison_status
+7,complete_four_components,middle_half,1,1,1,-6.4757,-6.4757,-6.4757,-6.4757,0.0,0,WITHHELD_price_adjustment_unverified
+7,partial_components_not_directly_comparable,top_quartile,2,2,1,-5.3208,-5.3208,-12.6612,2.0195,50.0,0,WITHHELD_price_adjustment_unverified

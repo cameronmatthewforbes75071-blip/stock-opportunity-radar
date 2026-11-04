@@ -1,1 +1,4 @@
 ticker,run_date,horizon_days,comparability_group,score_bucket,raw_price_change_pct,selection_rule
+QLYS,2026-10-27,7,complete_four_components,middle_half,-6.47568,earliest_observed_snapshot_per_ticker_per_horizon
+QTWO,2026-10-27,7,partial_components_not_directly_comparable,top_quartile,2.01948,earliest_observed_snapshot_per_ticker_per_horizon
+RBRK,2026-10-27,7,partial_components_not_directly_comparable,top_quartile,-12.66116,earliest_observed_snapshot_per_ticker_per_horizon

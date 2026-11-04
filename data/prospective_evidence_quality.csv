@@ -1,1 +1,3 @@
 horizon_days,comparability_group,score_bucket,raw_observations,unique_tickers,unique_snapshot_dates,selected_one_per_ticker,excluded_repeated_ticker_observations,mean_raw_price_change_pct,median_raw_price_change_pct,positive_change_pct,interpretation
+7,complete_four_components,middle_half,1,1,1,1,0,-6.4757,-6.4757,0.0,DESCRIPTIVE_ONLY_NOT_INDEPENDENCE_PROOF
+7,partial_components_not_directly_comparable,top_quartile,2,2,1,2,0,-5.3208,-5.3208,50.0,DESCRIPTIVE_ONLY_NOT_INDEPENDENCE_PROOF
