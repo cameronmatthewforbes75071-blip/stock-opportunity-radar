@@ -1,50 +1,50 @@
 {
-  "run_utc": "2026-11-05T00:09:36.781021+00:00",
+  "run_utc": "2026-11-06T00:10:58.116586+00:00",
   "evaluation_version": "5.8",
-  "snapshot_count": 1553,
-  "outcome_count": 18,
-  "spy_ledger_entries": 6,
+  "snapshot_count": 1758,
+  "outcome_count": 284,
+  "spy_ledger_entries": 7,
   "integrity_status": "PASS",
   "snapshot_comparability_groups": {
-    "partial_components_not_directly_comparable": 1232,
-    "complete_four_components": 321
+    "partial_components_not_directly_comparable": 1398,
+    "complete_four_components": 360
   },
-  "spy_baseline_present": 1305,
+  "spy_baseline_present": 1510,
   "spy_baseline_missing": 248,
   "horizons": {
     "7": {
       "horizon_calendar_days": 7,
       "comparability_group": "all",
-      "snapshots": 1553,
-      "matured_eligible": 495,
-      "pending_not_due": 1058,
-      "observed": 18,
-      "matured_missing_observation": 477,
+      "snapshots": 1758,
+      "matured_eligible": 742,
+      "pending_not_due": 1016,
+      "observed": 284,
+      "matured_missing_observation": 458,
       "observations_with_spy": 0,
-      "baseline_spy_present": 1305,
-      "completion_pct": 3.64
+      "baseline_spy_present": 1510,
+      "completion_pct": 38.27
     },
     "30": {
       "horizon_calendar_days": 30,
       "comparability_group": "all",
-      "snapshots": 1553,
+      "snapshots": 1758,
       "matured_eligible": 0,
-      "pending_not_due": 1553,
+      "pending_not_due": 1758,
       "observed": 0,
       "matured_missing_observation": 0,
       "observations_with_spy": 0,
-      "baseline_spy_present": 1305
+      "baseline_spy_present": 1510
     },
     "90": {
       "horizon_calendar_days": 90,
       "comparability_group": "all",
-      "snapshots": 1553,
+      "snapshots": 1758,
       "matured_eligible": 0,
-      "pending_not_due": 1553,
+      "pending_not_due": 1758,
       "observed": 0,
       "matured_missing_observation": 0,
       "observations_with_spy": 0,
-      "baseline_spy_present": 1305
+      "baseline_spy_present": 1510
     }
   },
   "notes": "Read-only snapshot-field comparability recovery; prospective-only cohorts. Completion is observation coverage, not investment return. No retrospective benchmarks, scoring changes, total-return estimates, or demonstrated alpha."

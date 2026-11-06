@@ -1,4 +1,7 @@
 horizon_days,comparability_group,score_bucket,raw_observations,unique_tickers,unique_snapshot_dates,selected_one_per_ticker,excluded_repeated_ticker_observations,mean_raw_price_change_pct,median_raw_price_change_pct,positive_change_pct,interpretation
-7,complete_four_components,middle_half,2,2,1,2,0,-3.813,-3.813,0.0,DESCRIPTIVE_ONLY_NOT_INDEPENDENCE_PROOF
-7,partial_components_not_directly_comparable,middle_half,6,6,1,6,0,1.2199,0.9291,50.0,DESCRIPTIVE_ONLY_NOT_INDEPENDENCE_PROOF
-7,partial_components_not_directly_comparable,top_quartile,10,10,1,10,0,-2.2007,-2.6414,40.0,DESCRIPTIVE_ONLY_NOT_INDEPENDENCE_PROOF
+7,complete_four_components,bottom_quartile,14,7,2,7,7,3.0228,1.7433,71.43,DESCRIPTIVE_ONLY_NOT_INDEPENDENCE_PROOF
+7,complete_four_components,middle_half,20,11,2,11,9,1.7586,1.0872,63.64,DESCRIPTIVE_ONLY_NOT_INDEPENDENCE_PROOF
+7,complete_four_components,top_quartile,16,8,2,8,8,-3.1394,0.383,50.0,DESCRIPTIVE_ONLY_NOT_INDEPENDENCE_PROOF
+7,partial_components_not_directly_comparable,bottom_quartile,70,35,2,35,35,-1.8604,0.4198,51.43,DESCRIPTIVE_ONLY_NOT_INDEPENDENCE_PROOF
+7,partial_components_not_directly_comparable,middle_half,112,59,2,59,53,0.3051,1.9249,59.32,DESCRIPTIVE_ONLY_NOT_INDEPENDENCE_PROOF
+7,partial_components_not_directly_comparable,top_quartile,52,31,2,31,21,-2.2189,-0.5379,45.16,DESCRIPTIVE_ONLY_NOT_INDEPENDENCE_PROOF

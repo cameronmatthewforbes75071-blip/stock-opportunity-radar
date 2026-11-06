@@ -1,30 +1,30 @@
 {
   "version": "6.3",
-  "run_utc": "2026-11-05T00:09:41.345895+00:00",
+  "run_utc": "2026-11-06T00:11:03.433081+00:00",
   "integrity_status": "PASS",
-  "snapshot_count": 1553,
-  "outcome_count": 18,
-  "evaluated_snapshot_horizons": 4659,
+  "snapshot_count": 1758,
+  "outcome_count": 284,
+  "evaluated_snapshot_horizons": 5274,
   "status_counts": {
     "DUE_POTENTIAL_MISSING_OUTCOME": 20,
-    "DUE_PRICE_PREDATES_HORIZON": 106,
-    "DUE_STALE_PRICE": 351,
-    "NOT_DUE": 4164,
-    "OBSERVED": 18
+    "DUE_PRICE_PREDATES_HORIZON": 311,
+    "DUE_STALE_PRICE": 127,
+    "NOT_DUE": 4532,
+    "OBSERVED": 284
   },
   "horizons": {
     "7": {
-      "OBSERVED": 18,
+      "OBSERVED": 284,
       "DUE_POTENTIAL_MISSING_OUTCOME": 20,
-      "DUE_STALE_PRICE": 351,
-      "DUE_PRICE_PREDATES_HORIZON": 106,
-      "NOT_DUE": 1058
+      "DUE_STALE_PRICE": 127,
+      "DUE_PRICE_PREDATES_HORIZON": 311,
+      "NOT_DUE": 1016
     },
     "30": {
-      "NOT_DUE": 1553
+      "NOT_DUE": 1758
     },
     "90": {
-      "NOT_DUE": 1553
+      "NOT_DUE": 1758
     }
   },
   "potential_missing_outcomes": 20,

@@ -1,19 +1,21 @@
 {
   "version": "6.5",
-  "run_utc": "2026-11-05T00:09:41.561665+00:00",
+  "run_utc": "2026-11-06T00:11:03.663562+00:00",
   "integrity_status": "PASS",
   "release_status": "REVIEW_REQUIRED",
-  "snapshots": 1553,
-  "spy_entries": 6,
-  "diagnostic_rows": 1559,
+  "snapshots": 1758,
+  "spy_entries": 7,
+  "diagnostic_rows": 1765,
   "same_date_conflicting_groups": 24,
   "precision_variation_groups": 1,
   "material_price_disagreement_groups": 23,
-  "large_steps_to_review": 1,
-  "total_review_items": 25,
-  "high_priority_review_items": 24,
+  "large_steps_to_review": 3,
+  "total_review_items": 27,
+  "high_priority_review_items": 26,
   "affected_tickers": [
+    "AESI",
     "ALLE",
+    "APP",
     "GDYN",
     "KMI",
     "KNTK",
@@ -40,6 +42,26 @@
     "SPY"
   ],
   "large_step_details": [
+    {
+      "ticker": "AESI",
+      "record_type": "equity",
+      "run_date": "2026-11-06",
+      "price_date": "2026-11-05",
+      "previous_price_date": "2026-10-30",
+      "previous_price": "9.220000267028809",
+      "recorded_price": "5.320000171661377",
+      "step_pct": "-42.29934905"
+    },
+    {
+      "ticker": "APP",
+      "record_type": "equity",
+      "run_date": "2026-11-06",
+      "price_date": "2026-11-05",
+      "previous_price_date": "2026-10-30",
+      "previous_price": "228.5",
+      "recorded_price": "356.1000061035156",
+      "step_pct": "55.84245344"
+    },
     {
       "ticker": "GDYN",
       "record_type": "equity",
