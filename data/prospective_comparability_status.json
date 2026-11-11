@@ -1,14 +1,14 @@
 {
-  "run_utc": "2026-11-06T00:10:57.661080+00:00",
+  "run_utc": "2026-11-11T00:04:30.937077+00:00",
   "recovery_version": "5.8",
-  "total_snapshot_rows": 1758,
+  "total_snapshot_rows": 1825,
   "recovered_group_counts": {
-    "partial_components_not_directly_comparable": 1398,
-    "complete_four_components": 360
+    "partial_components_not_directly_comparable": 1445,
+    "complete_four_components": 380
   },
   "evidence_counts": {
-    "recorded_snapshot_partial_components": 1398,
-    "recorded_snapshot_four_components": 360
+    "recorded_snapshot_partial_components": 1445,
+    "recorded_snapshot_four_components": 380
   },
   "historical_snapshot_rows_modified": 0,
   "note": "Read-only evidence from original snapshot label/component values. Unknown remains unknown. No current scoring data, retroactive fundamentals, or amended audit manifest."

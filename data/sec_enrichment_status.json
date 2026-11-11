@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-11-06T00:10:39+00:00",
+  "run_utc": "2026-11-11T00:04:21+00:00",
   "attempted": 50,
   "annual_success": 29,
   "quarterly_success": 29,
@@ -8,7 +8,7 @@
   "no_sec_success": 21,
   "selected_never_attempted": 50,
   "selection_policy": "unchecked first, then existing technical score descending, with cooldowns; score is research-queue priority only",
-  "deferred_recent_no_data_failures": 64,
+  "deferred_recent_no_data_failures": 55,
   "configured_daily_limit": 50,
   "selected_with_missing_both_sec": 50,
   "selected_with_missing_one_sec": 0,
@@ -16,7 +16,18 @@
   "quarterly_success_rate_pct": 58.0,
   "results_by_ticker": [
     {
-      "ticker": "AER",
+      "ticker": "CPAY",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "DEO",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -27,7 +38,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "CCEP",
+      "ticker": "EMBJ",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -38,7 +49,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "BTG",
+      "ticker": "FMX",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -49,7 +60,73 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "BZ",
+      "ticker": "FWONK",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "GTN",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "COKE",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "DAL",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "DCTH",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "DUOL",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "EPRX",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -60,7 +137,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "XYZ",
+      "ticker": "EWTX",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
@@ -71,7 +148,7 @@
       "filing_diagnostic_status": "not_needed"
     },
     {
-      "ticker": "CNQ",
+      "ticker": "FNV",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -82,18 +159,18 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "BLKB",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
+      "ticker": "FSCO",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics",
+      "reason_class": "sec_facts_no_supported_metrics",
+      "filing_type_class": "other_or_no_recent_supported_form",
       "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
+      "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "ASC",
+      "ticker": "FRO",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -104,7 +181,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "BP",
+      "ticker": "HAFN",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -115,40 +192,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "CLDT",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "ACEL",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "AVA",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "BTI",
+      "ticker": "EQNR",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -159,7 +203,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "BUD",
+      "ticker": "CVE",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -170,18 +214,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "CATY",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "CNI",
+      "ticker": "DHT",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -192,7 +225,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "BNS",
+      "ticker": "ECO",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -203,18 +236,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "ARDT",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "AEM",
+      "ticker": "DSGX",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -225,7 +247,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "ALC",
+      "ticker": "HMC",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -236,7 +258,62 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "ASND",
+      "ticker": "CP",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics",
+      "reason_class": "sec_facts_no_supported_metrics",
+      "filing_type_class": "domestic_form_observed_but_metrics_missing",
+      "recent_sec_form": "10-Q",
+      "filing_diagnostic_status": "ok"
+    },
+    {
+      "ticker": "DD",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "DOC",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "EVC",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "GEO",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "GLBE",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -247,18 +324,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "AXS",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "AZN",
+      "ticker": "HDB",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -269,7 +335,40 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "BMO",
+      "ticker": "HNST",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "CPRT",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "CTVA",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "DB",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -280,7 +379,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "BRKR",
+      "ticker": "DC",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
@@ -291,7 +390,7 @@
       "filing_diagnostic_status": "not_needed"
     },
     {
-      "ticker": "BXP",
+      "ticker": "ELAN",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
@@ -302,7 +401,139 @@
       "filing_diagnostic_status": "not_needed"
     },
     {
-      "ticker": "CHKP",
+      "ticker": "ELVN",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "EMBC",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "ENOV",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "EPAC",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "EQIX",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "ESRT",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "ESS",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "EXG",
+      "annual_success": false,
+      "quarterly_success": false,
+      "annual_result": "No usable annual SEC XBRL metrics",
+      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics",
+      "reason_class": "sec_facts_no_supported_metrics",
+      "filing_type_class": "other_or_no_recent_supported_form",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "ok"
+    },
+    {
+      "ticker": "FCN",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "FERG",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "FISV",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "FLR",
+      "annual_success": true,
+      "quarterly_success": true,
+      "annual_result": "OK",
+      "quarterly_result": "OK",
+      "reason_class": "other_or_unclassified",
+      "filing_type_class": "supported_metrics_found",
+      "recent_sec_form": "",
+      "filing_diagnostic_status": "not_needed"
+    },
+    {
+      "ticker": "FTS",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -313,7 +544,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "CM",
+      "ticker": "GLOB",
       "annual_success": false,
       "quarterly_success": false,
       "annual_result": "No usable annual SEC XBRL metrics",
@@ -324,238 +555,7 @@
       "filing_diagnostic_status": "ok"
     },
     {
-      "ticker": "CMG",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "RKT",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "RL",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "RNST",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "ROST",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "RY",
-      "annual_success": false,
-      "quarterly_success": false,
-      "annual_result": "No usable annual SEC XBRL metrics",
-      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics",
-      "reason_class": "sec_facts_no_supported_metrics",
-      "filing_type_class": "foreign_issuer_form_observed",
-      "recent_sec_form": "6-K",
-      "filing_diagnostic_status": "ok"
-    },
-    {
-      "ticker": "SBCF",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "SEZL",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "SFBS",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "SHOO",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "SLG",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "SMMT",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "STAG",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "SVV",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "SW",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "TAC",
-      "annual_success": false,
-      "quarterly_success": false,
-      "annual_result": "No usable annual SEC XBRL metrics",
-      "quarterly_result": "No usable quarterly 10-Q SEC XBRL metrics",
-      "reason_class": "sec_facts_no_supported_metrics",
-      "filing_type_class": "foreign_issuer_form_observed",
-      "recent_sec_form": "6-K",
-      "filing_diagnostic_status": "ok"
-    },
-    {
-      "ticker": "TFSL",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "TNL",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "TOL",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "TOWN",
-      "annual_success": false,
-      "quarterly_success": false,
-      "annual_result": "Ticker not present in SEC company directory",
-      "quarterly_result": "Ticker not present in SEC company directory",
-      "reason_class": "not_in_sec_ticker_directory",
-      "filing_type_class": "not_in_sec_ticker_directory",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "no_sec_ticker_match"
-    },
-    {
-      "ticker": "TRN",
-      "annual_success": true,
-      "quarterly_success": true,
-      "annual_result": "OK",
-      "quarterly_result": "OK",
-      "reason_class": "other_or_unclassified",
-      "filing_type_class": "supported_metrics_found",
-      "recent_sec_form": "",
-      "filing_diagnostic_status": "not_needed"
-    },
-    {
-      "ticker": "TSLX",
+      "ticker": "GNK",
       "annual_success": true,
       "quarterly_success": true,
       "annual_result": "OK",
@@ -568,52 +568,53 @@
   ],
   "filing_type_diagnostics_count": 21,
   "filing_type_counts": {
-    "foreign_issuer_form_observed": 20,
-    "not_in_sec_ticker_directory": 1
+    "foreign_issuer_form_observed": 18,
+    "other_or_no_recent_supported_form": 2,
+    "domestic_form_observed_but_metrics_missing": 1
   },
   "failures": {
-    "AER": "No usable annual SEC XBRL metrics",
-    "AER (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "CCEP": "No usable annual SEC XBRL metrics",
-    "CCEP (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "BTG": "No usable annual SEC XBRL metrics",
-    "BTG (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "BZ": "No usable annual SEC XBRL metrics",
-    "BZ (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "CNQ": "No usable annual SEC XBRL metrics",
-    "CNQ (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "ASC": "No usable annual SEC XBRL metrics",
-    "ASC (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "BP": "No usable annual SEC XBRL metrics",
-    "BP (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "BTI": "No usable annual SEC XBRL metrics",
-    "BTI (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "BUD": "No usable annual SEC XBRL metrics",
-    "BUD (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "CNI": "No usable annual SEC XBRL metrics",
-    "CNI (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "BNS": "No usable annual SEC XBRL metrics",
-    "BNS (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "AEM": "No usable annual SEC XBRL metrics",
-    "AEM (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "ALC": "No usable annual SEC XBRL metrics",
-    "ALC (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "ASND": "No usable annual SEC XBRL metrics",
-    "ASND (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "AZN": "No usable annual SEC XBRL metrics",
-    "AZN (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "BMO": "No usable annual SEC XBRL metrics",
-    "BMO (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "CHKP": "No usable annual SEC XBRL metrics",
-    "CHKP (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "CM": "No usable annual SEC XBRL metrics",
-    "CM (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "RY": "No usable annual SEC XBRL metrics",
-    "RY (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "TAC": "No usable annual SEC XBRL metrics",
-    "TAC (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
-    "TOWN": "Ticker not present in SEC company directory",
-    "TOWN (quarterly)": "Ticker not present in SEC company directory"
+    "DEO": "No usable annual SEC XBRL metrics",
+    "DEO (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "EMBJ": "No usable annual SEC XBRL metrics",
+    "EMBJ (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "FMX": "No usable annual SEC XBRL metrics",
+    "FMX (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "EPRX": "No usable annual SEC XBRL metrics",
+    "EPRX (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "FNV": "No usable annual SEC XBRL metrics",
+    "FNV (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "FSCO": "No usable annual SEC XBRL metrics",
+    "FSCO (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "FRO": "No usable annual SEC XBRL metrics",
+    "FRO (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "HAFN": "No usable annual SEC XBRL metrics",
+    "HAFN (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "EQNR": "No usable annual SEC XBRL metrics",
+    "EQNR (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "CVE": "No usable annual SEC XBRL metrics",
+    "CVE (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "DHT": "No usable annual SEC XBRL metrics",
+    "DHT (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "ECO": "No usable annual SEC XBRL metrics",
+    "ECO (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "DSGX": "No usable annual SEC XBRL metrics",
+    "DSGX (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "HMC": "No usable annual SEC XBRL metrics",
+    "HMC (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "CP": "No usable annual SEC XBRL metrics",
+    "CP (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "GLBE": "No usable annual SEC XBRL metrics",
+    "GLBE (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "HDB": "No usable annual SEC XBRL metrics",
+    "HDB (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "DB": "No usable annual SEC XBRL metrics",
+    "DB (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "EXG": "No usable annual SEC XBRL metrics",
+    "EXG (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "FTS": "No usable annual SEC XBRL metrics",
+    "FTS (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics",
+    "GLOB": "No usable annual SEC XBRL metrics",
+    "GLOB (quarterly)": "No usable quarterly 10-Q SEC XBRL metrics"
   },
   "note": "V5.1 research-queue priority using existing technical scores (not an investment signal). V5.0 SEC filing-type diagnostic on no-data lookups; 50-candidate benchmark. Missing tags and missing SEC listing do not mean weak fundamentals. SEC retrieval timestamps are not filing dates; cached XBRL data are not point-in-time backtest data."
 }

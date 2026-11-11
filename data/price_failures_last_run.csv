@@ -1,3 +1,6 @@
 ticker,reason,failure_class
-AGLT,Less than 20 daily observations,insufficient_history
-ASLE,Less than 20 daily observations,insufficient_history
+HYAC,Less than 20 daily observations,insufficient_history
+LEDR,Less than 20 daily observations,insufficient_history
+QUIT,Less than 20 daily observations,insufficient_history
+SCQC,Less than 20 daily observations,insufficient_history
+XGPU,Less than 20 daily observations,insufficient_history
