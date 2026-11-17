@@ -1,11 +1,11 @@
 {
   "version": "6.4",
-  "run_utc": "2026-11-11T00:04:34.465125+00:00",
+  "run_utc": "2026-11-17T00:14:25.798195+00:00",
   "integrity_status": "PASS",
-  "snapshot_count": 1825,
-  "spy_ledger_entries": 8,
-  "diagnostic_rows": 1833,
-  "distinct_price_date_steps_checked": 667,
+  "snapshot_count": 1840,
+  "spy_ledger_entries": 9,
+  "diagnostic_rows": 1849,
+  "distinct_price_date_steps_checked": 683,
   "large_price_steps_requiring_review": 4,
   "conflicting_same_date_groups": 24,
   "conflicting_same_date_details": [
@@ -180,7 +180,7 @@
   ],
   "row_flags": {
     "NO_PRIOR_DISTINCT_DATE": 509,
-    "NO_LARGE_STEP_DETECTED": 1272,
+    "NO_LARGE_STEP_DETECTED": 1288,
     "LARGE_STEP_REVIEW": 4,
     "SAME_DATE_PRICE_CONFLICT": 48
   },

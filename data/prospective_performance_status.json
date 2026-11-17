@@ -1,19 +1,19 @@
 {
   "version": "5.9",
-  "run_utc": "2026-11-11T00:04:31.588459+00:00",
+  "run_utc": "2026-11-17T00:14:20.530759+00:00",
   "integrity_status": "PASS",
-  "snapshot_count": 1825,
-  "outcome_count": 614,
-  "validated_outcome_count": 614,
+  "snapshot_count": 1840,
+  "outcome_count": 638,
+  "validated_outcome_count": 638,
   "invalid_outcome_count": 0,
   "summary_cohort_count": 6,
   "classification_counts": {
-    "partial_components_not_directly_comparable": 1445,
-    "complete_four_components": 380
+    "partial_components_not_directly_comparable": 1457,
+    "complete_four_components": 383
   },
   "horizons": {
     "7": {
-      "observations": 614,
+      "observations": 638,
       "cohorts_with_observations": 6
     },
     "30": {

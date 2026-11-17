@@ -1475,6 +1475,7 @@ equity,IFF,2026-11-03,2026-11-02,94.62999725341795,UNVERIFIED,NO_LARGE_STEP_DETE
 equity,IFF,2026-11-04,2026-11-02,94.62999725341795,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,93.0199966430664,1.73081130,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IFF,2026-11-05,2026-11-02,94.62999725341795,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,93.0199966430664,1.73081130,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IFF,2026-11-06,2026-11-02,94.62999725341795,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,93.0199966430664,1.73081130,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,IFF,2026-11-17,2026-11-16,79.98999786376953,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-02,94.62999725341795,-15.47078074,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IQV,2026-10-27,2026-10-26,280.7149963378906,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IQV,2026-10-29,2026-10-26,280.7149963378906,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IQV,2026-10-30,2026-10-29,276.57000732421875,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-26,280.7149963378906,-1.47658268,Only recorded dates checked; no split/dividend feed or adjustment verification
@@ -1483,6 +1484,7 @@ equity,IQV,2026-11-03,2026-11-02,258.44000244140625,UNVERIFIED,NO_LARGE_STEP_DET
 equity,IQV,2026-11-04,2026-11-02,258.44000244140625,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,267.3299865722656,-3.32547210,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IQV,2026-11-05,2026-11-02,258.44000244140625,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,267.3299865722656,-3.32547210,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IQV,2026-11-06,2026-11-02,258.44000244140625,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,267.3299865722656,-3.32547210,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,IQV,2026-11-17,2026-11-16,264.7300109863281,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-02,258.44000244140625,2.43383706,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IT,2026-10-27,2026-10-26,231.02999877929688,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IT,2026-10-29,2026-10-26,231.02999877929688,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IT,2026-10-30,2026-10-29,217.6649932861328,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-26,231.02999877929688,-5.78496540,Only recorded dates checked; no split/dividend feed or adjustment verification
@@ -1491,6 +1493,7 @@ equity,IT,2026-11-03,2026-11-02,235.259994506836,UNVERIFIED,NO_LARGE_STEP_DETECT
 equity,IT,2026-11-04,2026-11-02,235.259994506836,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,228.7899932861328,2.82792142,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IT,2026-11-05,2026-11-02,235.259994506836,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,228.7899932861328,2.82792142,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,IT,2026-11-06,2026-11-02,235.259994506836,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,228.7899932861328,2.82792142,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,IT,2026-11-17,2026-11-16,187.52999877929688,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-02,235.259994506836,-20.28819045,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,KMI,2026-10-27,2026-10-26,33.939998626708984,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,KMI,2026-10-29,2026-10-26,33.939998626708984,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,KMI,2026-10-30,2026-10-29,33.974998474121094,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1499,6 +1502,7 @@ equity,KMI,2026-11-03,2026-11-02,32.709999084472656,UNVERIFIED,NO_PRIOR_DISTINCT
 equity,KMI,2026-11-04,2026-11-02,32.709999084472656,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,KMI,2026-11-05,2026-11-02,32.709999084472656,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,KMI,2026-11-06,2026-11-02,32.709999084472656,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,KMI,2026-11-17,2026-11-16,31.420000076293945,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-02,32.709999084472656,-3.94374517,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,KNTK,2026-10-27,2026-10-26,55.970001220703125,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,KNTK,2026-10-29,2026-10-26,55.970001220703125,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,KNTK,2026-10-30,2026-10-29,58.38999938964844,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1507,6 +1511,7 @@ equity,KNTK,2026-11-03,2026-11-02,53.540000915527344,UNVERIFIED,NO_PRIOR_DISTINC
 equity,KNTK,2026-11-04,2026-11-02,53.540000915527344,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,KNTK,2026-11-05,2026-11-02,53.540000915527344,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,KNTK,2026-11-06,2026-11-02,53.540000915527344,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,KNTK,2026-11-17,2026-11-16,54.970001220703125,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-02,53.540000915527344,2.67090079,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,LNG,2026-10-27,2026-10-26,300.5899963378906,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,LNG,2026-10-29,2026-10-26,300.5899963378906,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,LNG,2026-10-30,2026-10-29,309.260009765625,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1515,6 +1520,7 @@ equity,LNG,2026-11-03,2026-10-30,330.32000732421875,UNVERIFIED,NO_PRIOR_DISTINCT
 equity,LNG,2026-11-04,2026-11-03,311.1700134277344,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,330.32000732421875,-5.79740660,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,LNG,2026-11-05,2026-11-03,311.1700134277344,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,330.32000732421875,-5.79740660,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,LNG,2026-11-06,2026-11-03,311.1700134277344,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,330.32000732421875,-5.79740660,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,LNG,2026-11-17,2026-11-16,305.20001220703125,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-03,311.1700134277344,-1.91856572,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,LTC,2026-10-27,2026-10-26,43.959999084472656,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,LTC,2026-10-29,2026-10-26,43.959999084472656,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,LTC,2026-10-30,2026-10-29,43.68000030517578,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1523,6 +1529,7 @@ equity,LTC,2026-11-03,2026-10-30,44.75,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only
 equity,LTC,2026-11-04,2026-11-03,45.79999923706055,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,44.75,2.34636701,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,LTC,2026-11-05,2026-11-03,45.79999923706055,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,44.75,2.34636701,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,LTC,2026-11-06,2026-11-03,45.79999923706055,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,44.75,2.34636701,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,LTC,2026-11-17,2026-11-16,42.709999084472656,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-03,45.79999923706055,-6.74672534,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MANH,2026-10-27,2026-10-26,236.3999938964844,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MANH,2026-10-29,2026-10-26,236.3999938964844,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MANH,2026-10-30,2026-10-29,239.42999267578125,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1531,6 +1538,7 @@ equity,MANH,2026-11-03,2026-10-30,248.38999938964844,UNVERIFIED,NO_PRIOR_DISTINC
 equity,MANH,2026-11-04,2026-11-03,255.13999938964844,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,248.38999938964844,2.71750071,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MANH,2026-11-05,2026-11-03,255.13999938964844,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,248.38999938964844,2.71750071,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MANH,2026-11-06,2026-11-03,255.13999938964844,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,248.38999938964844,2.71750071,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,MANH,2026-11-17,2026-11-16,257.92999267578125,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-03,255.13999938964844,1.09351466,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MKTX,2026-10-27,2026-10-26,165.02000427246094,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MKTX,2026-10-29,2026-10-26,165.02000427246094,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MKTX,2026-10-30,2026-10-29,164.92999267578125,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1539,6 +1547,7 @@ equity,MKTX,2026-11-03,2026-10-30,165.3000030517578,UNVERIFIED,NO_PRIOR_DISTINCT
 equity,MKTX,2026-11-04,2026-11-03,165.67999267578125,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,165.3000030517578,0.22987878,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MKTX,2026-11-05,2026-11-03,165.67999267578125,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,165.3000030517578,0.22987878,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MKTX,2026-11-06,2026-11-03,165.67999267578125,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,165.3000030517578,0.22987878,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,MKTX,2026-11-17,2026-11-16,165.44000244140625,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-03,165.67999267578125,-0.14485167,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MMSI,2026-10-27,2026-10-26,94.1999969482422,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MMSI,2026-10-29,2026-10-26,94.1999969482422,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MMSI,2026-10-30,2026-10-29,91.88999938964844,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1547,6 +1556,7 @@ equity,MMSI,2026-11-03,2026-10-30,86.23999786376953,UNVERIFIED,NO_PRIOR_DISTINCT
 equity,MMSI,2026-11-04,2026-11-03,84.16000366210938,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,86.23999786376953,-2.41186718,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MMSI,2026-11-05,2026-11-03,84.16000366210938,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,86.23999786376953,-2.41186718,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MMSI,2026-11-06,2026-11-03,84.16000366210938,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,86.23999786376953,-2.41186718,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,MMSI,2026-11-17,2026-11-16,86.3499984741211,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-03,84.16000366210938,2.60218003,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MPC,2026-10-27,2026-10-26,470.6400146484375,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MPC,2026-10-29,2026-10-26,470.6400146484375,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MPC,2026-10-30,2026-10-29,432.1300048828125,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1555,6 +1565,7 @@ equity,MPC,2026-11-03,2026-10-30,444.7300109863281,UNVERIFIED,NO_PRIOR_DISTINCT_
 equity,MPC,2026-11-04,2026-11-03,427.3399963378906,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,444.7300109863281,-3.91024087,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MPC,2026-11-05,2026-11-03,427.3399963378906,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,444.7300109863281,-3.91024087,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MPC,2026-11-06,2026-11-03,427.3399963378906,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,444.7300109863281,-3.91024087,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,MPC,2026-11-17,2026-11-16,402.1900024414063,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-03,427.3399963378906,-5.88524222,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MUR,2026-10-27,2026-10-26,44.220001220703125,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MUR,2026-10-29,2026-10-26,44.220001220703125,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MUR,2026-10-30,2026-10-29,42.470001220703125,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1563,6 +1574,7 @@ equity,MUR,2026-11-03,2026-10-30,43.95000076293945,UNVERIFIED,NO_PRIOR_DISTINCT_
 equity,MUR,2026-11-04,2026-11-03,39.459999084472656,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,43.95000076293945,-10.21615836,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MUR,2026-11-05,2026-11-03,39.459999084472656,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,43.95000076293945,-10.21615836,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,MUR,2026-11-06,2026-11-03,39.459999084472656,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,43.95000076293945,-10.21615836,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,MUR,2026-11-17,2026-11-16,35.31999969482422,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-03,39.459999084472656,-10.49163580,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NDAQ,2026-10-27,2026-10-26,104.72000122070312,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NDAQ,2026-10-29,2026-10-26,104.72000122070312,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NDAQ,2026-10-30,2026-10-29,106.41999816894533,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1571,6 +1583,7 @@ equity,NDAQ,2026-11-03,2026-10-30,106.2300033569336,UNVERIFIED,NO_PRIOR_DISTINCT
 equity,NDAQ,2026-11-04,2026-11-03,106.97000122070312,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,106.2300033569336,0.69659968,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NDAQ,2026-11-05,2026-11-03,106.97000122070312,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,106.2300033569336,0.69659968,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NDAQ,2026-11-06,2026-11-03,106.97000122070312,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,106.2300033569336,0.69659968,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,NDAQ,2026-11-17,2026-11-16,108.5199966430664,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-03,106.97000122070312,1.44900010,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NE,2026-10-27,2026-10-26,47.810001373291016,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NE,2026-10-29,2026-10-26,47.810001373291016,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NE,2026-10-30,2026-10-29,47.09000015258789,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1579,6 +1592,7 @@ equity,NE,2026-11-03,2026-10-30,49.0,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only r
 equity,NE,2026-11-04,2026-11-03,43.970001220703125,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,49.0,-10.26530363,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NE,2026-11-05,2026-11-03,43.970001220703125,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,49.0,-10.26530363,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NE,2026-11-06,2026-11-03,43.970001220703125,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,49.0,-10.26530363,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,NE,2026-11-17,2026-11-16,41.16999816894531,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-03,43.970001220703125,-6.36798493,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NTSK,2026-10-27,2026-10-26,25.209999084472656,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NTSK,2026-10-29,2026-10-26,25.209999084472656,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NTSK,2026-10-30,2026-10-29,25.795000076293945,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1587,6 +1601,7 @@ equity,NTSK,2026-11-03,2026-10-30,24.299999237060547,UNVERIFIED,NO_PRIOR_DISTINC
 equity,NTSK,2026-11-04,2026-11-03,21.84000015258789,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,24.299999237060547,-10.12345334,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NTSK,2026-11-05,2026-11-03,21.84000015258789,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,24.299999237060547,-10.12345334,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NTSK,2026-11-06,2026-11-03,21.84000015258789,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-10-30,24.299999237060547,-10.12345334,Only recorded dates checked; no split/dividend feed or adjustment verification
+equity,NTSK,2026-11-17,2026-11-16,21.86000061035156,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-03,21.84000015258789,0.09157719,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NWE,2026-10-27,2026-10-26,78.44999694824219,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NWE,2026-10-29,2026-10-26,78.44999694824219,UNVERIFIED,NO_PRIOR_DISTINCT_DATE,,,,Only recorded dates checked; no split/dividend feed or adjustment verification
 equity,NWE,2026-10-30,2026-10-29,79.31999969482422,UNVERIFIED,SAME_DATE_PRICE_CONFLICT,,,,"Conflicting recorded prices for the same ticker and price date; original rows preserved, price-step comparisons touching this date withheld"
@@ -1832,3 +1847,4 @@ spy,SPY,2026-11-04,2026-11-03,754.3499755859375,UNVERIFIED,NO_LARGE_STEP_DETECTE
 spy,SPY,2026-11-05,2026-11-04,766.8099975585938,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-03,754.3499755859375,1.65175613,Only recorded dates checked; no split/dividend feed or adjustment verification
 spy,SPY,2026-11-06,2026-11-05,733.0,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-04,766.8099975585938,-4.40917537,Only recorded dates checked; no split/dividend feed or adjustment verification
 spy,SPY,2026-11-11,2026-11-10,749.9199829101562,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-05,733.0,2.30831963,Only recorded dates checked; no split/dividend feed or adjustment verification
+spy,SPY,2026-11-17,2026-11-16,739.9500122070312,UNVERIFIED,NO_LARGE_STEP_DETECTED,2026-11-10,749.9199829101562,-1.32947127,Only recorded dates checked; no split/dividend feed or adjustment verification

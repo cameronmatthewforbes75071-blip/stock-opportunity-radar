@@ -197,6 +197,9 @@ GTE,2026-10-27,7,partial_components_not_directly_comparable,bottom_quartile,-16.
 HALO,2026-10-27,7,complete_four_components,middle_half,-18.89423,earliest_observed_snapshot_per_ticker_per_horizon
 HAS,2026-10-27,7,partial_components_not_directly_comparable,bottom_quartile,3.38623,earliest_observed_snapshot_per_ticker_per_horizon
 HPK,2026-10-27,7,partial_components_not_directly_comparable,bottom_quartile,-41.00346,earliest_observed_snapshot_per_ticker_per_horizon
+IFF,2026-10-27,7,partial_components_not_directly_comparable,middle_half,-15.27381,earliest_observed_snapshot_per_ticker_per_horizon
+IQV,2026-10-27,7,partial_components_not_directly_comparable,middle_half,-5.69438,earliest_observed_snapshot_per_ticker_per_horizon
+IT,2026-10-27,7,complete_four_components,middle_half,-18.82872,earliest_observed_snapshot_per_ticker_per_horizon
 QLYS,2026-10-27,7,complete_four_components,middle_half,-6.47568,earliest_observed_snapshot_per_ticker_per_horizon
 QTWO,2026-10-27,7,partial_components_not_directly_comparable,top_quartile,2.01948,earliest_observed_snapshot_per_ticker_per_horizon
 RBRK,2026-10-27,7,partial_components_not_directly_comparable,top_quartile,-12.66116,earliest_observed_snapshot_per_ticker_per_horizon

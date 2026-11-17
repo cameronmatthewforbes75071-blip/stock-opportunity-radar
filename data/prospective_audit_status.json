@@ -1,14 +1,14 @@
 {
-  "run_utc": "2026-11-11T00:04:29.623701+00:00",
+  "run_utc": "2026-11-17T00:14:16.883889+00:00",
   "audit_version": "5.6",
   "baseline_initialized_this_run": false,
   "integrity_status": "PASS",
   "integrity_violations": [],
   "ledger_details": {
     "snapshots": {
-      "rows": 1825,
-      "new_fingerprints": 67,
-      "previous_fingerprints": 1758,
+      "rows": 1840,
+      "new_fingerprints": 15,
+      "previous_fingerprints": 1825,
       "duplicate_keys": 0,
       "changed_prior_rows": 0,
       "missing_prior_rows": 0,
@@ -16,9 +16,9 @@
       "examples_missing": []
     },
     "outcomes": {
-      "rows": 614,
-      "new_fingerprints": 330,
-      "previous_fingerprints": 284,
+      "rows": 638,
+      "new_fingerprints": 24,
+      "previous_fingerprints": 614,
       "duplicate_keys": 0,
       "changed_prior_rows": 0,
       "missing_prior_rows": 0,
@@ -26,9 +26,9 @@
       "examples_missing": []
     },
     "spy": {
-      "rows": 8,
+      "rows": 9,
       "new_fingerprints": 1,
-      "previous_fingerprints": 7,
+      "previous_fingerprints": 8,
       "duplicate_keys": 0,
       "changed_prior_rows": 0,
       "missing_prior_rows": 0,
@@ -36,20 +36,20 @@
       "examples_missing": []
     }
   },
-  "snapshot_count": 1825,
-  "snapshot_spy_baseline_present": 1577,
+  "snapshot_count": 1840,
+  "snapshot_spy_baseline_present": 1592,
   "snapshot_spy_baseline_missing": 248,
-  "spy_baseline_coverage_pct": 86.41,
+  "spy_baseline_coverage_pct": 86.52,
   "snapshot_invalid_prices": 0,
   "snapshot_invalid_dates": 0,
   "snapshot_future_or_out_of_order_dates": 0,
   "snapshot_stale_reference_price_gt_5_calendar_days": 0,
-  "outcome_count": 614,
+  "outcome_count": 638,
   "outcome_invalid_prices": 0,
   "outcome_premature_or_invalid_horizon": 0,
   "outcome_spy_matched_count": 0,
-  "outcome_spy_unmatched_count": 614,
-  "spy_entries": 8,
+  "outcome_spy_unmatched_count": 638,
+  "spy_entries": 9,
   "spy_invalid_rows": 0,
   "notes": "First manifest establishes integrity baseline only; it cannot verify unchanged historical data predating V5.6. No historical backfill or return claim. Benchmark price adjustments may differ from equity price adjustments."
 }
