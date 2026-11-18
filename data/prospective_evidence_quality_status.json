@@ -1,17 +1,17 @@
 {
   "version": "6.0",
-  "run_utc": "2026-11-17T00:14:20.994182+00:00",
+  "run_utc": "2026-11-18T00:19:45.160381+00:00",
   "integrity_status": "PASS",
-  "snapshot_count": 1840,
-  "validated_outcome_count": 638,
+  "snapshot_count": 1877,
+  "validated_outcome_count": 729,
   "one_per_ticker_horizon_count": 220,
-  "excluded_repeated_ticker_observations": 418,
+  "excluded_repeated_ticker_observations": 509,
   "price_adjustment_validation": "UNVERIFIED",
   "spy_relative_results": "WITHHELD",
   "significance_claim": "WITHHELD_DEPENDENCE_AND_SAMPLE_SIZE",
   "horizons": {
     "7": {
-      "original_observations": 638,
+      "original_observations": 729,
       "selected_unique_tickers": 220
     },
     "30": {

@@ -1,12 +1,2 @@
 ticker,reason,failure_class
-HZN,Less than 20 daily observations,insufficient_history
-LOVI,Less than 20 daily observations,insufficient_history
-MDRN,Less than 20 daily observations,insufficient_history
-PORT,Less than 20 daily observations,insufficient_history
-VVVV,Less than 20 daily observations,insufficient_history
-WWB,Less than 20 daily observations,insufficient_history
-BRRK,Less than 20 daily observations,insufficient_history
-KALA,Less than 20 daily observations,insufficient_history
-LOBO,Less than 20 daily observations,insufficient_history
-MOBX,Less than 20 daily observations,insufficient_history
-NCT,Less than 20 daily observations,insufficient_history
+TXR,Less than 20 daily observations,insufficient_history

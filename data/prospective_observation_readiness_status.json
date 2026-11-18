@@ -1,31 +1,31 @@
 {
   "version": "6.3",
-  "run_utc": "2026-11-17T00:14:25.633494+00:00",
+  "run_utc": "2026-11-18T00:19:48.363909+00:00",
   "integrity_status": "PASS",
-  "snapshot_count": 1840,
-  "outcome_count": 638,
-  "evaluated_snapshot_horizons": 5520,
+  "snapshot_count": 1877,
+  "outcome_count": 729,
+  "evaluated_snapshot_horizons": 5631,
   "status_counts": {
-    "DUE_POTENTIAL_MISSING_OUTCOME": 96,
-    "DUE_STALE_PRICE": 1024,
-    "NOT_DUE": 3762,
-    "OBSERVED": 638
+    "DUE_POTENTIAL_MISSING_OUTCOME": 168,
+    "DUE_STALE_PRICE": 928,
+    "NOT_DUE": 3806,
+    "OBSERVED": 729
   },
   "horizons": {
     "7": {
-      "OBSERVED": 638,
-      "DUE_POTENTIAL_MISSING_OUTCOME": 96,
-      "DUE_STALE_PRICE": 1024,
-      "NOT_DUE": 82
+      "OBSERVED": 729,
+      "DUE_POTENTIAL_MISSING_OUTCOME": 168,
+      "DUE_STALE_PRICE": 928,
+      "NOT_DUE": 52
     },
     "30": {
-      "NOT_DUE": 1840
+      "NOT_DUE": 1877
     },
     "90": {
-      "NOT_DUE": 1840
+      "NOT_DUE": 1877
     }
   },
-  "potential_missing_outcomes": 96,
+  "potential_missing_outcomes": 168,
   "invalid_existing_outcomes": 0,
   "historical_snapshots_modified": 0,
   "source_or_adjustment_verified": false,
