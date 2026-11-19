@@ -1,2 +1,2 @@
 ticker,reason,failure_class
-TXR,Less than 20 daily observations,insufficient_history
+ZOAR,Less than 20 daily observations,insufficient_history

@@ -1,69 +1,68 @@
 {
-  "run_utc": "2026-11-18T00:19:38+00:00",
-  "candidate_count": 2152,
+  "run_utc": "2026-11-19T00:21:16+00:00",
+  "candidate_count": 2162,
   "financial_validation_status_counts": {
-    "no_financial_data": 1084,
-    "basic_checks_passed_not_audited": 973,
-    "manual_validation_needed": 59,
-    "unverified_provider_metadata": 36
+    "no_financial_data": 1061,
+    "basic_checks_passed_not_audited": 1004,
+    "manual_validation_needed": 62,
+    "unverified_provider_metadata": 35
   },
   "financial_validation_flag_counts": {
-    "annual_period_old": 38,
-    "profit_margin_scale_review": 14,
+    "annual_period_old": 41,
+    "profit_margin_scale_review": 15,
     "quarterly_period_old": 7,
-    "sec_provenance_not_established": 1111
+    "sec_provenance_not_established": 1086
   },
-  "with_any_financial_metric": 1068,
-  "with_all_five_financial_metrics": 99,
-  "with_sec_annual_provenance": 1038,
-  "with_sec_quarterly_provenance": 1037,
-  "with_quarterly_metrics": 1037,
+  "with_any_financial_metric": 1101,
+  "with_all_five_financial_metrics": 100,
+  "with_sec_annual_provenance": 1072,
+  "with_sec_quarterly_provenance": 1072,
+  "with_quarterly_metrics": 1072,
   "fundamental_check_older_than_90d": 0,
-  "fundamental_check_date_missing": 1078,
+  "fundamental_check_date_missing": 1055,
   "research_readiness_counts": {
-    "technical_discovery_only": 1075,
-    "data_ready_for_manual_review": 861,
-    "partial_financial_research": 216
+    "technical_discovery_only": 1051,
+    "data_ready_for_manual_review": 890,
+    "partial_financial_research": 221
   },
-  "financial_period_recent_460d_count": 1041,
-  "financial_period_missing_count": 1111,
+  "financial_period_recent_460d_count": 1076,
+  "financial_period_missing_count": 1086,
   "sec_reporting_class_counts": {
-    "unknown": 2070,
-    "foreign_issuer_form_observed": 74,
-    "other_or_no_recent_supported_form": 5,
-    "domestic_form_observed_but_metrics_missing": 2,
-    "not_in_sec_ticker_directory": 1
+    "unknown": 2080,
+    "foreign_issuer_form_observed": 76,
+    "other_or_no_recent_supported_form": 4,
+    "domestic_form_observed_but_metrics_missing": 2
   },
-  "financial_metric_coverage_pct": 33.09,
+  "financial_metric_coverage_pct": 33.98,
   "per_metric_coverage": {
     "revenue_growth": {
-      "available_count": 981,
-      "missing_count": 1171,
-      "coverage_pct": 45.59
+      "available_count": 1012,
+      "missing_count": 1150,
+      "coverage_pct": 46.81
     },
     "earnings_growth": {
-      "available_count": 745,
-      "missing_count": 1407,
-      "coverage_pct": 34.62
+      "available_count": 771,
+      "missing_count": 1391,
+      "coverage_pct": 35.66
     },
     "profit_margin": {
-      "available_count": 913,
-      "missing_count": 1239,
-      "coverage_pct": 42.43
+      "available_count": 942,
+      "missing_count": 1220,
+      "coverage_pct": 43.57
     },
     "free_cash_flow": {
-      "available_count": 797,
-      "missing_count": 1355,
-      "coverage_pct": 37.04
+      "available_count": 821,
+      "missing_count": 1341,
+      "coverage_pct": 37.97
     },
     "trailing_pe": {
-      "available_count": 125,
-      "missing_count": 2027,
-      "coverage_pct": 5.81
+      "available_count": 127,
+      "missing_count": 2035,
+      "coverage_pct": 5.87
     }
   },
-  "quarterly_filing_date_recorded": 1037,
-  "annual_reporting_period_recorded": 1038,
-  "quarterly_reporting_period_recorded": 1037,
+  "quarterly_filing_date_recorded": 1072,
+  "annual_reporting_period_recorded": 1072,
+  "quarterly_reporting_period_recorded": 1072,
   "note": "V5.1 basic date, provenance and plausibility diagnostics are not financial-statement audits or investment ratings. V5.0 readiness is data sufficiency only, not an investment score. Coverage counts fields with numeric values, not financial accuracy or timeliness. SEC provenance uses saved retrieval timestamps; reported periods are separately extracted. Missing fields are not zero; no new investment score or performance claim."
 }

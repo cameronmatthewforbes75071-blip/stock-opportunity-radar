@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-11-18T00:19:40.245595+00:00",
+  "run_utc": "2026-11-19T00:21:17.685429+00:00",
   "version": "6.5.1",
   "policy": "PRIOR_COMPLETED_DAY_ONLY_AND_QUARANTINE",
   "blocked_tickers": [
@@ -33,10 +33,10 @@
   "spy_benchmark_blocked": true,
   "deferred_counts": {
     "unconfirmed_or_same_day": 0,
-    "unresolved_ticker": 168,
+    "unresolved_ticker": 178,
     "no_completed_due_price": 0
   },
   "historical_outcomes_rewritten": false,
-  "new_price_observations": 91,
-  "existing_outcomes_preserved": 638
+  "new_price_observations": 560,
+  "existing_outcomes_preserved": 729
 }

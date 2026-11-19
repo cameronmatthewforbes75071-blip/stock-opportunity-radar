@@ -1,18 +1,19 @@
 {
   "version": "6.5",
-  "run_utc": "2026-11-18T00:19:48.570845+00:00",
+  "run_utc": "2026-11-19T00:21:26.919879+00:00",
   "integrity_status": "PASS",
   "release_status": "REVIEW_REQUIRED",
-  "snapshots": 1877,
-  "spy_entries": 10,
-  "diagnostic_rows": 1887,
+  "snapshots": 2026,
+  "spy_entries": 11,
+  "diagnostic_rows": 2037,
   "same_date_conflicting_groups": 24,
   "precision_variation_groups": 1,
   "material_price_disagreement_groups": 23,
-  "large_steps_to_review": 4,
-  "total_review_items": 28,
-  "high_priority_review_items": 27,
+  "large_steps_to_review": 5,
+  "total_review_items": 29,
+  "high_priority_review_items": 28,
   "affected_tickers": [
+    "AAON",
     "AESI",
     "ALLE",
     "APP",
@@ -43,6 +44,16 @@
     "SPY"
   ],
   "large_step_details": [
+    {
+      "ticker": "AAON",
+      "record_type": "equity",
+      "run_date": "2026-11-19",
+      "price_date": "2026-11-18",
+      "previous_price_date": "2026-11-05",
+      "previous_price": "54.41999816894531",
+      "recorded_price": "79.80000305175781",
+      "step_pct": "46.63727625"
+    },
     {
       "ticker": "AESI",
       "record_type": "equity",

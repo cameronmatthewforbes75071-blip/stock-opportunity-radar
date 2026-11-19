@@ -1,7 +1,7 @@
 horizon_days,comparability_group,score_bucket,observations,distinct_tickers,distinct_snapshot_dates,mean_raw_price_change_pct,median_raw_price_change_pct,min_raw_price_change_pct,max_raw_price_change_pct,positive_change_pct,benchmark_matched_count,benchmark_comparison_status
-7,complete_four_components,bottom_quartile,40,13,6,-7.5705,-1.7255,-33.6817,10.2875,40.0,0,WITHHELD_price_adjustment_unverified
-7,complete_four_components,middle_half,84,22,8,-4.8876,-3.9852,-27.2417,42.5987,36.9,0,WITHHELD_price_adjustment_unverified
-7,complete_four_components,top_quartile,41,13,5,-5.9965,-4.4778,-25.7241,11.3416,43.9,0,WITHHELD_price_adjustment_unverified
-7,partial_components_not_directly_comparable,bottom_quartile,131,49,6,-3.568,-0.1827,-41.9214,31.2575,48.85,0,WITHHELD_price_adjustment_unverified
-7,partial_components_not_directly_comparable,middle_half,306,93,8,-1.8361,0.3115,-37.2003,45.2678,52.61,0,WITHHELD_price_adjustment_unverified
-7,partial_components_not_directly_comparable,top_quartile,127,37,8,-3.318,-0.562,-36.8977,36.8011,45.67,0,WITHHELD_price_adjustment_unverified
+7,complete_four_components,bottom_quartile,55,13,8,-5.5499,-0.8985,-33.6817,10.6854,47.27,0,WITHHELD_price_adjustment_unverified
+7,complete_four_components,middle_half,138,24,8,-3.4694,-1.1198,-27.2417,42.5987,43.48,0,WITHHELD_price_adjustment_unverified
+7,complete_four_components,top_quartile,74,13,7,-6.9591,-9.5181,-25.7241,11.3416,32.43,0,WITHHELD_price_adjustment_unverified
+7,partial_components_not_directly_comparable,bottom_quartile,266,50,8,-2.8144,-2.6293,-41.9214,31.2575,45.11,0,WITHHELD_price_adjustment_unverified
+7,partial_components_not_directly_comparable,middle_half,531,97,8,-0.9023,0.4036,-50.3892,46.6373,53.48,0,WITHHELD_price_adjustment_unverified
+7,partial_components_not_directly_comparable,top_quartile,225,37,8,-3.8332,-2.0184,-36.8977,36.8011,40.0,0,WITHHELD_price_adjustment_unverified

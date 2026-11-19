@@ -1,12 +1,12 @@
 {
   "version": "6.4",
-  "run_utc": "2026-11-18T00:19:48.503540+00:00",
+  "run_utc": "2026-11-19T00:21:26.851865+00:00",
   "integrity_status": "PASS",
-  "snapshot_count": 1877,
-  "spy_ledger_entries": 10,
-  "diagnostic_rows": 1887,
-  "distinct_price_date_steps_checked": 706,
-  "large_price_steps_requiring_review": 4,
+  "snapshot_count": 2026,
+  "spy_ledger_entries": 11,
+  "diagnostic_rows": 2037,
+  "distinct_price_date_steps_checked": 819,
+  "large_price_steps_requiring_review": 5,
   "conflicting_same_date_groups": 24,
   "conflicting_same_date_details": [
     {
@@ -180,8 +180,8 @@
   ],
   "row_flags": {
     "NO_PRIOR_DISTINCT_DATE": 509,
-    "NO_LARGE_STEP_DETECTED": 1326,
-    "LARGE_STEP_REVIEW": 4,
+    "NO_LARGE_STEP_DETECTED": 1475,
+    "LARGE_STEP_REVIEW": 5,
     "SAME_DATE_PRICE_CONFLICT": 48
   },
   "equity_adjustment_verified": false,
